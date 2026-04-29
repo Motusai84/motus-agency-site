@@ -1,5 +1,5 @@
 import React, { useState, useMemo, FormEvent } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { 
   PhoneIncoming, PhoneMissed, Voicemail, FileEdit, AlertTriangle, PenTool, 
   Clock, Zap, MessageSquare, FileText, Database, FileSignature, 
