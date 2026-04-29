@@ -1,7 +1,5 @@
-"use client";
-
 import { useMemo, useState, type ComponentType, type FormEvent, type ReactNode } from "react";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 import {
   PhoneIncoming,
   PhoneMissed,
@@ -52,7 +50,7 @@ const SECTOR_WORKFLOWS = [
       { title: "Follow Up", icon: Clock },
     ],
     auto: [
-      { title: "Incoming Call -> Auto SMS", icon: PhoneIncoming },
+      { title: "Incoming Call to Auto SMS", icon: PhoneIncoming },
       { title: "Instant Lead Log", icon: Database },
       { title: "Smart Scheduling", icon: Calendar },
       { title: "Auto-Draft Quote", icon: FileSignature },
@@ -346,7 +344,7 @@ export default function App() {
           Scale Your Business, Not Your Headcount.
         </motion.h1>
         <motion.p variants={fadeInUp} className="text-xl font-medium text-slate-300 max-w-2xl mb-12">
-          Motus deploys Our Proprietary Framework-an industrial-grade, AI-driven architecture powered by Strategic AI
+          Motus deploys the Motus Framework, an industrial-grade, AI-driven architecture powered by Strategic AI
           Agents designed to eliminate repetitive administration. Reclaim staff focus and accelerate growth without the
           overhead, pensions, or NI of new hires.
         </motion.p>
@@ -378,10 +376,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <motion.div variants={fadeInUp} className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-6">
-              Why UK businesses have not automated yet.
+              Why UK businesses haven&apos;t automated yet.
             </h2>
             <p className="text-lg font-medium text-slate-300 max-w-3xl mx-auto">
-              Operational friction is an architectural vulnerability. Motus deploys AI-Driven Infrastructure to resolve
+              Operational friction is an architectural vulnerability. Motus deploys AI-driven infrastructure to resolve
               these structural flaws natively.
             </p>
           </motion.div>
@@ -389,13 +387,13 @@ export default function App() {
           <motion.div variants={staggerContainer} className="grid md:grid-cols-3 gap-8 mb-12">
             {[
               {
-                title: "Your data stays on UK soil. Ours does not leave the country.",
+                title: "Your data stays on UK soil. It does not leave the country.",
                 text: "UK Data Residency is a core pillar of the framework's architecture. Operations are executed strictly within self-hosted UK infrastructure, ensuring absolute structural integrity for our AI Agents.",
                 icon: ShieldCheck,
               },
               {
-                title: "We do not change how you work. You do not have to set anything up.",
-                text: "The Motus Standard adapts to your existing structure. We map your current protocols and deploy autonomous logic seamlessly-establishing an AI operational backbone with zero internal friction.",
+                title: "We don't change how you work. You don't have to set anything up.",
+                text: "The Motus Standard adapts to your existing structure. We map your current protocols and deploy autonomous logic seamlessly, establishing an AI operational backbone with zero internal friction.",
                 icon: Clock,
               },
               {
@@ -430,8 +428,8 @@ export default function App() {
             <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-blue-500 to-transparent" />
             <p className="text-lg md:text-xl font-medium text-slate-200">
               Every moment spent on manual administration compromises operational integrity. A recruiter chasing
-              placements over WhatsApp. A letting agent manually sending reminders. This is a structural bottleneck-and
-              Our Proprietary Framework is deployed to resolve it end-to-end.
+              placements over WhatsApp. A letting agent manually sending reminders. This is a structural bottleneck, and
+              the Motus Framework is deployed to resolve it end-to-end.
             </p>
           </motion.div>
         </div>
@@ -484,7 +482,7 @@ export default function App() {
               {
                 icon: TrendingUp,
                 title: "Frictionless Capacity Unlock",
-                desc: "Expand output and client intake confidently without the liabilities of recruitment, training, or management overhead, scaling via AI-Driven Infrastructure.",
+                desc: "Expand output and client intake confidently without the liabilities of recruitment, training, or management overhead, scaling via AI-driven infrastructure.",
               },
               {
                 icon: CheckCircle2,
@@ -828,7 +826,7 @@ export default function App() {
                   </div>
                   <div>
                     <span className="text-purple-400">const</span> workflow <span className="text-rose-400">=</span>{" "}
-                    <span className="text-purple-400">new</span> <span className="text-amber-200">automation</span>.build();
+                    <span className="text-amber-200">automation</span>.build();
                   </div>
                   <div className="pt-2">
                     workflow.init().then(<span className="text-rose-400">()</span> <span className="text-rose-400">=&gt;</span> {"{"}
@@ -934,7 +932,7 @@ export default function App() {
               <p className="text-lg md:text-xl font-medium text-white text-left">
                 <strong className="block text-emerald-400 mb-1">Compliance Guarantee:</strong>
                 All Motus AI deployments operate under strict UK Data Residency and GDPR compliance as core components of
-                The Framework. Your Safe AI compliance obligations - clearly mapped.
+                The Framework, with your Safe AI compliance obligations clearly mapped.
               </p>
             </div>
           </motion.div>
@@ -956,7 +954,7 @@ export default function App() {
             </div>
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-6">Admin Drain Calculator</h2>
             <p className="text-lg font-medium text-slate-300 mb-8">
-              Admin is not free. Calculate exactly how much manual tasks are costing your business every year, including
+              Admin isn&apos;t free. Calculate exactly how much manual tasks are costing your business every year, including
               hidden overheads.
             </p>
 
@@ -985,12 +983,12 @@ export default function App() {
             <div className="grid gap-6 relative z-10">
               <div className="bg-black/40 p-8 rounded-3xl border border-orange-500/20 shadow-[0_0_30px_rgba(249,115,22,0.05)] text-center backdrop-blur-md">
                 <span className="block text-xs font-bold tracking-widest uppercase text-orange-400 mb-2">Total Annual Cost Bleed</span>
-                <span className="text-5xl md:text-6xl font-black text-white tracking-tight">Â£{stats.annualBleed.toLocaleString()}</span>
+                <span className="text-5xl md:text-6xl font-black text-white tracking-tight">&pound;{stats.annualBleed.toLocaleString()}</span>
                 <span className="block text-xs text-slate-500 mt-2 font-medium">True Cost Including Overheads</span>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-center">
-                <Metric label="Base Wages / Yr" value={`Â£${stats.annualValue.toLocaleString()}`} />
+                <Metric label="Base Wages / Yr" value={`\u00A3${stats.annualValue.toLocaleString()}`} />
                 <Metric label="Wasted Hours / Yr" value={stats.hoursFreedYear.toLocaleString()} />
               </div>
             </div>
@@ -1056,7 +1054,7 @@ export default function App() {
               <div className="bg-black/40 p-8 rounded-3xl border border-indigo-500/20 shadow-[0_0_30px_rgba(139,92,246,0.05)] text-center backdrop-blur-md">
                 <span className="block text-xs font-bold tracking-widest uppercase text-indigo-400 mb-2">Annual Strategic Value</span>
                 <span className="text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-cyan-400 bg-clip-text text-transparent tracking-tight">
-                  Â£{stats.strategicValue.toLocaleString()}
+                  &pound;{stats.strategicValue.toLocaleString()}
                 </span>
                 <span className="block text-xs text-slate-500 mt-2 font-medium">Unlocked Resource Value</span>
               </div>
@@ -1090,7 +1088,7 @@ export default function App() {
       >
         <div className="max-w-3xl mx-auto">
           <motion.div variants={fadeInUp} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">It is time to fix the leaks.</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">It&apos;s time to fix the leaks.</h2>
             <p className="text-lg font-medium text-slate-300">Book a free 15-minute tech audit to see if your processes can be automated.</p>
           </motion.div>
 
@@ -1143,7 +1141,7 @@ export default function App() {
                     <label className="text-sm font-medium text-slate-300 flex items-center gap-2">
                       <MessageSquare className="w-4 h-4" /> Headache?
                     </label>
-                    <textarea name="headache" rows={4} className="w-full bg-black/40 backdrop-blur-md border border-white/[0.05] rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:bg-blue-950/20 transition-all resize-none font-medium" placeholder="What is the one process that drains your team's time?" />
+                    <textarea name="headache" rows={4} className="w-full bg-black/40 backdrop-blur-md border border-white/[0.05] rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:bg-blue-950/20 transition-all resize-none font-medium" placeholder="What's the one process that drains your team's time?" />
                   </div>
                   <div className="md:col-span-2 pt-4 border-t border-white/5 flex flex-col items-center gap-4">
                     <button
@@ -1207,7 +1205,7 @@ export default function App() {
               Contact
             </button>
           </div>
-          <p className="font-medium text-slate-600">Â© {new Date().getFullYear()} Motus AI Systems. All rights reserved. Self-hosted in the UK.</p>
+          <p className="font-medium text-slate-600">&copy; {new Date().getFullYear()} Motus AI Systems. All rights reserved. Self-hosted in the UK.</p>
         </div>
       </footer>
     </div>
@@ -1290,7 +1288,7 @@ function CalculatorControls({
     <div className="space-y-8 bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-8 rounded-3xl shadow-lg">
       <RangeControl label="Number of staff" value={teamSize} min={1} max={50} onChange={setTeamSize} accent={accent} valueColor={valueColor} />
       <RangeControl label="% of time spent on manual tasks" value={manualTimePct} suffix="%" min={5} max={80} onChange={setManualTimePct} accent={accent} valueColor={valueColor} />
-      <RangeControl label="Average hourly cost (Â£)" value={hourlyRate} prefix="Â£" min={10} max={60} onChange={setHourlyRate} accent={accent} valueColor={valueColor} />
+      <RangeControl label="Average hourly cost (\u00A3)" value={hourlyRate} prefix={"\u00A3"} min={10} max={60} onChange={setHourlyRate} accent={accent} valueColor={valueColor} />
       {children}
     </div>
   );
