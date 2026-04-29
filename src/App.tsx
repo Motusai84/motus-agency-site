@@ -1,5 +1,5 @@
 import { useMemo, useState, type ComponentType, type FormEvent, type ReactNode } from "react";
-import { AnimatePresence, motion, type Variants } from "motion/react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
   PhoneIncoming,
   PhoneMissed,
