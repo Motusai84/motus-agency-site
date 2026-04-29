@@ -1,4 +1,4 @@
-import { useState, useMemo, FormEvent } from 'react';
+import React, { useState, useMemo, FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { 
   PhoneIncoming, PhoneMissed, Voicemail, FileEdit, AlertTriangle, PenTool, 
