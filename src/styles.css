@@ -2,31 +2,17 @@
   box-sizing: border-box;
 }
 
-:root {
-  --ink: #080706;
-  --ink-soft: #0f0d0a;
-  --panel: rgba(19, 17, 13, 0.78);
-  --panel-strong: rgba(24, 21, 16, 0.92);
-  --ivory: #f5f1e8;
-  --ivory-muted: #b8b0a2;
-  --gold: #c7a76c;
-  --gold-light: #e4cf9e;
-  --gold-deep: #8f713c;
-  --hairline: rgba(199, 167, 108, 0.18);
-}
-
 html {
   scroll-behavior: smooth;
-  background: var(--ink);
+  background: #000;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   overflow-x: hidden;
-  background: var(--ink);
-  color: var(--ivory);
-  font-family: "Inter", sans-serif;
+  background: #000;
+  color: #fff;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -35,201 +21,6 @@ button,
 input,
 textarea {
   font: inherit;
-}
-
-.motus-site {
-  isolation: isolate;
-  width: 100%;
-  min-width: 0;
-  overflow-x: clip;
-  background:
-    radial-gradient(circle at 50% -10%, rgba(199, 167, 108, 0.12), transparent 28rem),
-    linear-gradient(180deg, #090806 0%, #050505 48%, #080706 100%);
-  color: var(--ivory);
-}
-
-.motus-site::before {
-  position: fixed;
-  z-index: 1;
-  inset: 0;
-  pointer-events: none;
-  content: "";
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-}
-
-.motus-site > section,
-.motus-site > footer {
-  position: relative;
-  z-index: 2;
-}
-
-.motus-site > section {
-  width: 100%;
-  min-width: 0;
-  overflow-x: clip;
-  border-color: rgba(199, 167, 108, 0.1) !important;
-}
-
-.motus-site > section::after {
-  position: absolute;
-  right: 12%;
-  bottom: 0;
-  left: 12%;
-  height: 1px;
-  content: "";
-  background: linear-gradient(90deg, transparent, rgba(199, 167, 108, 0.18), transparent);
-}
-
-.motus-site h1,
-.motus-site h2 {
-  color: var(--ivory) !important;
-  font-family: "Cormorant Garamond", serif;
-  font-weight: 600 !important;
-  letter-spacing: -0.025em !important;
-}
-
-.motus-site h1 {
-  text-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
-}
-
-.motus-site h3 {
-  color: var(--ivory);
-  letter-spacing: -0.015em;
-}
-
-.motus-site p {
-  color: var(--ivory-muted);
-}
-
-.motus-site [class~="text-white"] {
-  color: var(--ivory) !important;
-}
-
-.motus-site [class~="text-slate-200"],
-.motus-site [class~="text-slate-300"] {
-  color: #d5cec2 !important;
-}
-
-.motus-site [class~="text-slate-400"] {
-  color: var(--ivory-muted) !important;
-}
-
-.motus-site [class~="text-slate-500"],
-.motus-site [class~="text-slate-600"] {
-  color: #81796d !important;
-}
-
-.motus-site [class~="text-blue-300"],
-.motus-site [class~="text-blue-400"],
-.motus-site [class~="text-blue-500"],
-.motus-site [class~="text-indigo-400"],
-.motus-site [class~="text-orange-400"],
-.motus-site [class~="text-cyan-400"] {
-  color: var(--gold-light) !important;
-}
-
-.motus-site [class~="bg-blue-600"] {
-  border: 1px solid rgba(228, 207, 158, 0.52);
-  background: linear-gradient(135deg, #d1b576 0%, #a88343 100%) !important;
-  color: #171208 !important;
-  box-shadow:
-    0 14px 34px rgba(0, 0, 0, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
-}
-
-.motus-site [class~="bg-blue-600"]:hover {
-  background: linear-gradient(135deg, #e0c990 0%, #b79250 100%) !important;
-  box-shadow:
-    0 18px 42px rgba(0, 0, 0, 0.42),
-    0 0 28px rgba(199, 167, 108, 0.14) !important;
-}
-
-.motus-site [class~="bg-blue-500/10"],
-.motus-site [class~="bg-indigo-500/10"],
-.motus-site [class~="bg-orange-500/10"] {
-  background-color: rgba(199, 167, 108, 0.09) !important;
-}
-
-.motus-site [class~="border-blue-500/30"],
-.motus-site [class~="border-blue-500"],
-.motus-site [class~="border-indigo-500/20"],
-.motus-site [class~="border-orange-500/20"] {
-  border-color: rgba(199, 167, 108, 0.34) !important;
-}
-
-.motus-site [class~="bg-[#0A0A0A]"],
-.motus-site [class~="bg-[#0A0A0B]"],
-.motus-site [class~="bg-white/[0.02]"],
-.motus-site [class~="bg-white/[0.03]"] {
-  border-color: var(--hairline) !important;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 42%),
-    var(--panel) !important;
-  box-shadow:
-    0 22px 60px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.035);
-}
-
-.motus-site [class~="rounded-3xl"][class*="border"],
-.motus-site [class~="rounded-2xl"][class*="border"] {
-  border-color: var(--hairline) !important;
-}
-
-.motus-site .mobile-static,
-.motus-site [class~="shadow-lg"][class*="border"] {
-  transition:
-    border-color 300ms ease,
-    box-shadow 300ms ease,
-    background-color 300ms ease,
-    transform 300ms ease;
-}
-
-@media (min-width: 768px) {
-  .motus-site .mobile-static:hover,
-  .motus-site [class~="shadow-lg"][class*="border"]:hover {
-    border-color: rgba(199, 167, 108, 0.32) !important;
-    box-shadow:
-      0 28px 70px rgba(0, 0, 0, 0.38),
-      0 0 0 1px rgba(199, 167, 108, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    transform: translateY(-3px);
-  }
-}
-
-.motus-site input,
-.motus-site textarea {
-  border-color: rgba(199, 167, 108, 0.16) !important;
-  background: rgba(8, 7, 6, 0.78) !important;
-  color: var(--ivory);
-  box-shadow: inset 0 1px 12px rgba(0, 0, 0, 0.2);
-}
-
-.motus-site input:focus,
-.motus-site textarea:focus {
-  border-color: rgba(199, 167, 108, 0.7) !important;
-  background: rgba(25, 21, 14, 0.88) !important;
-  box-shadow: 0 0 0 3px rgba(199, 167, 108, 0.08);
-}
-
-.motus-site input[type="range"] {
-  accent-color: var(--gold);
-}
-
-.motus-site footer {
-  border-color: rgba(199, 167, 108, 0.12) !important;
-  background: rgba(5, 5, 5, 0.7);
-}
-
-.motus-site footer [class~="text-white"] {
-  color: var(--gold-light) !important;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1.4rem;
-}
-
-::selection {
-  background: rgba(199, 167, 108, 0.28);
-  color: var(--ivory);
 }
 
 @media (max-width: 767px) {
@@ -268,10 +59,6 @@ textarea {
 
   .motus-site footer {
     padding-block: 2.5rem;
-  }
-
-  .motus-site [class~="rounded-3xl"] {
-    border-radius: 1.25rem;
   }
 }
 
