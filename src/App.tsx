@@ -252,14 +252,22 @@ export default function App() {
   };
 
   const fadeInUp: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+    hidden: { opacity: 0, y: 22, scale: 0.992 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+    },
   };
   const staggerContainer: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 },
+      transition: {
+        delayChildren: 0.04,
+        staggerChildren: 0.09,
+      },
     },
   };
 
@@ -401,12 +409,11 @@ export default function App() {
                 text: "Fragmented tools compromise your structural integrity. The framework bridges your systems using standardized protocols so AI agents can move data automatically with absolute precision and system redundancy.",
                 icon: Database,
               },
-            ].map((card, i) => (
+            ].map((card) => (
               <motion.div variants={fadeInUp} key={card.title}>
                 <motion.div
                   className="mobile-static relative p-6 md:p-8 rounded-3xl flex flex-col items-start transition-all border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md overflow-hidden h-full group"
-                  animate={{ y: [0, -6 + i * 2, 0] }}
-                  transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+                  whileHover={{ y: -4, transition: { duration: 0.25, ease: "easeOut" } }}
                   style={{
                     backgroundImage: "radial-gradient(circle at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 70%)",
                   }}
@@ -489,12 +496,11 @@ export default function App() {
                 title: "Absolute Structural Integrity",
                 desc: "Unlike manual processing, Autonomous Logic operates with zero variance, requires no downtime, and executes every standard flawlessly.",
               },
-            ].map((benefit, i) => (
+            ].map((benefit) => (
               <motion.div variants={fadeInUp} key={benefit.title}>
                 <motion.div
                   className="mobile-static p-6 md:p-8 rounded-3xl flex flex-col items-start transition-all border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md overflow-hidden h-full group"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                  whileHover={{ y: -4, transition: { duration: 0.25, ease: "easeOut" } }}
                   style={{ backgroundImage: "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.03) 0%, transparent 60%)" }}
                 >
                   <div className="w-11 h-11 md:w-12 md:h-12 bg-white/[0.04] border border-white/[0.05] rounded-2xl flex items-center justify-center mb-4 md:mb-6 text-white group-hover:scale-110 transition-transform">
@@ -530,8 +536,8 @@ export default function App() {
           <motion.div
             className="absolute inset-0 bg-emerald-500/10 mix-blend-screen pointer-events-none z-10"
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.5, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 5, ease: "easeOut" }}
+            animate={{ opacity: [0, 0.35, 0] }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           />
         )}
 
@@ -565,8 +571,8 @@ export default function App() {
 
           <motion.div
             variants={fadeInUp}
-            animate={isAutomated ? { x: [-2, 2, -1, 1, 0, -1, 1, 0], y: [-1, 1, -2, 2, 0, 1, -1, 0] } : {}}
-            transition={{ duration: 0.5 }}
+            animate={isAutomated ? { scale: [1, 0.996, 1] } : { scale: 1 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="w-full max-w-[1228px] mx-auto bg-black border border-white/5 rounded-2xl md:rounded-3xl relative flex flex-col overflow-hidden md:max-h-[85vh] flex-1 min-h-[610px] md:min-h-[720px]"
           >
             <div
@@ -580,7 +586,7 @@ export default function App() {
                   className="absolute top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-[#D4AF37] to-transparent shadow-[0_0_20px_rgba(212,175,55,1)] z-30 pointer-events-none"
                   initial={{ left: "0%", opacity: 0 }}
                   animate={{ left: "100%", opacity: [0, 1, 1, 0] }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
+                  transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
                 />
               )}
 
@@ -610,7 +616,7 @@ export default function App() {
                       const manualNode = SECTOR_WORKFLOWS[activeSector].manual[i];
                       const isLastAuto = i === SECTOR_WORKFLOWS[activeSector].auto.length - 1;
                       const isLastManual = i === SECTOR_WORKFLOWS[activeSector].manual.length - 1;
-                      const stepDelay = i * 0.4;
+                      const stepDelay = i * 0.22;
                       const isSuccessNode = isLastAuto;
                       const textAccent = isSuccessNode ? "text-emerald-400" : "text-[#D4AF37]";
                       const glowAccent = isSuccessNode
@@ -626,7 +632,7 @@ export default function App() {
                             <motion.div
                               initial={{ opacity: 1 }}
                               animate={isAutomated ? { opacity: 0.15 } : { opacity: 1 }}
-                              transition={{ delay: isAutomated ? stepDelay + 0.3 : 0, duration: 0.5 }}
+                              transition={{ delay: isAutomated ? stepDelay + 0.16 : 0, duration: 0.4, ease: "easeOut" }}
                               className={`flex items-center justify-end gap-3 md:gap-4 transition-opacity duration-300 ${
                                 !manualNode ? "opacity-0 pointer-events-none" : "opacity-100"
                               }`}
@@ -648,10 +654,10 @@ export default function App() {
                                         ? { scale: [1, 1.1, 1], boxShadow: ["0 0 0px #D4AF37", "0 0 15px #D4AF37", "0 0 0px #D4AF37"] }
                                         : {}
                                     }
-                                    transition={{ delay: isAutomated ? stepDelay : 0, duration: 0.4 }}
+                                    transition={{ delay: isAutomated ? stepDelay : 0, duration: 0.32, ease: "easeOut" }}
                                     className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shrink-0 relative z-10 bg-black border border-white/10"
                                   >
-                                    {isLastManual && !isAutomated && <div className="absolute inset-0 rounded-full bg-rose-500/20 blur-md opacity-80 animate-pulse" />}
+                                    {isLastManual && !isAutomated && <div className="motion-soft-pulse absolute inset-0 rounded-full bg-rose-500/20 blur-md opacity-80" />}
                                     <manualNode.icon
                                       className={`w-4 h-4 md:w-5 md:h-5 ${isLastManual && !isAutomated ? "text-rose-400" : "text-slate-400"}`}
                                       strokeWidth={1.5}
@@ -682,7 +688,7 @@ export default function App() {
                                 className="absolute top-1/2 w-[40px] h-[3px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent z-30 transform -translate-y-1/2"
                                 initial={{ left: "0%", opacity: 0, scaleX: 0.5 }}
                                 animate={{ left: "100%", opacity: [0, 1, 0], scaleX: 1 }}
-                                transition={{ delay: stepDelay + 0.1, duration: 0.5, ease: "linear" }}
+                                transition={{ delay: stepDelay + 0.08, duration: 0.38, ease: "linear" }}
                               />
                             )}
                           </div>
@@ -694,7 +700,7 @@ export default function App() {
                               } ${isAutomated ? glowAccent : "shadow-none"} ${!autoNode ? "opacity-0 pointer-events-none" : ""}`}
                               initial={{ opacity: 0.3, x: -10 }}
                               animate={isAutomated ? { opacity: 1, x: 0 } : { opacity: 0.3, x: 0 }}
-                              transition={{ delay: isAutomated ? stepDelay + 0.3 : 0, duration: 0.3, ease: "easeOut" }}
+                              transition={{ delay: isAutomated ? stepDelay + 0.16 : 0, duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
                             >
                               {autoNode && (
                                 <>
@@ -723,7 +729,7 @@ export default function App() {
                                       className={`absolute inset-0 opacity-10 ${isSuccessNode ? "bg-emerald-500" : "bg-[#D4AF37]"}`}
                                       initial={{ width: "0%" }}
                                       animate={{ width: "100%" }}
-                                      transition={{ duration: 1.0, delay: stepDelay + 0.4 }}
+                                      transition={{ duration: 0.7, delay: stepDelay + 0.22, ease: "easeOut" }}
                                     />
                                   )}
                                 </>
@@ -751,12 +757,12 @@ export default function App() {
                 <div className="relative flex items-center gap-3 md:gap-4">
                   {!isAutomated ? (
                     <>
-                      <Zap className="w-5 h-5 md:w-6 md:h-6 text-[#D4AF37] animate-pulse" />
+                      <Zap className="motion-soft-pulse w-5 h-5 md:w-6 md:h-6 text-[#D4AF37]" />
                       <span className="tracking-[0.2em] uppercase text-sm md:text-base font-mono font-bold whitespace-nowrap">INITIALIZE ENGINE</span>
                     </>
                   ) : (
                     <>
-                      <Activity className="w-5 h-5 md:w-6 md:h-6 text-emerald-400 animate-pulse" />
+                      <Activity className="motion-soft-pulse w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
                       <span className="tracking-[0.2em] uppercase text-sm md:text-base font-mono font-bold whitespace-nowrap">SYSTEM OPERATIONAL</span>
                     </>
                   )}
@@ -869,7 +875,7 @@ export default function App() {
                   <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Live Status</span>
                   <div className="flex items-center gap-2">
                     <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="motion-status-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
                     </span>
                     <span className="text-xs text-emerald-500 font-bold">100% Online</span>
@@ -1226,11 +1232,20 @@ function ProcessCard({
   children: ReactNode;
 }) {
   return (
-    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}>
+    <motion.div
+      variants={{
+        hidden: { opacity: 0, y: 22, scale: 0.992 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+        },
+      }}
+    >
       <motion.div
         className="mobile-static bg-white/[0.02] backdrop-blur-md border border-white/[0.05] rounded-3xl overflow-hidden flex flex-col shadow-lg h-full"
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        whileHover={{ y: -4, transition: { duration: 0.25, ease: "easeOut" } }}
         style={{ backgroundImage: "radial-gradient(circle at 100% 0%, rgba(255,255,255,0.03) 0%, transparent 50%)" }}
       >
         <div className="p-6 md:p-10 pb-0">
