@@ -1288,7 +1288,7 @@ function CalculatorControls({
     <div className="space-y-6 md:space-y-8 bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-5 md:p-8 rounded-3xl shadow-lg">
       <RangeControl label="Number of staff" value={teamSize} min={1} max={50} onChange={setTeamSize} accent={accent} valueColor={valueColor} />
       <RangeControl label="% of time spent on manual tasks" value={manualTimePct} suffix="%" min={5} max={80} onChange={setManualTimePct} accent={accent} valueColor={valueColor} />
-      <RangeControl label="Average hourly cost (\u00A3)" value={hourlyRate} prefix={"\u00A3"} min={10} max={60} onChange={setHourlyRate} accent={accent} valueColor={valueColor} />
+      <RangeControl label="Average hourly cost (£)" value={hourlyRate} prefix="£" min={10} max={60} onChange={setHourlyRate} accent={accent} valueColor={valueColor} />
       {children}
     </div>
   );
