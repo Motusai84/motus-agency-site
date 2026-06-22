@@ -196,7 +196,7 @@ const Starfield = () => {
   const layer3 = useMemo(() => createLayer(50, 3), []);
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <div className="starfield fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
       <style>{`
         @keyframes animStar {
           from { transform: translateY(0px) }
@@ -320,7 +320,7 @@ export default function App() {
   ]);
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-blue-500/30 relative">
+    <div className="motus-site min-h-screen bg-black text-white flex flex-col font-sans selection:bg-blue-500/30 relative">
       <Starfield />
       <IconCoverage />
 
@@ -328,37 +328,37 @@ export default function App() {
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
-        className="relative px-6 pt-32 pb-20 max-w-7xl mx-auto flex flex-col items-center text-center"
+        className="relative px-5 pt-20 pb-14 md:px-6 md:pt-32 md:pb-20 max-w-7xl mx-auto flex flex-col items-center text-center"
       >
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none" />
         <motion.span
           variants={fadeInUp}
-          className="px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-sm font-medium mb-8 flex items-center gap-2 shadow-[0_0_200px_rgba(59,130,246,0.15)]"
+          className="px-3.5 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs sm:text-sm font-medium mb-5 md:mb-8 flex items-center gap-2 shadow-[0_0_200px_rgba(59,130,246,0.15)]"
         >
           <Zap className="w-4 h-4" /> Safe AI Infrastructure. Built for UK Business.
         </motion.span>
         <motion.h1
           variants={fadeInUp}
-          className="text-5xl md:text-7xl font-semibold tracking-tight text-white mb-8 max-w-4xl leading-tight"
+          className="text-4xl sm:text-5xl md:text-7xl font-semibold tracking-[-0.035em] text-white mb-5 md:mb-8 max-w-4xl leading-[1.05]"
         >
           Scale Your Business, Not Your Headcount.
         </motion.h1>
-        <motion.p variants={fadeInUp} className="text-xl font-medium text-slate-300 max-w-2xl mb-12">
+        <motion.p variants={fadeInUp} className="text-base sm:text-lg md:text-xl font-medium leading-relaxed text-slate-300 max-w-2xl mb-8 md:mb-12">
           Motus deploys the Motus Framework, an industrial-grade, AI-driven architecture powered by Strategic AI
           Agents designed to eliminate repetitive administration. Reclaim staff focus and accelerate growth without the
           overhead, pensions, or NI of new hires.
         </motion.p>
-        <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 justify-center">
+        <motion.div variants={fadeInUp} className="flex w-full sm:w-auto flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <button
             onClick={() => handleScroll("audit-form")}
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]"
+            className="w-full sm:w-auto px-7 py-3.5 md:px-8 md:py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]"
             type="button"
           >
             Request Free Tech Audit
           </button>
           <button
             onClick={() => handleScroll("how-it-works")}
-            className="px-8 py-4 bg-white/[0.03] backdrop-blur-md hover:bg-white/[0.08] text-white rounded-full font-semibold transition-all border border-white/[0.05]"
+            className="w-full sm:w-auto px-7 py-3.5 md:px-8 md:py-4 bg-white/[0.03] backdrop-blur-md hover:bg-white/[0.08] text-white rounded-full font-semibold transition-all border border-white/[0.05]"
             type="button"
           >
             See How It Works
@@ -371,20 +371,20 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="px-6 py-32 border-t border-white/[0.05]"
+        className="px-5 py-20 md:px-6 md:py-32 border-t border-white/[0.05]"
       >
         <div className="max-w-7xl mx-auto">
-          <motion.div variants={fadeInUp} className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-6">
+          <motion.div variants={fadeInUp} className="text-center mb-10 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4 md:mb-6">
               Why UK businesses haven&apos;t automated yet.
             </h2>
-            <p className="text-lg font-medium text-slate-300 max-w-3xl mx-auto">
+            <p className="text-base md:text-lg leading-relaxed font-medium text-slate-300 max-w-3xl mx-auto">
               Operational friction is an architectural vulnerability. Motus deploys AI-driven infrastructure to resolve
               these structural flaws natively.
             </p>
           </motion.div>
 
-          <motion.div variants={staggerContainer} className="grid md:grid-cols-3 gap-8 mb-12">
+          <motion.div variants={staggerContainer} className="grid md:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-12">
             {[
               {
                 title: "Your data stays on UK soil. It does not leave the country.",
@@ -404,14 +404,14 @@ export default function App() {
             ].map((card, i) => (
               <motion.div variants={fadeInUp} key={card.title}>
                 <motion.div
-                  className="relative p-8 rounded-3xl flex flex-col items-start transition-all border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md overflow-hidden h-full group"
+                  className="mobile-static relative p-6 md:p-8 rounded-3xl flex flex-col items-start transition-all border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md overflow-hidden h-full group"
                   animate={{ y: [0, -6 + i * 2, 0] }}
                   transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
                   style={{
                     backgroundImage: "radial-gradient(circle at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 70%)",
                   }}
                 >
-                  <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 text-blue-400 group-hover:scale-110 transition-transform">
+                  <div className="w-11 h-11 md:w-12 md:h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-4 md:mb-6 text-blue-400 group-hover:scale-110 transition-transform">
                     <card.icon className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-semibold tracking-tight text-white mb-4 leading-tight">{card.title}</h3>
@@ -423,7 +423,7 @@ export default function App() {
 
           <motion.div
             variants={fadeInUp}
-            className="bg-[#0A0A0A] backdrop-blur-md border border-white/[0.05] p-8 md:p-10 rounded-3xl text-center max-w-4xl mx-auto relative overflow-hidden shadow-[0_0_40px_rgba(37,99,235,0.05)]"
+            className="bg-[#0A0A0A] backdrop-blur-md border border-white/[0.05] p-6 md:p-10 rounded-3xl text-left md:text-center max-w-4xl mx-auto relative overflow-hidden shadow-[0_0_40px_rgba(37,99,235,0.05)]"
           >
             <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-blue-500 to-transparent" />
             <p className="text-lg md:text-xl font-medium text-slate-200">
@@ -440,24 +440,24 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="px-6 py-32 border-t border-white/[0.05] relative"
+        className="px-5 py-20 md:px-6 md:py-32 border-t border-white/[0.05] relative"
       >
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div variants={fadeInUp} className="text-center mb-16 flex flex-col items-center">
+          <motion.div variants={fadeInUp} className="text-center mb-10 md:mb-16 flex flex-col items-center">
             <span className="px-4 py-1.5 rounded-full border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md text-slate-300 text-xs font-bold uppercase tracking-widest mb-6">
               Benefits
             </span>
-            <h2 className="text-3xl md:text-5xl font-semibold text-white mb-6 max-w-4xl tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-semibold text-white mb-4 md:mb-6 max-w-4xl tracking-tight">
               The Key Benefits of Automation for Your Business Growth
             </h2>
-            <p className="text-lg font-medium text-slate-400 max-w-3xl mx-auto">
+            <p className="text-base md:text-lg leading-relaxed font-medium text-slate-400 max-w-3xl mx-auto">
               Discover how business automation enhances efficiency, reduces costs, and drives growth with smarter,
               faster processes that work around the clock.
             </p>
           </motion.div>
 
-          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {[
               {
                 icon: Clock,
@@ -492,12 +492,12 @@ export default function App() {
             ].map((benefit, i) => (
               <motion.div variants={fadeInUp} key={benefit.title}>
                 <motion.div
-                  className="p-8 rounded-3xl flex flex-col items-start transition-all border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md overflow-hidden h-full group"
+                  className="mobile-static p-6 md:p-8 rounded-3xl flex flex-col items-start transition-all border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md overflow-hidden h-full group"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
                   style={{ backgroundImage: "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.03) 0%, transparent 60%)" }}
                 >
-                  <div className="w-12 h-12 bg-white/[0.04] border border-white/[0.05] rounded-2xl flex items-center justify-center mb-6 text-white group-hover:scale-110 transition-transform">
+                  <div className="w-11 h-11 md:w-12 md:h-12 bg-white/[0.04] border border-white/[0.05] rounded-2xl flex items-center justify-center mb-4 md:mb-6 text-white group-hover:scale-110 transition-transform">
                     <benefit.icon className="w-6 h-6 text-slate-200" />
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-3 tracking-tight leading-tight">{benefit.title}</h3>
@@ -514,7 +514,7 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="relative px-4 py-8 md:py-12 border-t border-white/[0.05] overflow-hidden bg-[#000000] flex flex-col justify-center min-h-screen"
+        className="relative px-3 py-16 md:px-4 md:py-12 border-t border-white/[0.05] overflow-hidden bg-[#000000] flex flex-col justify-center md:min-h-screen"
         id="how-it-works"
       >
         <div
@@ -538,12 +538,12 @@ export default function App() {
         <div className="max-w-[1600px] w-full mx-auto text-center relative z-20 flex flex-col flex-1 h-full items-center justify-center pb-4">
           <motion.h2
             variants={fadeInUp}
-            className="text-2xl md:text-4xl font-semibold tracking-tight text-white mb-6 shrink-0 mt-8 md:mt-2"
+            className="text-2xl md:text-4xl font-semibold tracking-tight text-white mb-5 shrink-0 md:mt-2"
           >
             Watch The System Connect
           </motion.h2>
 
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-2 mb-8 shrink-0">
+          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-2 mb-5 md:mb-8 shrink-0">
             {SECTOR_WORKFLOWS.map((sector, i) => (
               <button
                 key={sector.name}
@@ -567,14 +567,14 @@ export default function App() {
             variants={fadeInUp}
             animate={isAutomated ? { x: [-2, 2, -1, 1, 0, -1, 1, 0], y: [-1, 1, -2, 2, 0, 1, -1, 0] } : {}}
             transition={{ duration: 0.5 }}
-            className="w-full max-w-[1228px] mx-auto bg-black border border-white/5 rounded-3xl relative flex flex-col overflow-hidden max-h-[85vh] flex-1 min-h-[720px]"
+            className="w-full max-w-[1228px] mx-auto bg-black border border-white/5 rounded-2xl md:rounded-3xl relative flex flex-col overflow-hidden md:max-h-[85vh] flex-1 min-h-[610px] md:min-h-[720px]"
           >
             <div
               className="absolute inset-0 pointer-events-none opacity-[0.05]"
               style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(212,175,55,0.3) 0%, transparent 70%)" }}
             />
 
-            <div className="flex flex-col relative z-10 flex-grow p-4 md:px-8 overflow-hidden items-center justify-center w-full min-h-0">
+            <div className="flex flex-col relative z-10 flex-grow p-2.5 md:p-4 md:px-8 overflow-hidden items-center justify-center w-full min-h-0">
               {isAutomated && (
                 <motion.div
                   className="absolute top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-[#D4AF37] to-transparent shadow-[0_0_20px_rgba(212,175,55,1)] z-30 pointer-events-none"
@@ -585,12 +585,12 @@ export default function App() {
               )}
 
               <div className="flex flex-col flex-1 w-full items-center justify-center h-full min-h-0 relative">
-                <div className="w-full max-w-4xl lg:max-w-5xl mx-auto flex flex-col justify-center px-4 md:px-0">
-                  <div className="flex w-full justify-center mb-6 relative shrink-0">
+                <div className="w-full max-w-4xl lg:max-w-5xl mx-auto flex flex-col justify-center px-1 md:px-0">
+                  <div className="flex w-full justify-center mb-4 md:mb-6 relative shrink-0">
                     <div className="flex-1 flex flex-col items-end justify-center">
                       <h3 className="text-sm uppercase tracking-[0.2em] text-slate-400 font-bold">Old Way</h3>
                     </div>
-                    <div className="w-[100px] md:w-[140px] flex justify-center items-center mx-3 md:mx-6">
+                    <div className="w-[58px] sm:w-[82px] md:w-[140px] flex justify-center items-center mx-1.5 sm:mx-3 md:mx-6">
                       <h3 className="text-[11px] md:text-sm uppercase tracking-widest text-[#D4AF37]/50 font-bold bg-[#0A0A0A] px-3 py-1 rounded-full border border-white/5 shadow-[0_0_10px_rgba(212,175,55,0.1)]">
                         Bridge
                       </h3>
@@ -662,7 +662,7 @@ export default function App() {
                             </motion.div>
                           </div>
 
-                          <div className="w-[100px] md:w-[140px] flex items-center justify-center relative h-full mx-3 md:mx-6 shrink-0">
+                          <div className="w-[58px] sm:w-[82px] md:w-[140px] flex items-center justify-center relative h-full mx-1.5 sm:mx-3 md:mx-6 shrink-0">
                             {(autoNode || manualNode) && (
                               <div
                                 className={`w-2 h-2 rounded-full absolute top-1/2 left-1/2 -ml-[4px] -mt-[4px] z-20 transition-all duration-700 ${
@@ -772,11 +772,11 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="px-6 py-32 border-t border-white/[0.05] relative"
+        className="px-5 py-20 md:px-6 md:py-32 border-t border-white/[0.05] relative"
       >
         <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-emerald-600/5 blur-[150px] rounded-full pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div variants={fadeInUp} className="text-center mb-16 flex flex-col items-center">
+          <motion.div variants={fadeInUp} className="text-center mb-10 md:mb-16 flex flex-col items-center">
             <span className="px-4 py-1.5 rounded-full border border-white/[0.05] bg-[#0A0A0A] backdrop-blur-md text-slate-300 text-xs font-bold uppercase tracking-widest mb-6">
               Our Process
             </span>
@@ -786,7 +786,7 @@ export default function App() {
             </p>
           </motion.div>
 
-          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <ProcessCard
               step="Step 01"
               color="text-emerald-500"
@@ -890,10 +890,10 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="px-6 py-32 border-t border-white/[0.05]"
+        className="px-5 py-20 md:px-6 md:py-32 border-t border-white/[0.05]"
       >
         <div className="max-w-7xl mx-auto">
-          <motion.div variants={fadeInUp} className="text-center mb-16">
+          <motion.div variants={fadeInUp} className="text-center mb-10 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-6">
               Engineered for UK Governance. Built on Safe AI Standards.
             </h2>
@@ -944,10 +944,10 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="px-6 py-32 border-t border-white/[0.05]"
+        className="px-5 py-20 md:px-6 md:py-32 border-t border-white/[0.05]"
         id="cost-analysis"
       >
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 md:gap-16 items-start">
           <motion.div variants={fadeInUp}>
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-400 mb-6">
               <Calculator className="w-6 h-6" />
@@ -977,11 +977,11 @@ export default function App() {
             </CalculatorControls>
           </motion.div>
 
-          <motion.div variants={fadeInUp} className="bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-10 md:p-12 rounded-3xl shadow-xl relative overflow-hidden">
+          <motion.div variants={fadeInUp} className="bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-5 sm:p-7 md:p-12 rounded-3xl shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-orange-600/10 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="grid gap-6 relative z-10">
-              <div className="bg-black/40 p-8 rounded-3xl border border-orange-500/20 shadow-[0_0_30px_rgba(249,115,22,0.05)] text-center backdrop-blur-md">
+              <div className="bg-black/40 p-5 md:p-8 rounded-3xl border border-orange-500/20 shadow-[0_0_30px_rgba(249,115,22,0.05)] text-center backdrop-blur-md">
                 <span className="block text-xs font-bold tracking-widest uppercase text-orange-400 mb-2">Total Annual Cost Bleed</span>
                 <span className="text-5xl md:text-6xl font-black text-white tracking-tight">&pound;{stats.annualBleed.toLocaleString()}</span>
                 <span className="block text-xs text-slate-500 mt-2 font-medium">True Cost Including Overheads</span>
@@ -1001,10 +1001,10 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="px-6 py-32 border-t border-white/[0.05]"
+        className="px-5 py-20 md:px-6 md:py-32 border-t border-white/[0.05]"
         id="capacity-unlock"
       >
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 md:gap-16 items-start">
           <motion.div variants={fadeInUp}>
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-6">
               <Zap className="w-6 h-6" />
@@ -1045,13 +1045,13 @@ export default function App() {
 
           <motion.div
             variants={fadeInUp}
-            className="bg-[#0A0A0B] backdrop-blur-md border border-white/[0.05] p-10 md:p-12 rounded-3xl shadow-xl relative overflow-hidden"
+            className="bg-[#0A0A0B] backdrop-blur-md border border-white/[0.05] p-5 sm:p-7 md:p-12 rounded-3xl shadow-xl relative overflow-hidden"
             style={{ backgroundImage: "radial-gradient(circle at 100% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 60%)" }}
           >
             <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="grid gap-6 relative z-10">
-              <div className="bg-black/40 p-8 rounded-3xl border border-indigo-500/20 shadow-[0_0_30px_rgba(139,92,246,0.05)] text-center backdrop-blur-md">
+              <div className="bg-black/40 p-5 md:p-8 rounded-3xl border border-indigo-500/20 shadow-[0_0_30px_rgba(139,92,246,0.05)] text-center backdrop-blur-md">
                 <span className="block text-xs font-bold tracking-widest uppercase text-indigo-400 mb-2">Annual Strategic Value</span>
                 <span className="text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-cyan-400 bg-clip-text text-transparent tracking-tight">
                   &pound;{stats.strategicValue.toLocaleString()}
@@ -1064,7 +1064,7 @@ export default function App() {
                 <Metric label="Annual Hours Freed" value={stats.hoursFreedYear.toLocaleString()} large />
               </div>
 
-              <div className="bg-indigo-950/20 backdrop-blur-md border border-indigo-500/20 p-8 rounded-3xl text-center">
+              <div className="bg-indigo-950/20 backdrop-blur-md border border-indigo-500/20 p-5 md:p-8 rounded-3xl text-center">
                 <span className="block text-xs font-bold uppercase tracking-wider text-indigo-400 mb-2">Equivalent Headcount Gained</span>
                 <span className="text-5xl font-black text-white tracking-tight">{stats.headcountGained}</span>
                 <span className="block text-xs text-indigo-500/60 mt-2">New Operational Capacity</span>
@@ -1083,16 +1083,16 @@ export default function App() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="px-6 py-32 border-t border-white/[0.05]"
+        className="px-5 py-20 md:px-6 md:py-32 border-t border-white/[0.05]"
         id="audit-form"
       >
         <div className="max-w-3xl mx-auto">
-          <motion.div variants={fadeInUp} className="text-center mb-12">
+          <motion.div variants={fadeInUp} className="text-center mb-8 md:mb-12">
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">It&apos;s time to fix the leaks.</h2>
             <p className="text-lg font-medium text-slate-300">Book a free 15-minute tech audit to see if your processes can be automated.</p>
           </motion.div>
 
-          <motion.div variants={fadeInUp} className="bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-8 md:p-10 rounded-3xl shadow-xl relative overflow-hidden">
+          <motion.div variants={fadeInUp} className="bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-5 sm:p-7 md:p-10 rounded-3xl shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
 
             <AnimatePresence mode="wait">
@@ -1119,7 +1119,7 @@ export default function App() {
                 <motion.form
                   key="form"
                   name="audit_form"
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 relative z-10"
                   onSubmit={handleFormSubmit}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1228,17 +1228,17 @@ function ProcessCard({
   return (
     <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}>
       <motion.div
-        className="bg-white/[0.02] backdrop-blur-md border border-white/[0.05] rounded-3xl overflow-hidden flex flex-col shadow-lg h-full"
+        className="mobile-static bg-white/[0.02] backdrop-blur-md border border-white/[0.05] rounded-3xl overflow-hidden flex flex-col shadow-lg h-full"
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         style={{ backgroundImage: "radial-gradient(circle at 100% 0%, rgba(255,255,255,0.03) 0%, transparent 50%)" }}
       >
-        <div className="p-8 md:p-10 pb-0">
+        <div className="p-6 md:p-10 pb-0">
           <span className={`text-xs font-bold ${color} uppercase tracking-widest mb-2 block`}>{step}</span>
           <h3 className="text-2xl font-semibold tracking-tight text-white mb-3">{title}</h3>
-          <p className="text-slate-400 font-medium leading-relaxed mb-8">{text}</p>
+          <p className="text-sm md:text-base text-slate-400 font-medium leading-relaxed mb-6 md:mb-8">{text}</p>
         </div>
-        <div className="mt-auto p-8 pt-0 flex justify-center">{children}</div>
+        <div className="mt-auto p-6 md:p-8 pt-0 flex justify-center">{children}</div>
       </motion.div>
     </motion.div>
   );
@@ -1256,7 +1256,7 @@ function StatusRow({ label, status, color }: { label: string; status: string; co
 
 function Metric({ label, value, large = false }: { label: string; value: string; large?: boolean }) {
   return (
-    <div className="bg-black/40 border border-white/[0.05] p-6 rounded-3xl backdrop-blur-md">
+    <div className="bg-black/40 border border-white/[0.05] p-4 md:p-6 rounded-2xl md:rounded-3xl backdrop-blur-md">
       <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">{label}</span>
       <span className={`${large ? "text-3xl" : "text-2xl"} font-bold tracking-tight text-white`}>{value}</span>
     </div>
@@ -1285,7 +1285,7 @@ function CalculatorControls({
   children: ReactNode;
 }) {
   return (
-    <div className="space-y-8 bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-8 rounded-3xl shadow-lg">
+    <div className="space-y-6 md:space-y-8 bg-white/[0.02] backdrop-blur-md border border-white/[0.05] p-5 md:p-8 rounded-3xl shadow-lg">
       <RangeControl label="Number of staff" value={teamSize} min={1} max={50} onChange={setTeamSize} accent={accent} valueColor={valueColor} />
       <RangeControl label="% of time spent on manual tasks" value={manualTimePct} suffix="%" min={5} max={80} onChange={setManualTimePct} accent={accent} valueColor={valueColor} />
       <RangeControl label="Average hourly cost (\u00A3)" value={hourlyRate} prefix={"\u00A3"} min={10} max={60} onChange={setHourlyRate} accent={accent} valueColor={valueColor} />

@@ -1,0 +1,78 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #000;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+  background: #000;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+@media (max-width: 767px) {
+  .starfield {
+    display: none;
+  }
+
+  .mobile-static {
+    transform: none !important;
+  }
+
+  .motus-site > section {
+    content-visibility: auto;
+    contain-intrinsic-size: 800px;
+    padding: 5rem 1.25rem !important;
+  }
+
+  .motus-site > section:first-of-type {
+    padding-top: 5rem !important;
+    padding-bottom: 3.5rem !important;
+  }
+
+  .motus-site > #how-it-works {
+    padding: 4rem 0.75rem !important;
+  }
+
+  .motus-site p {
+    text-wrap: pretty;
+  }
+
+  .motus-site h1,
+  .motus-site h2,
+  .motus-site h3 {
+    text-wrap: balance;
+  }
+
+  .motus-site footer {
+    padding-block: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
