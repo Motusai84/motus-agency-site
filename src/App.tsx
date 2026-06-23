@@ -194,10 +194,13 @@ export default function App() {
       <BackgroundField />
 
       <motion.header
-        style={{ scale: reduceMotion ? 1 : navScale, top: reduceMotion ? 14 : navTop }}
+        style={{ top: reduceMotion ? 14 : navTop }}
         className="fixed left-1/2 z-50 w-[calc(100%-24px)] max-w-5xl -translate-x-1/2 origin-top"
       >
-        <div className="nav-shell flex items-center justify-between rounded-full border border-white/10 bg-black/70 px-3 py-2 shadow-2xl shadow-black/40 backdrop-blur-xl md:px-4">
+        <motion.div
+          style={{ scale: reduceMotion ? 1 : navScale }}
+          className="nav-shell flex origin-top items-center justify-between rounded-full border border-white/10 bg-black/70 px-3 py-2 shadow-2xl shadow-black/40 backdrop-blur-xl md:px-4"
+        >
           <button
             type="button"
             onClick={() => scrollTo("top")}
@@ -243,7 +246,7 @@ export default function App() {
               {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
           </div>
-        </div>
+        </motion.div>
 
         <AnimatePresence>
           {menuOpen && (
