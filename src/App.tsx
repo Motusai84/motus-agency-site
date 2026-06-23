@@ -14,6 +14,7 @@ import {
   Menu,
   MessageSquareText,
   PhoneMissed,
+  PoundSterling,
   Route,
   ShieldCheck,
   Sparkles,
@@ -32,12 +33,13 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
-import { useRef, useState, type FormEvent } from "react";
+import { useMemo, useRef, useState, type FormEvent } from "react";
 
 const NAV_ITEMS = [
   { label: "The problem", id: "friction" },
   { label: "See it move", id: "journey" },
   { label: "Examples", id: "examples" },
+  { label: "Calculator", id: "calculator" },
 ];
 
 const JOURNEY_STAGES = [
@@ -127,7 +129,26 @@ export default function App() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [activeExample, setActiveExample] = useState<keyof typeof EXAMPLES>("Missed call");
   const [exampleRunning, setExampleRunning] = useState(false);
+  const [calculatorMode, setCalculatorMode] = useState<"cost" | "capacity">("cost");
+  const [teamSize, setTeamSize] = useState(10);
+  const [adminTime, setAdminTime] = useState(20);
+  const [hourlyCost, setHourlyCost] = useState(15);
+  const [includeOverheads, setIncludeOverheads] = useState(true);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success">("idle");
+
+  const calculator = useMemo(() => {
+    const hoursPerWeek = teamSize * 40 * (adminTime / 100);
+    const hoursPerYear = hoursPerWeek * 52;
+    const baseCost = hoursPerYear * hourlyCost;
+    const overheadRate = includeOverheads ? 0.3106 : 0;
+    return {
+      hoursPerWeek: Math.round(hoursPerWeek),
+      hoursPerYear: Math.round(hoursPerYear),
+      baseCost: Math.round(baseCost),
+      annualCost: Math.round(baseCost * (1 + overheadRate)),
+      headcount: (hoursPerWeek / 40).toFixed(1),
+    };
+  }, [teamSize, adminTime, hourlyCost, includeOverheads]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -306,6 +327,20 @@ export default function App() {
           onRun={() => setExampleRunning(true)}
         />
 
+        <OperationsCalculator
+          mode={calculatorMode}
+          onModeChange={setCalculatorMode}
+          teamSize={teamSize}
+          onTeamSizeChange={setTeamSize}
+          adminTime={adminTime}
+          onAdminTimeChange={setAdminTime}
+          hourlyCost={hourlyCost}
+          onHourlyCostChange={setHourlyCost}
+          includeOverheads={includeOverheads}
+          onIncludeOverheadsChange={setIncludeOverheads}
+          values={calculator}
+        />
+
         <section id="outcomes" className="relative overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-36">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
@@ -455,9 +490,28 @@ function SignalSwitchboard() {
         <div className="relative p-5 sm:p-7">
           <div className="absolute bottom-10 left-[42px] top-10 w-px bg-white/[0.08] sm:left-[50px]" />
           <motion.div initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 1.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }} className="absolute bottom-10 left-[42px] top-10 w-px origin-top bg-[#2864ff] shadow-[0_0_12px_rgba(40,100,255,.7)] sm:left-[50px]" />
+          <motion.span
+            animate={{ top: ["8%", "88%"], opacity: [0, 1, 1, 0] }}
+            transition={{ duration: 3.8, delay: 1.2, repeat: Infinity, repeatDelay: 0.7, ease: "easeInOut" }}
+            className="absolute left-[37px] z-20 h-3 w-3 rounded-full border-2 border-[#a9c1ff] bg-[#2864ff] shadow-[0_0_18px_rgba(40,100,255,.95)] sm:left-[45px]"
+          />
           <div className="space-y-3">
             {events.map((event, index) => (
-              <motion.div key={event.title} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.65, delay: event.delay, ease: [0.16, 1, 0.3, 1] }} className="relative flex items-center gap-4 bg-[#0e131b] p-4">
+              <motion.div
+                key={event.title}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  backgroundColor: ["#0e131b", "#101a2c", "#0e131b"],
+                }}
+                transition={{
+                  opacity: { duration: 0.65, delay: event.delay, ease: [0.16, 1, 0.3, 1] },
+                  x: { duration: 0.65, delay: event.delay, ease: [0.16, 1, 0.3, 1] },
+                  backgroundColor: { duration: 1.1, delay: 1.4 + index * 0.75, repeat: Infinity, repeatDelay: 2.7 },
+                }}
+                className="relative flex items-center gap-4 bg-[#0e131b] p-4"
+              >
                 <span className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#2864ff]/30 bg-[#0a1020] text-[#7da0ff]">
                   <event.icon className="h-4 w-4" />
                 </span>
@@ -742,6 +796,280 @@ function ExampleConsole({
         </div>
       </div>
     </section>
+  );
+}
+
+function OperationsCalculator({
+  mode,
+  onModeChange,
+  teamSize,
+  onTeamSizeChange,
+  adminTime,
+  onAdminTimeChange,
+  hourlyCost,
+  onHourlyCostChange,
+  includeOverheads,
+  onIncludeOverheadsChange,
+  values,
+}: {
+  mode: "cost" | "capacity";
+  onModeChange: (mode: "cost" | "capacity") => void;
+  teamSize: number;
+  onTeamSizeChange: (value: number) => void;
+  adminTime: number;
+  onAdminTimeChange: (value: number) => void;
+  hourlyCost: number;
+  onHourlyCostChange: (value: number) => void;
+  includeOverheads: boolean;
+  onIncludeOverheadsChange: (value: boolean) => void;
+  values: {
+    hoursPerWeek: number;
+    hoursPerYear: number;
+    baseCost: number;
+    annualCost: number;
+    headcount: string;
+  };
+}) {
+  return (
+    <section id="calculator" className="relative overflow-hidden bg-[#f2f0ea] px-5 py-20 text-[#101318] md:px-8 md:py-32">
+      <div className="absolute inset-0 calculator-grid opacity-60" />
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute left-0 right-0 top-0 h-1 origin-left bg-[#2864ff]"
+      />
+
+      <div className="relative mx-auto max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]">
+          <div>
+            <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#2864ff]">Put a number on the friction</span>
+            <h2 className="mt-5 font-display text-5xl font-semibold uppercase leading-[0.87] tracking-[-0.035em] md:text-7xl">
+              What is routine
+              <span className="block text-[#748092]">admin costing?</span>
+            </h2>
+            <p className="mt-7 max-w-lg text-base font-medium leading-8 text-[#5d6877]">
+              Use your own team figures. Switch between the annual cost of manual admin and the operational capacity that could be redirected.
+            </p>
+
+            <div className="mt-9 inline-flex rounded-full border border-[#b8c0cb] bg-white/60 p-1">
+              <button
+                id="calculator-cost-mode"
+                type="button"
+                onClick={() => onModeChange("cost")}
+                className={`rounded-full px-5 py-3 text-sm font-bold transition ${
+                  mode === "cost" ? "bg-[#101318] text-white shadow-lg" : "text-[#657181] hover:text-[#101318]"
+                }`}
+              >
+                Admin cost
+              </button>
+              <button
+                id="calculator-capacity-mode"
+                type="button"
+                onClick={() => onModeChange("capacity")}
+                className={`rounded-full px-5 py-3 text-sm font-bold transition ${
+                  mode === "capacity" ? "bg-[#2864ff] text-white shadow-lg" : "text-[#657181] hover:text-[#101318]"
+                }`}
+              >
+                Capacity unlocked
+              </button>
+            </div>
+          </div>
+
+          <div className="grid overflow-hidden border border-[#c7cdd5] bg-[#ebe9e3] lg:grid-cols-[0.82fr_1.18fr]">
+            <div className="border-b border-[#c7cdd5] p-6 sm:p-8 lg:border-b-0 lg:border-r">
+              <span className="font-utility text-[9px] font-bold uppercase tracking-[0.18em] text-[#687485]">Your working estimate</span>
+              <div className="mt-8 space-y-8">
+                <CalculatorRange
+                  id="calculator-team-size"
+                  label="Number of staff"
+                  value={teamSize}
+                  min={1}
+                  max={50}
+                  suffix=""
+                  onChange={onTeamSizeChange}
+                />
+                <CalculatorRange
+                  id="calculator-admin-time"
+                  label="Time spent on routine admin"
+                  value={adminTime}
+                  min={5}
+                  max={80}
+                  suffix="%"
+                  onChange={onAdminTimeChange}
+                />
+                <CalculatorRange
+                  id="calculator-hourly-cost"
+                  label="Average hourly employment cost"
+                  value={hourlyCost}
+                  min={10}
+                  max={60}
+                  prefix="£"
+                  suffix=""
+                  onChange={onHourlyCostChange}
+                />
+              </div>
+
+              <button
+                id="calculator-overheads-toggle"
+                type="button"
+                onClick={() => onIncludeOverheadsChange(!includeOverheads)}
+                className="mt-9 flex min-h-12 w-full items-center justify-between border-t border-[#c7cdd5] pt-6 text-left"
+                aria-pressed={includeOverheads}
+              >
+                <span>
+                  <strong className="block text-sm">Include typical UK overheads</strong>
+                  <span className="mt-1 block text-xs leading-5 text-[#748092]">Employer NI, pension, holiday and estimated sick leave.</span>
+                </span>
+                <span className={`relative ml-4 h-7 w-12 shrink-0 rounded-full transition ${includeOverheads ? "bg-[#2864ff]" : "bg-[#aeb6c1]"}`}>
+                  <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${includeOverheads ? "translate-x-6" : "translate-x-1"}`} />
+                </span>
+              </button>
+            </div>
+
+            <div className="relative min-h-[520px] overflow-hidden bg-[#101318] p-6 text-white sm:p-9">
+              <div className="signal-grid absolute inset-0 opacity-25" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
+                className="absolute -right-32 -top-32 h-80 w-80 rounded-full border border-dashed border-[#6f95ff]/20"
+              />
+              <div className="relative z-10 flex h-full flex-col">
+                <div className="flex items-center justify-between">
+                  <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#7f8b9a]">
+                    {mode === "cost" ? "Admin drain · annual" : "Capacity unlock · annual"}
+                  </span>
+                  <span className={`grid h-10 w-10 place-items-center rounded-full ${mode === "cost" ? "bg-[#e77387]/10 text-[#e995a4]" : "bg-[#2864ff]/15 text-[#7da0ff]"}`}>
+                    {mode === "cost" ? <PoundSterling className="h-5 w-5" /> : <Zap className="h-5 w-5" />}
+                  </span>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  {mode === "cost" ? (
+                    <motion.div
+                      key="cost"
+                      initial={{ opacity: 0, x: 30, filter: "blur(8px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, x: -30, filter: "blur(8px)" }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className="flex flex-1 flex-col"
+                    >
+                      <div className="mt-14">
+                        <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#e995a4]">Estimated annual admin cost</span>
+                        <AnimatedValue prefix="£" value={values.annualCost.toLocaleString()} />
+                        <p className="mt-5 max-w-sm text-sm leading-7 text-[#8d99aa]">
+                          Estimated employment cost tied to routine admin, using the figures you selected.
+                        </p>
+                      </div>
+                      <div className="mt-auto grid grid-cols-2 border-t border-white/10 pt-7">
+                        <CalculatorMiniMetric label="Base wages" value={`£${values.baseCost.toLocaleString()}`} />
+                        <CalculatorMiniMetric label="Hours each year" value={values.hoursPerYear.toLocaleString()} />
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="capacity"
+                      initial={{ opacity: 0, x: 30, filter: "blur(8px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, x: -30, filter: "blur(8px)" }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className="flex flex-1 flex-col"
+                    >
+                      <div className="mt-14">
+                        <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#77d7a8]">Equivalent capacity identified</span>
+                        <AnimatedValue value={values.headcount} suffix=" people" />
+                        <p className="mt-5 max-w-sm text-sm leading-7 text-[#8d99aa]">
+                          The equivalent full-time capacity currently absorbed by the selected percentage of routine admin.
+                        </p>
+                      </div>
+                      <div className="mt-auto grid grid-cols-2 border-t border-white/10 pt-7">
+                        <CalculatorMiniMetric label="Hours each week" value={values.hoursPerWeek.toLocaleString()} />
+                        <CalculatorMiniMetric label="Hours each year" value={values.hoursPerYear.toLocaleString()} />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <span className="mt-8 font-utility text-[8px] uppercase leading-5 tracking-[0.12em] text-[#526071]">
+                  Planning estimate only. Actual automation potential depends on the process reviewed.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CalculatorRange({
+  id,
+  label,
+  value,
+  min,
+  max,
+  prefix = "",
+  suffix,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  prefix?: string;
+  suffix: string;
+  onChange: (value: number) => void;
+}) {
+  const percentage = ((value - min) / (max - min)) * 100;
+  return (
+    <label htmlFor={id} className="block">
+      <span className="flex items-end justify-between gap-4">
+        <span className="text-sm font-semibold text-[#46515f]">{label}</span>
+        <strong className="font-display text-3xl font-semibold">
+          {prefix}{value}{suffix}
+        </strong>
+      </span>
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        onChange={(event) => onChange(Number(event.target.value))}
+        style={{ background: `linear-gradient(90deg, #2864ff ${percentage}%, #c1c7cf ${percentage}%)` }}
+        className="calculator-range mt-4 w-full"
+      />
+    </label>
+  );
+}
+
+function AnimatedValue({ value, prefix = "", suffix = "" }: { value: string; prefix?: string; suffix?: string }) {
+  return (
+    <div className="mt-4 min-h-[86px] overflow-hidden">
+      <AnimatePresence mode="popLayout">
+        <motion.strong
+          key={`${prefix}-${value}-${suffix}`}
+          initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
+          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          className="block font-display text-6xl font-semibold uppercase leading-none tracking-[-0.035em] sm:text-7xl"
+        >
+          {prefix}{value}<span className="text-3xl text-[#6f7b8b]">{suffix}</span>
+        </motion.strong>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function CalculatorMiniMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <span className="block font-utility text-[8px] uppercase tracking-[0.14em] text-[#596576]">{label}</span>
+      <strong className="mt-2 block font-display text-2xl font-semibold">{value}</strong>
+    </div>
   );
 }
 
