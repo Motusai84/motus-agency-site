@@ -70,6 +70,45 @@ textarea {
   animation: statusPing 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
+.motus-site {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(30, 64, 175, 0.08), transparent 32rem),
+    linear-gradient(180deg, #020305 0%, #040509 45%, #020305 100%);
+}
+
+.motus-site main,
+.motus-site footer {
+  position: relative;
+  z-index: 2;
+}
+
+.engine-grid {
+  background-image:
+    linear-gradient(rgba(96, 165, 250, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 165, 250, 0.08) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.noise-layer {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.engine-particle {
+  offset-rotate: 0deg;
+}
+
+.nav-shell {
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+input[type="range"] {
+  height: 4px;
+}
+
 @media (max-width: 767px) {
   .starfield {
     display: none;
@@ -86,16 +125,6 @@ textarea {
   .motus-site > section {
     content-visibility: auto;
     contain-intrinsic-size: 800px;
-    padding: 5rem 1.25rem !important;
-  }
-
-  .motus-site > section:first-of-type {
-    padding-top: 5rem !important;
-    padding-bottom: 3.5rem !important;
-  }
-
-  .motus-site > #how-it-works {
-    padding: 4rem 0.75rem !important;
   }
 
   .motus-site p {
