@@ -704,14 +704,14 @@ function ChaosToClarityScene() {
                 animate={{ y: [0, index % 2 ? 7 : -7, 0], rotate: [item.rotate, item.rotate + 2, item.rotate] }}
                 transition={{ duration: 5 + index, repeat: Infinity, ease: "easeInOut" }}
                 style={{ left: item.left, top: item.top }}
-                className="absolute flex items-center gap-3 rounded-2xl border border-rose-400/15 bg-[#0b090c]/90 p-3 pr-5 shadow-2xl"
+                className="absolute flex items-center gap-2 rounded-2xl border border-rose-400/15 bg-[#0b090c]/90 p-2 pr-3 shadow-2xl sm:gap-3 sm:p-3 sm:pr-5"
               >
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-rose-500/10 text-rose-300">
                   <item.icon className="h-4 w-4" />
                 </span>
                 <div>
                   <strong className="block text-xs">{item.label}</strong>
-                  <span className="mt-1 block text-[10px] text-slate-700">Waiting for somebody</span>
+                  <span className="mt-1 hidden text-[10px] text-slate-700 sm:block">Waiting for somebody</span>
                 </div>
               </motion.div>
             ))}
@@ -746,14 +746,14 @@ function ChaosToClarityScene() {
                 initial={{ x: 16 }}
                 whileInView={{ x: 0 }}
                 style={{ right: item.right, top: item.top }}
-                className="absolute flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-[#07100d]/90 p-3 pr-5 shadow-2xl"
+                className="absolute flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-[#07100d]/90 p-2 pr-3 shadow-2xl sm:gap-3 sm:p-3 sm:pr-5"
               >
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400">
                   <item.icon className="h-4 w-4" />
                 </span>
                 <div>
                   <strong className="block text-xs">{item.label}</strong>
-                  <span className="mt-1 block text-[10px] text-slate-600">Completed and recorded</span>
+                  <span className="mt-1 hidden text-[10px] text-slate-600 sm:block">Completed and recorded</span>
                 </div>
               </motion.div>
             ))}
