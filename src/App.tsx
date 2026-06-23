@@ -1,30 +1,21 @@
 import {
-  Activity,
-  AlertTriangle,
   ArrowDown,
   ArrowRight,
   BellRing,
-  BookOpenCheck,
-  BriefcaseBusiness,
-  Calendar,
+  Building2,
+  CalendarCheck2,
   Check,
   CheckCircle2,
   ChevronRight,
   Clock3,
-  Database,
   FileCheck2,
-  Gauge,
   Inbox,
   LockKeyhole,
   Mail,
   Menu,
   MessageSquareText,
-  Phone,
   PhoneMissed,
-  PoundSterling,
-  RefreshCw,
   Route,
-  Send,
   ShieldCheck,
   Sparkles,
   User,
@@ -41,98 +32,92 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
-import { useMemo, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
 const NAV_ITEMS = [
   { label: "What we fix", id: "problems" },
-  { label: "How it works", id: "framework" },
+  { label: "See an example", id: "example" },
   { label: "Results", id: "results" },
-  { label: "Industries", id: "industries" },
 ];
 
-const ENGINE_STAGES = [
-  {
-    number: "01",
-    short: "Receive",
-    title: "A request arrives",
-    text: "A customer enquiry, missed call, booking or internal request enters the system.",
-    icon: Inbox,
+const WORKFLOWS = {
+  "Missed calls": {
+    intro: "A potential customer calls while your team is busy.",
+    before: ["The call is missed", "Someone writes a note", "The reply is delayed", "The lead may go elsewhere"],
+    after: [
+      { title: "Call detected", detail: "The missed call is recognised immediately.", icon: PhoneMissed },
+      { title: "Helpful reply sent", detail: "The customer receives a text within moments.", icon: MessageSquareText },
+      { title: "Lead recorded", detail: "Their details are added to the right place.", icon: FileCheck2 },
+      { title: "Team notified", detail: "The right person knows what needs attention.", icon: BellRing },
+    ],
+    result: "The opportunity stays warm without somebody watching the phone.",
   },
-  {
-    number: "02",
-    short: "Check",
-    title: "The details are checked",
-    text: "Motus makes sure the information needed to continue is present and usable.",
-    icon: FileCheck2,
+  Enquiries: {
+    intro: "A customer submits a question through your website.",
+    before: ["Email enters a busy inbox", "Details are copied manually", "A reply is drafted", "Follow-up is easily forgotten"],
+    after: [
+      { title: "Enquiry received", detail: "The request enters one organised process.", icon: Inbox },
+      { title: "Details checked", detail: "The important information is captured.", icon: FileCheck2 },
+      { title: "Response prepared", detail: "A clear acknowledgement goes out quickly.", icon: Mail },
+      { title: "Next step created", detail: "A task is assigned instead of being forgotten.", icon: Route },
+    ],
+    result: "Every enquiry receives a consistent first response and a clear next step.",
   },
-  {
-    number: "03",
-    short: "Route",
-    title: "It goes to the right process",
-    text: "The request is sent to the correct workflow, system or member of staff.",
-    icon: Route,
-  },
-  {
-    number: "04",
-    short: "Act",
-    title: "The routine work gets done",
-    text: "Motus can reply, update records, create tasks, send reminders or arrange bookings.",
-    icon: Zap,
-  },
-  {
-    number: "05",
-    short: "Watch",
-    title: "The result is monitored",
-    text: "The system checks that each important step completed instead of assuming it worked.",
-    icon: Activity,
-  },
-  {
-    number: "06",
-    short: "Alert",
-    title: "Problems do not stay hidden",
-    text: "If something fails, Motus records it and alerts the right person to take over.",
-    icon: BellRing,
-  },
-];
-
-const SECTORS = {
-  Trades: {
-    before: ["Missed customer call", "Handwritten note", "Reply sent hours later", "Job goes cold"],
-    after: ["Automatic text sent", "Lead recorded", "Booking link shared", "Staff notified"],
-    outcome: "A missed call becomes a live opportunity.",
-  },
-  Property: {
-    before: ["Tenant email arrives", "Inbox checked manually", "Contractor searched for", "Updates chased"],
-    after: ["Request categorised", "Urgent cases flagged", "Contractor contacted", "Progress recorded"],
-    outcome: "Maintenance requests move without constant chasing.",
-  },
-  Accountants: {
-    before: ["Deadline approaches", "Client chased manually", "Documents renamed", "Data copied"],
-    after: ["Deadline monitored", "Reminder sent", "Folder prepared", "Status updated"],
-    outcome: "Routine client chasing happens consistently.",
-  },
-  Recruitment: {
-    before: ["CV received", "Skills read manually", "Database updated", "Interview chased"],
-    after: ["CV details extracted", "Candidate categorised", "Records updated", "Invite sent"],
-    outcome: "Candidates move faster while recruiters focus on people.",
+  Bookings: {
+    intro: "A customer wants to arrange an appointment or site visit.",
+    before: ["Dates go back and forth", "Availability is checked", "Details are retyped", "Reminders are sent manually"],
+    after: [
+      { title: "Request received", detail: "The customer starts from one clear booking route.", icon: Inbox },
+      { title: "Time confirmed", detail: "Available times are presented automatically.", icon: CalendarCheck2 },
+      { title: "Records updated", detail: "The booking details stay organised.", icon: FileCheck2 },
+      { title: "Reminder scheduled", detail: "The customer is reminded before the appointment.", icon: BellRing },
+    ],
+    result: "Bookings move forward with fewer messages and fewer no-shows.",
   },
 } as const;
 
-const PROCESS_STEPS = [
-  ["01", "Review", "We look at how work currently moves through your business."],
-  ["02", "Choose", "We identify the repetitive tasks worth automating first."],
-  ["03", "Build", "We create and test the workflow around your existing tools."],
-  ["04", "Connect", "We install it with minimal disruption to your team."],
-  ["05", "Improve", "We monitor performance and make useful adjustments."],
+const OUTCOMES = [
+  {
+    icon: Clock3,
+    title: "More time for valuable work",
+    text: "Routine admin moves in the background while your team focuses on customers and delivery.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Fewer things fall through gaps",
+    text: "Important steps are recorded, checked and handed to the right person.",
+  },
+  {
+    icon: Zap,
+    title: "Faster customer responses",
+    text: "Enquiries receive a useful first response without waiting for someone to become available.",
+  },
+];
+
+const PROCESS = [
+  {
+    number: "01",
+    title: "Show us the bottleneck",
+    text: "We look at one repetitive process that is costing your team time.",
+  },
+  {
+    number: "02",
+    title: "See a practical plan",
+    text: "We explain what can be improved, what should stay human and what it would involve.",
+  },
+  {
+    number: "03",
+    title: "Build without disruption",
+    text: "If it makes sense, we connect the workflow to the tools your business already uses.",
+  },
 ];
 
 const reveal: Variants = {
-  hidden: { opacity: 0, y: 28, scale: 0.99 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
@@ -144,45 +129,46 @@ const stagger: Variants = {
 export default function App() {
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
-  const navScale = useTransform(scrollYProgress, [0, 0.08], [1, 0.94]);
-  const navTop = useTransform(scrollYProgress, [0, 0.08], [20, 10]);
+  const navScale = useTransform(scrollYProgress, [0, 0.08], [1, 0.95]);
+  const navTop = useTransform(scrollYProgress, [0, 0.08], [18, 10]);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeStage, setActiveStage] = useState(0);
-  const [activeSector, setActiveSector] = useState<keyof typeof SECTORS>("Trades");
-  const [engineRunning, setEngineRunning] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [activeWorkflow, setActiveWorkflow] = useState<keyof typeof WORKFLOWS>("Missed calls");
+  const [workflowRunning, setWorkflowRunning] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success">("idle");
-  const [teamSize, setTeamSize] = useState(10);
-  const [manualTime, setManualTime] = useState(20);
-  const [hourlyCost, setHourlyCost] = useState(15);
-
-  const impact = useMemo(() => {
-    const hours = teamSize * 40 * (manualTime / 100);
-    const annualHours = hours * 52;
-    const annualValue = annualHours * hourlyCost;
-    return {
-      weeklyHours: Math.round(hours),
-      annualHours: Math.round(annualHours),
-      annualValue: Math.round(annualValue),
-      capacity: (hours / 40).toFixed(1),
-    };
-  }, [teamSize, manualTime, hourlyCost]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     setMenuOpen(false);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const chooseWorkflow = (workflow: keyof typeof WORKFLOWS) => {
+    setActiveWorkflow(workflow);
+    setWorkflowRunning(false);
+  };
+
+  const openReview = () => {
+    setMenuOpen(false);
+    setReviewOpen(true);
+  };
+
+  const closeReview = () => {
+    if (formStatus !== "sending") setReviewOpen(false);
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formStatus !== "idle") return;
     const form = event.currentTarget;
-    setFormStatus("sending");
     const data = Object.fromEntries(new FormData(form).entries());
+    setFormStatus("sending");
+
     fetch("https://seunayomide.app.n8n.cloud/webhook/lead-capture", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     }).catch(() => undefined);
+
     window.setTimeout(() => {
       setFormStatus("success");
       form.reset();
@@ -195,19 +181,20 @@ export default function App() {
 
       <motion.header
         style={{ top: reduceMotion ? 14 : navTop }}
-        className="fixed left-1/2 z-50 w-[calc(100%-24px)] max-w-5xl -translate-x-1/2 origin-top"
+        className="fixed left-1/2 z-50 w-[calc(100%-24px)] max-w-5xl -translate-x-1/2"
       >
         <motion.div
           style={{ scale: reduceMotion ? 1 : navScale }}
-          className="nav-shell flex origin-top items-center justify-between rounded-full border border-white/10 bg-black/70 px-3 py-2 shadow-2xl shadow-black/40 backdrop-blur-xl md:px-4"
+          className="nav-shell flex origin-top items-center justify-between rounded-full border border-white/10 bg-black/75 px-2.5 py-2 shadow-2xl backdrop-blur-xl sm:px-4"
         >
           <button
+            id="nav-home-btn"
             type="button"
             onClick={() => scrollTo("top")}
-            className="flex items-center gap-2 rounded-full px-2 py-2"
+            className="flex items-center gap-2 rounded-full px-2 py-1.5"
             aria-label="Back to top"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-full border border-blue-400/30 bg-blue-500/10">
+            <span className="grid h-9 w-9 place-items-center rounded-full border border-blue-400/30 bg-blue-500/10">
               <Sparkles className="h-4 w-4 text-blue-400" />
             </span>
             <span className="hidden text-sm font-bold tracking-[0.18em] sm:block">MOTUS</span>
@@ -220,7 +207,7 @@ export default function App() {
                 key={item.id}
                 type="button"
                 onClick={() => scrollTo(item.id)}
-                className="rounded-full px-4 py-2 text-sm font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
+                className="rounded-full px-4 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-white"
               >
                 {item.label}
               </button>
@@ -229,12 +216,12 @@ export default function App() {
 
           <div className="flex items-center gap-2">
             <button
-              id="nav-audit-btn"
+              id="nav-review-btn"
               type="button"
-              onClick={() => scrollTo("audit")}
-              className="rounded-full bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-500 sm:text-sm"
+              onClick={openReview}
+              className="rounded-full bg-blue-600 px-4 py-2.5 text-xs font-semibold shadow-lg shadow-blue-600/20 transition hover:bg-blue-500 sm:px-5 sm:text-sm"
             >
-              Free audit
+              Free review
             </button>
             <button
               id="mobile-menu-btn"
@@ -242,6 +229,7 @@ export default function App() {
               onClick={() => setMenuOpen((open) => !open)}
               className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 md:hidden"
               aria-label="Toggle navigation"
+              aria-expanded={menuOpen}
             >
               {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -254,10 +242,11 @@ export default function App() {
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="mt-2 rounded-3xl border border-white/10 bg-black/90 p-3 shadow-2xl backdrop-blur-xl md:hidden"
+              className="mt-2 rounded-[28px] border border-white/10 bg-black/95 p-3 shadow-2xl backdrop-blur-xl md:hidden"
             >
               {NAV_ITEMS.map((item) => (
                 <button
+                  id={`mobile-nav-${item.id}`}
                   key={item.id}
                   type="button"
                   onClick={() => scrollTo(item.id)}
@@ -274,713 +263,466 @@ export default function App() {
 
       <main>
         <section id="top" className="relative flex min-h-screen items-center overflow-hidden px-5 pb-16 pt-32 md:px-8 md:pt-36">
-          <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1fr_0.9fr] lg:gap-16">
             <motion.div initial="hidden" animate="visible" variants={stagger} className="relative z-10">
-              <motion.div variants={reveal} className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-300">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-50" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-400" />
+              <motion.div variants={reveal} className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-300">
+                <span className="relative h-2 w-2 rounded-full bg-blue-400">
+                  <span className="motion-status-ping absolute inset-0 rounded-full bg-blue-400" />
                 </span>
                 Business automation, explained clearly
               </motion.div>
-              <motion.h1 variants={reveal} className="max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.055em] sm:text-6xl lg:text-7xl">
-                Scale Your Business,
-                <span className="block bg-gradient-to-r from-white via-blue-100 to-blue-400 bg-clip-text text-transparent">
-                  Not Your Headcount.
-                </span>
+
+              <motion.h1 variants={reveal} className="max-w-3xl text-[3.4rem] font-semibold leading-[0.96] tracking-[-0.055em] sm:text-6xl md:text-7xl">
+                Less repetitive admin.
+                <span className="mt-2 block text-slate-600">More room to grow.</span>
               </motion.h1>
-              <motion.p variants={reveal} className="mt-6 max-w-xl text-base font-medium leading-relaxed text-slate-300 sm:text-lg">
-                Motus connects your business tools and handles repetitive admin automatically—so enquiries move faster,
-                records stay updated and your team gets more time for valuable work.
+
+              <motion.p variants={reveal} className="mt-7 max-w-2xl text-base font-medium leading-8 text-slate-400 sm:text-lg">
+                Motus connects the tools your business already uses, so enquiries move faster, records stay organised and your team spends less time chasing routine tasks.
               </motion.p>
-              <motion.div variants={reveal} className="mt-8 flex flex-col gap-3 sm:flex-row">
+
+              <motion.div variants={reveal} className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <button
-                  id="hero-audit-btn"
+                  id="hero-review-btn"
                   type="button"
-                  onClick={() => scrollTo("audit")}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-7 py-4 font-semibold shadow-xl shadow-blue-600/25 transition hover:bg-blue-500"
+                  onClick={openReview}
+                  className="group flex min-h-14 items-center justify-center gap-3 rounded-full bg-blue-600 px-7 font-semibold shadow-[0_14px_55px_rgba(37,99,235,.25)] transition hover:bg-blue-500"
                 >
-                  Request Free Tech Audit
-                  <ArrowRight className="h-4 w-4" />
+                  Book a free workflow review
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
                 <button
-                  id="hero-how-btn"
+                  id="hero-example-btn"
                   type="button"
-                  onClick={() => scrollTo("framework")}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-7 py-4 font-semibold text-slate-200 backdrop-blur transition hover:bg-white/[0.08]"
+                  onClick={() => scrollTo("example")}
+                  className="flex min-h-14 items-center justify-center gap-3 rounded-full border border-white/10 bg-white/[0.025] px-7 font-semibold text-slate-300 transition hover:bg-white/5 hover:text-white"
                 >
-                  See how it works
+                  See a simple example
                   <ArrowDown className="h-4 w-4" />
                 </button>
+              </motion.div>
+
+              <motion.div variants={reveal} className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs font-medium text-slate-500">
+                <span className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-emerald-400" />No obligation</span>
+                <span className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-emerald-400" />Plain-English advice</span>
+                <span className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-emerald-400" />Built for UK businesses</span>
               </motion.div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 30 }}
+              initial={{ opacity: 0, scale: 0.94, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1.3, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="relative min-h-[500px]"
+              transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="relative mx-auto w-full max-w-xl"
             >
-              <OperationalEngine running />
+              <ActivityPreview />
             </motion.div>
-          </div>
-          <div className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-slate-600 md:flex">
-            Explore the system
-            <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }} className="h-10 w-px bg-gradient-to-b from-blue-400 to-transparent" />
           </div>
         </section>
 
-        <section id="problems" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
+        <section id="problems" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionIntro
               eyebrow="What we fix"
-              title="Your tools work. They just don’t work together."
-              text="Most businesses do not need another app. They need the tools they already use to share information and move routine work forward."
+              title="Good businesses lose time in small, repetitive gaps."
+              text="It is rarely one dramatic problem. It is the repeated copying, checking, chasing and updating that quietly consumes the week."
             />
 
-            <div className="mt-14 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={stagger}
-                className="relative min-h-[560px] overflow-hidden rounded-[32px] border border-white/10 bg-[#07090d] p-5 sm:p-8"
-              >
-                <div className="absolute inset-0 opacity-30 engine-grid" />
-                <div className="relative z-10 flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Before Motus</span>
-                  <span className="flex items-center gap-2 text-xs font-medium text-rose-400">
-                    <AlertTriangle className="h-4 w-4" />
-                    Work is disconnected
-                  </span>
-                </div>
-                <div className="relative z-10 mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3">
-                  <ChaosNode icon={PhoneMissed} label="Missed enquiry" delay={0} />
-                  <ChaosNode icon={Mail} label="Inbox backlog" delay={0.15} />
-                  <ChaosNode icon={Database} label="Manual spreadsheet" delay={0.3} />
-                  <ChaosNode icon={Clock3} label="Delayed follow-up" delay={0.45} />
-                  <ChaosNode icon={RefreshCw} label="Repeated data entry" delay={0.6} />
-                  <ChaosNode icon={AlertTriangle} label="Silent failures" delay={0.75} />
-                </div>
-                <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-30" viewBox="0 0 700 560" fill="none">
-                  <path d="M80 180 C220 80 310 300 460 160" stroke="#334155" strokeWidth="1.5" strokeDasharray="8 10" />
-                  <path d="M150 400 C260 250 430 500 610 340" stroke="#334155" strokeWidth="1.5" strokeDasharray="8 10" />
-                  <path d="M400 100 C330 240 510 300 530 470" stroke="#334155" strokeWidth="1.5" strokeDasharray="8 10" />
-                </svg>
-              </motion.div>
-
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={stagger}
-                className="flex flex-col justify-center"
-              >
-                {[
-                  ["Enquiries wait too long", "Customers move quickly. Slow replies quietly cost opportunities."],
-                  ["Information is copied by hand", "Staff spend valuable time moving the same details between tools."],
-                  ["Follow-ups depend on memory", "Important reminders happen inconsistently when people get busy."],
-                  ["Failures stay hidden", "A broken process can go unnoticed until a customer complains."],
-                ].map(([title, text], index) => (
-                  <motion.div key={title} variants={reveal} className="group border-b border-white/10 py-6 first:pt-0">
-                    <div className="flex gap-4">
-                      <span className="mt-1 font-mono text-xs text-blue-400">0{index + 1}</span>
-                      <div>
-                        <h3 className="text-xl font-semibold">{title}</h3>
-                        <p className="mt-2 max-w-lg text-sm leading-relaxed text-slate-400">{text}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <section id="framework" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
-          <div className="mx-auto max-w-7xl">
-            <SectionIntro
-              eyebrow="How it works"
-              title="One clear system, from request to result."
-              text="Motus quietly moves routine work through six understandable stages. Your team stays in control and steps in when judgement is needed."
-            />
-
-            <div className="mt-16 grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
-              <div className="lg:sticky lg:top-28 lg:h-[620px]">
-                <FrameworkVisual active={activeStage} />
-              </div>
-              <div className="space-y-4">
-                {ENGINE_STAGES.map((stage, index) => (
-                  <motion.button
-                    id={`framework-stage-${index + 1}`}
-                    key={stage.short}
-                    type="button"
-                    onViewportEnter={() => setActiveStage(index)}
-                    onClick={() => setActiveStage(index)}
-                    viewport={{ margin: "-40% 0px -40% 0px" }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                    className={`w-full rounded-3xl border p-5 text-left transition-all sm:p-7 ${
-                      activeStage === index
-                        ? "border-blue-500/40 bg-blue-500/[0.08] shadow-xl shadow-blue-950/20"
-                        : "border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04]"
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <span className={`font-mono text-xs ${activeStage === index ? "text-blue-400" : "text-slate-600"}`}>
-                        {stage.number}
-                      </span>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between gap-4">
-                          <h3 className="text-xl font-semibold">{stage.title}</h3>
-                          <stage.icon className={`h-5 w-5 shrink-0 ${activeStage === index ? "text-blue-400" : "text-slate-600"}`} />
-                        </div>
-                        <p className="mt-2 text-sm leading-relaxed text-slate-400">{stage.text}</p>
-                      </div>
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="results" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
-          <div className="mx-auto max-w-7xl">
-            <SectionIntro
-              eyebrow="What changes"
-              title="The technology disappears. The results stay visible."
-              text="The point is not to add complexity. It is to remove repeated work and make everyday service more dependable."
-            />
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
               variants={stagger}
-              className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+              className="mt-14 grid gap-4 md:grid-cols-3"
             >
-              <OutcomeCard icon={MessageSquareText} title="Faster replies" text="Customers receive useful responses while interest is still high." />
-              <OutcomeCard icon={CheckCircle2} title="Fewer missed steps" text="Important follow-ups happen consistently, even on busy days." />
-              <OutcomeCard icon={Clock3} title="More staff time" text="Routine admin stops consuming time meant for customers and growth." />
-              <OutcomeCard icon={ShieldCheck} title="Clearer oversight" text="Activity, outcomes and failures are easier to see and understand." />
+              <ProblemCard
+                icon={PhoneMissed}
+                number="01"
+                title="Customers wait too long"
+                text="Missed calls and new enquiries sit until somebody has time to respond."
+              />
+              <ProblemCard
+                icon={Workflow}
+                number="02"
+                title="Information gets copied around"
+                text="The same details move between inboxes, sheets and systems by hand."
+              />
+              <ProblemCard
+                icon={BellRing}
+                number="03"
+                title="Follow-ups depend on memory"
+                text="Important next steps are easy to miss when the team gets busy."
+              />
             </motion.div>
-
-            <div className="mt-6 grid gap-6 overflow-hidden rounded-[32px] border border-white/10 bg-[#07090d] p-6 md:grid-cols-[0.9fr_1.1fr] md:p-10">
-              <div className="flex flex-col justify-center">
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">Live capacity estimate</span>
-                <h3 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">See what repetitive work costs your team.</h3>
-                <p className="mt-4 text-sm leading-relaxed text-slate-400">
-                  Adjust the figures. The estimate updates immediately without sending or storing your information.
-                </p>
-                <div className="mt-8 space-y-6">
-                  <RangeControl label="Number of staff" value={teamSize} min={1} max={50} onChange={setTeamSize} />
-                  <RangeControl label="Time spent on routine admin" value={manualTime} suffix="%" min={5} max={80} onChange={setManualTime} />
-                  <RangeControl label="Average hourly cost" value={hourlyCost} prefix="£" min={10} max={60} onChange={setHourlyCost} />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
-                <ImpactMetric label="Hours each week" value={impact.weeklyHours.toLocaleString()} icon={Clock3} featured />
-                <ImpactMetric label="Annual hours" value={impact.annualHours.toLocaleString()} icon={Gauge} />
-                <ImpactMetric label="Estimated yearly value" value={`£${impact.annualValue.toLocaleString()}`} icon={PoundSterling} />
-                <ImpactMetric label="Staff-equivalent capacity" value={impact.capacity} icon={BriefcaseBusiness} featured />
-              </div>
-            </div>
           </div>
         </section>
 
-        <section id="industries" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
+        <section id="example" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionIntro
-              eyebrow="See it in practice"
-              title="The same engine, shaped around your business."
-              text="Choose an industry to see a simple example of how Motus can replace a fragile manual process."
+              eyebrow="One practical example"
+              title="See how one routine task can move."
+              text="Choose a common process, then run the example. This is the level of automation we mean: useful, understandable and built around real work."
             />
 
             <div className="mt-12 flex flex-wrap justify-center gap-2">
-              {(Object.keys(SECTORS) as Array<keyof typeof SECTORS>).map((sector) => (
+              {(Object.keys(WORKFLOWS) as Array<keyof typeof WORKFLOWS>).map((workflow) => (
                 <button
-                  id={`sector-${sector.toLowerCase()}`}
-                  key={sector}
+                  id={`workflow-${workflow.toLowerCase().replace(" ", "-")}`}
+                  key={workflow}
                   type="button"
-                  onClick={() => {
-                    setActiveSector(sector);
-                    setEngineRunning(false);
-                  }}
+                  onClick={() => chooseWorkflow(workflow)}
                   className={`rounded-full border px-5 py-2.5 text-sm font-semibold transition ${
-                    activeSector === sector
-                      ? "border-blue-500 bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-                      : "border-white/10 bg-white/[0.03] text-slate-400 hover:text-white"
+                    activeWorkflow === workflow
+                      ? "border-blue-500/40 bg-blue-500/15 text-blue-300"
+                      : "border-white/10 bg-white/[0.02] text-slate-500 hover:text-white"
                   }`}
                 >
-                  {sector}
+                  {workflow}
                 </button>
               ))}
             </div>
 
-            <div className="mt-8 overflow-hidden rounded-[32px] border border-white/10 bg-[#05070a]">
-              <div className="grid lg:grid-cols-[1fr_180px_1fr]">
-                <WorkflowColumn title="Before Motus" items={SECTORS[activeSector].before} faded={engineRunning} />
-                <div className="relative flex min-h-40 items-center justify-center border-y border-white/10 bg-black/40 lg:min-h-[520px] lg:border-x lg:border-y-0">
-                  <div className="absolute inset-0 engine-grid opacity-30" />
-                  <div className="relative z-10 flex flex-col items-center gap-4">
-                    <motion.div
-                      animate={engineRunning ? { scale: [1, 1.12, 1], rotate: [0, 3, 0] } : { scale: 1 }}
-                      transition={{ duration: 0.7 }}
-                      className={`grid h-20 w-20 place-items-center rounded-full border ${
-                        engineRunning
-                          ? "border-emerald-400 bg-emerald-400/10 shadow-[0_0_50px_rgba(52,211,153,0.25)]"
-                          : "border-blue-400/40 bg-blue-500/10 shadow-[0_0_50px_rgba(59,130,246,0.18)]"
-                      }`}
-                    >
-                      <Workflow className={`h-8 w-8 ${engineRunning ? "text-emerald-400" : "text-blue-400"}`} />
-                    </motion.div>
-                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Motus Engine</span>
-                    <button
-                      id="run-engine-btn"
-                      type="button"
-                      onClick={() => setEngineRunning((running) => !running)}
-                      className={`rounded-full border px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition ${
-                        engineRunning
-                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
-                          : "border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20"
-                      }`}
-                    >
-                      {engineRunning ? "System running" : "Run the engine"}
-                    </button>
+            <motion.div
+              layout
+              className="mt-8 overflow-hidden rounded-[32px] border border-white/10 bg-[#07090d] shadow-2xl shadow-black/30"
+            >
+              <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
+                <div className="border-b border-white/10 p-6 sm:p-9 lg:border-b-0 lg:border-r">
+                  <span className="text-xs font-bold uppercase tracking-[0.18em] text-slate-600">Without a connected process</span>
+                  <p className="mt-4 text-lg font-medium leading-relaxed text-slate-300">{WORKFLOWS[activeWorkflow].intro}</p>
+                  <div className="mt-7 space-y-3">
+                    {WORKFLOWS[activeWorkflow].before.map((item, index) => (
+                      <motion.div
+                        key={item}
+                        animate={{ opacity: workflowRunning ? 0.25 : 1, x: workflowRunning ? -5 : 0 }}
+                        transition={{ duration: 0.45, delay: index * 0.05 }}
+                        className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-black/30 p-4"
+                      >
+                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white/5 text-xs text-slate-600">{index + 1}</span>
+                        <span className="text-sm font-medium text-slate-400">{item}</span>
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
-                <WorkflowColumn title="With Motus" items={SECTORS[activeSector].after} active={engineRunning} />
+
+                <div className="relative overflow-hidden p-6 sm:p-9">
+                  <div className="engine-grid absolute inset-0 opacity-20" />
+                  <div className="relative z-10">
+                    <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <span className="text-xs font-bold uppercase tracking-[0.18em] text-blue-400">With Motus</span>
+                        <h3 className="mt-2 text-2xl font-semibold">One clear, reliable flow</h3>
+                      </div>
+                      <button
+                        id="run-workflow-btn"
+                        type="button"
+                        onClick={() => setWorkflowRunning(true)}
+                        className="group flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-bold text-black transition hover:bg-blue-100"
+                      >
+                        {workflowRunning ? "Example running" : "Run the example"}
+                        {workflowRunning ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                      </button>
+                    </div>
+
+                    <div className="relative mt-9 grid gap-3 sm:grid-cols-2">
+                      {WORKFLOWS[activeWorkflow].after.map((step, index) => (
+                        <WorkflowStep
+                          key={step.title}
+                          step={step}
+                          index={index}
+                          active={workflowRunning}
+                        />
+                      ))}
+                    </div>
+
+                    <motion.div
+                      animate={{
+                        opacity: workflowRunning ? 1 : 0.45,
+                        borderColor: workflowRunning ? "rgba(52,211,153,.3)" : "rgba(255,255,255,.08)",
+                      }}
+                      className="mt-5 flex items-start gap-3 rounded-2xl border bg-emerald-500/[0.05] p-4"
+                    >
+                      <CheckCircle2 className={`mt-0.5 h-5 w-5 shrink-0 ${workflowRunning ? "text-emerald-400" : "text-slate-600"}`} />
+                      <p className="text-sm font-medium leading-relaxed text-slate-300">
+                        {workflowRunning ? WORKFLOWS[activeWorkflow].result : "Press “Run the example” to see the connected process."}
+                      </p>
+                    </motion.div>
+                  </div>
+                </div>
               </div>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`${activeSector}-${engineRunning}`}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="border-t border-white/10 bg-white/[0.02] px-6 py-5 text-center text-sm font-medium text-slate-300"
-                >
-                  {engineRunning ? SECTORS[activeSector].outcome : "Run the engine to see the routine process change."}
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        <section className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
+        <section id="results" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionIntro
-              eyebrow="Working with Motus"
-              title="A clear route from problem to working system."
-              text="We keep the process understandable, test carefully and work around the tools your team already knows."
+              eyebrow="The point of automation"
+              title="Technology should make the working day feel lighter."
+              text="The outcome is not a complicated system. It is a business that responds consistently and relies less on repetitive manual effort."
             />
-            <div className="relative mt-16">
-              <div className="absolute left-6 top-0 hidden h-full w-px bg-gradient-to-b from-blue-500 via-blue-500/40 to-transparent md:left-0 md:top-8 md:block md:h-px md:w-full" />
-              <div className="grid gap-5 md:grid-cols-5">
-                {PROCESS_STEPS.map(([number, title, text]) => (
-                  <motion.div
-                    key={number}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative rounded-3xl border border-white/[0.08] bg-[#080a0e] p-5 md:pt-12"
-                  >
-                    <span className="absolute left-5 top-5 grid h-7 w-7 place-items-center rounded-full border border-blue-400/40 bg-blue-500/10 font-mono text-[10px] text-blue-300 md:left-0 md:top-4 md:-translate-x-1/2">
-                      {number}
-                    </span>
-                    <h3 className="mt-10 text-lg font-semibold md:mt-0">{title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-400">{text}</p>
-                  </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={stagger}
+              className="mt-14 grid gap-4 md:grid-cols-3"
+            >
+              {OUTCOMES.map((outcome) => (
+                <OutcomeCard key={outcome.title} {...outcome} />
+              ))}
+            </motion.div>
+
+            <div className="mt-16 grid gap-8 rounded-[32px] border border-white/10 bg-white/[0.025] p-6 sm:p-9 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-blue-400">A sensible first step</span>
+                <h3 className="mt-4 text-3xl font-semibold tracking-tight">Start with one frustrating process.</h3>
+                <p className="mt-4 max-w-lg leading-relaxed text-slate-400">
+                  You do not need to automate the whole company. The best starting point is usually one repeated task with a clear beginning, end and owner.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {PROCESS.map((step) => (
+                  <div key={step.number} className="rounded-3xl border border-white/[0.08] bg-black/30 p-5">
+                    <span className="font-mono text-xs text-blue-400">{step.number}</span>
+                    <h4 className="mt-8 font-semibold">{step.title}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-500">{step.text}</p>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
         </section>
 
-        <section className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">Built to stay understandable</span>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                Safe automation should never feel like a black box.
-              </h2>
-              <p className="mt-5 max-w-xl leading-relaxed text-slate-400">
-                You should know what the system does, where information moves and what happens when something goes wrong.
-              </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <TrustItem icon={LockKeyhole} title="GDPR-aware handling" text="Customer information is only used where the process requires it." />
-              <TrustItem icon={BookOpenCheck} title="Plain-English handover" text="Your team receives a clear explanation of how the automation works." />
-              <TrustItem icon={BellRing} title="Error alerts" text="Important failures are surfaced instead of disappearing silently." />
-              <TrustItem icon={ShieldCheck} title="Visible audit trail" text="Key actions and outcomes can be recorded for review." />
+        <section className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-28">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-blue-400">Built responsibly</span>
+                <h2 className="mt-4 text-4xl font-semibold tracking-[-0.035em] md:text-5xl">Clear enough to trust.</h2>
+                <p className="mt-5 max-w-xl leading-relaxed text-slate-400">
+                  We explain what the workflow is doing, where information goes and when a person needs to step in.
+                </p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <TrustItem icon={ShieldCheck} title="Human oversight" text="Important decisions stay with the right person." />
+                <TrustItem icon={LockKeyhole} title="Data considered" text="Workflows are planned with UK privacy obligations in mind." />
+                <TrustItem icon={Route} title="Clear handover" text="Your team can understand how the process works." />
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="audit" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
-          <div className="mx-auto max-w-4xl overflow-hidden rounded-[36px] border border-blue-500/20 bg-gradient-to-br from-blue-950/30 via-[#080a0e] to-black p-5 shadow-2xl shadow-blue-950/20 sm:p-8 md:p-12">
-            <div className="mx-auto max-w-2xl text-center">
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">Free 15-minute tech audit</span>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Let’s find the work your team should not be doing by hand.</h2>
-              <p className="mt-5 text-sm leading-relaxed text-slate-400 md:text-base">
-                Tell us where time is being lost. We will identify whether automation can help and explain the next step clearly.
-              </p>
-            </div>
-
-            <AnimatePresence mode="wait">
-              {formStatus === "success" ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.97 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="mx-auto mt-10 max-w-xl rounded-3xl border border-emerald-500/20 bg-emerald-500/[0.06] p-8 text-center"
-                >
-                  <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-400" />
-                  <h3 className="mt-4 text-2xl font-semibold">Your request has been received.</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-400">We will review your details and contact you to arrange the audit.</p>
-                </motion.div>
-              ) : (
-                <motion.form
-                  key="form"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  onSubmit={handleSubmit}
-                  className="mt-10 grid gap-4 md:grid-cols-2"
-                >
-                  <FormField id="audit-name" name="full_name" label="Full name" placeholder="Jane Doe" icon={User} required />
-                  <FormField id="audit-company" name="company_name" label="Company" placeholder="Your Business Ltd" icon={BriefcaseBusiness} required />
-                  <FormField id="audit-email" name="email" type="email" label="Email" placeholder="jane@example.co.uk" icon={Mail} required />
-                  <FormField id="audit-phone" name="phone" type="tel" label="Phone" placeholder="07123 456 789" icon={Phone} required />
-                  <label className="md:col-span-2">
-                    <span className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-300">
-                      <MessageSquareText className="h-4 w-4" />
-                      What is taking too much time?
-                    </span>
-                    <textarea
-                      id="audit-headache"
-                      name="headache"
-                      rows={4}
-                      className="w-full resize-none rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-white outline-none transition focus:border-blue-500/60 focus:bg-blue-950/20"
-                      placeholder="Tell us about the repetitive process, missed enquiries or admin problem."
-                    />
-                  </label>
-                  <button
-                    id="audit-submit-btn"
-                    type="submit"
-                    disabled={formStatus === "sending"}
-                    className="md:col-span-2 mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-7 py-4 font-semibold shadow-xl shadow-blue-600/20 transition hover:bg-blue-500 disabled:cursor-wait disabled:opacity-70"
-                  >
-                    {formStatus === "sending" ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 animate-spin" />
-                        Sending…
-                      </>
-                    ) : (
-                      <>
-                        <Calendar className="h-4 w-4" />
-                        Request Free Tech Audit
-                      </>
-                    )}
-                  </button>
-                </motion.form>
-              )}
-            </AnimatePresence>
+        <section id="review" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-32">
+          <div className="mx-auto max-w-5xl overflow-hidden rounded-[36px] border border-blue-500/20 bg-blue-600 px-6 py-12 text-center shadow-[0_30px_100px_rgba(37,99,235,.2)] sm:px-10 md:py-16">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-blue-100/70">Free workflow review</span>
+            <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+              Show us the task your team is tired of repeating.
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-blue-100/80">
+              We will identify what could be improved and explain the practical next step—without jargon or obligation.
+            </p>
+            <button
+              id="final-review-btn"
+              type="button"
+              onClick={openReview}
+              className="group mx-auto mt-8 flex min-h-14 items-center justify-center gap-3 rounded-full bg-white px-8 font-bold text-blue-700 shadow-xl transition hover:bg-blue-50"
+            >
+              Book my free workflow review
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </button>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-white/5 px-5 py-10 text-sm text-slate-500 md:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 sm:flex-row">
-          <div className="flex items-center gap-2 font-bold tracking-[0.18em] text-white">
-            <Sparkles className="h-4 w-4 text-blue-400" />
-            MOTUS
-          </div>
-          <p>© {new Date().getFullYear()} Motus AI Systems. Built for UK businesses.</p>
+      <footer className="border-t border-white/5 px-5 py-10 text-sm text-slate-600 md:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-bold tracking-[0.16em] text-slate-400">MOTUS</span>
+          <span>Business automation for UK small businesses.</span>
+          <span>© 2026 Motus</span>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {reviewOpen && (
+          <ReviewPanel
+            formStatus={formStatus}
+            onClose={closeReview}
+            onSubmit={handleSubmit}
+            onReset={() => setFormStatus("idle")}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-function OperationalEngine({ running }: { running: boolean }) {
-  const inputs = [
-    { label: "Missed call", icon: PhoneMissed, position: "left-[1%] top-[12%]" },
-    { label: "New enquiry", icon: Mail, position: "left-[0%] top-[42%]" },
-    { label: "Booking", icon: Calendar, position: "left-[5%] top-[72%]" },
-  ];
-  const outputs = [
-    { label: "Reply sent", icon: Send, position: "right-[1%] top-[12%]" },
-    { label: "Records updated", icon: Database, position: "right-[0%] top-[42%]" },
-    { label: "Staff notified", icon: BellRing, position: "right-[5%] top-[72%]" },
-  ];
+function ActivityPreview() {
+  const events = [
+    { time: "09:41", title: "New customer enquiry", detail: "Website form received", icon: Inbox, tone: "blue" },
+    { time: "09:41", title: "Helpful reply sent", detail: "Customer knows what happens next", icon: Mail, tone: "emerald" },
+    { time: "09:42", title: "Follow-up assigned", detail: "Team member notified", icon: BellRing, tone: "violet" },
+  ] as const;
 
   return (
-    <div className="relative mx-auto h-[520px] w-full max-w-[680px]">
-      <div className="absolute inset-[8%] rounded-full border border-blue-500/10" />
-      <div className="absolute inset-[20%] rounded-full border border-blue-500/15" />
-      <div className="absolute inset-[31%] rounded-full border border-blue-500/20" />
-      <div className="absolute inset-0 engine-grid opacity-40 [mask-image:radial-gradient(circle,black,transparent_72%)]" />
-
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-[14%] rounded-full border border-dashed border-blue-400/20"
-      />
-      <motion.div
-        animate={{ rotate: -360 }}
-        transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-[25%] rounded-full border border-dashed border-white/10"
-      />
-
-      {inputs.map((item, index) => (
-        <EngineNode key={item.label} {...item} side="input" delay={index * 0.35} />
-      ))}
-      {outputs.map((item, index) => (
-        <EngineNode key={item.label} {...item} side="output" delay={0.5 + index * 0.35} />
-      ))}
-
-      <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-        <motion.div
-          animate={running ? { boxShadow: ["0 0 25px rgba(59,130,246,.2)", "0 0 70px rgba(59,130,246,.45)", "0 0 25px rgba(59,130,246,.2)"] } : {}}
-          transition={{ duration: 3.2, repeat: Infinity }}
-          className="grid h-40 w-40 place-items-center rounded-full border border-blue-400/40 bg-black/90 shadow-2xl sm:h-48 sm:w-48"
-        >
-          <div className="absolute inset-3 rounded-full border border-white/5" />
-          <div className="text-center">
-            <Workflow className="mx-auto h-10 w-10 text-blue-400" />
-            <span className="mt-3 block text-sm font-bold tracking-[0.2em]">MOTUS</span>
-            <span className="mt-1 block text-[9px] uppercase tracking-[0.18em] text-slate-500">Operational Engine</span>
+    <div className="relative">
+      <div className="absolute inset-8 rounded-full bg-blue-600/20 blur-[100px]" />
+      <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#080a0f]/95 p-4 shadow-[0_40px_100px_rgba(0,0,0,.55)] backdrop-blur-xl sm:p-6">
+        <div className="engine-grid absolute inset-0 opacity-20" />
+        <div className="relative z-10">
+          <div className="flex items-center justify-between border-b border-white/[0.08] pb-5">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-[0.16em] text-slate-600">Today</span>
+              <h2 className="mt-1 text-lg font-semibold">Routine work, moving</h2>
+            </div>
+            <span className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400">
+              <span className="relative h-2 w-2 rounded-full bg-emerald-400">
+                <span className="motion-status-ping absolute inset-0 rounded-full bg-emerald-400" />
+              </span>
+              Connected
+            </span>
           </div>
-        </motion.div>
-      </div>
 
-      {[0, 1, 2].map((index) => (
-        <motion.div
-          key={index}
-          animate={{ offsetDistance: ["0%", "100%"] }}
-          transition={{ duration: 3.2, delay: index * 0.9, repeat: Infinity, ease: "linear" }}
-          className="engine-particle absolute h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_14px_#60a5fa]"
-          style={{ offsetPath: `path("M ${60 + index * 8} ${120 + index * 120} C 180 ${110 + index * 110}, 210 260, 335 260 C 450 260, 490 ${110 + index * 110}, ${610 - index * 8} ${120 + index * 120}")` }}
-        />
-      ))}
-    </div>
-  );
-}
+          <div className="mt-5 space-y-3">
+            {events.map((event, index) => (
+              <motion.div
+                key={event.title}
+                initial={{ opacity: 0, x: 18 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.65, delay: 0.65 + index * 0.24, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-black/30 p-3.5 sm:p-4"
+              >
+                <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${
+                  event.tone === "blue"
+                    ? "bg-blue-500/10 text-blue-400"
+                    : event.tone === "emerald"
+                      ? "bg-emerald-500/10 text-emerald-400"
+                      : "bg-violet-500/10 text-violet-400"
+                }`}>
+                  <event.icon className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <strong className="block truncate text-sm font-semibold text-slate-200">{event.title}</strong>
+                  <span className="mt-1 block truncate text-xs text-slate-600">{event.detail}</span>
+                </div>
+                <span className="font-mono text-[10px] text-slate-700">{event.time}</span>
+              </motion.div>
+            ))}
+          </div>
 
-function EngineNode({
-  label,
-  icon: Icon,
-  position,
-  side,
-  delay,
-}: {
-  label: string;
-  icon: LucideIcon;
-  position: string;
-  side: "input" | "output";
-  delay: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: side === "input" ? -20 : 20 }}
-      animate={{ opacity: 1, x: 0, y: [0, -5, 0] }}
-      transition={{
-        opacity: { duration: 0.8, delay },
-        x: { duration: 0.8, delay },
-        y: { duration: 4 + delay, delay, repeat: Infinity, ease: "easeInOut" },
-      }}
-      className={`absolute z-20 ${position}`}
-    >
-      <div className={`flex items-center gap-2 rounded-2xl border border-white/10 bg-black/75 p-2.5 shadow-xl backdrop-blur ${side === "output" ? "flex-row-reverse" : ""}`}>
-        <span className={`grid h-9 w-9 place-items-center rounded-xl ${side === "output" ? "bg-emerald-500/10 text-emerald-400" : "bg-white/5 text-slate-400"}`}>
-          <Icon className="h-4 w-4" />
-        </span>
-        <span className="hidden whitespace-nowrap pr-1 text-xs font-medium text-slate-300 sm:block">{label}</span>
-      </div>
-    </motion.div>
-  );
-}
-
-function ChaosNode({ icon: Icon, label, delay }: { icon: LucideIcon; label: string; delay: number }) {
-  return (
-    <motion.div
-      variants={reveal}
-      animate={{ y: [0, -5, 0], rotate: [0, delay % 0.3 === 0 ? 1 : -1, 0] }}
-      transition={{ duration: 5 + delay, repeat: Infinity, ease: "easeInOut" }}
-      className="relative flex min-h-32 flex-col justify-between rounded-2xl border border-white/[0.08] bg-black/50 p-4 backdrop-blur"
-    >
-      <Icon className="h-5 w-5 text-slate-500" />
-      <span className="text-sm font-medium text-slate-300">{label}</span>
-      <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-rose-400/70 shadow-[0_0_12px_rgba(251,113,133,.5)]" />
-    </motion.div>
-  );
-}
-
-function FrameworkVisual({ active }: { active: number }) {
-  const stage = ENGINE_STAGES[active];
-  return (
-    <div className="relative flex h-full min-h-[500px] items-center justify-center overflow-hidden rounded-[32px] border border-white/10 bg-[#06080c]">
-      <div className="absolute inset-0 engine-grid opacity-30" />
-      <div className="absolute h-[70%] w-px bg-gradient-to-b from-transparent via-blue-500/40 to-transparent" />
-      <div className="relative z-10 w-full max-w-md px-6">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: -15 }}
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center"
-          >
-            <motion.div
-              animate={{ boxShadow: ["0 0 25px rgba(59,130,246,.15)", "0 0 60px rgba(59,130,246,.35)", "0 0 25px rgba(59,130,246,.15)"] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="mx-auto grid h-28 w-28 place-items-center rounded-full border border-blue-400/40 bg-blue-500/10"
-            >
-              <stage.icon className="h-10 w-10 text-blue-400" />
-            </motion.div>
-            <span className="mt-6 block font-mono text-xs text-blue-400">{stage.number} / 06</span>
-            <h3 className="mt-3 text-3xl font-semibold">{stage.short}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-slate-400">{stage.text}</p>
-          </motion.div>
-        </AnimatePresence>
-        <div className="mt-10 flex justify-center gap-2">
-          {ENGINE_STAGES.map((item, index) => (
-            <span
-              key={item.short}
-              aria-hidden="true"
-              className={`h-1.5 rounded-full transition-all ${active === index ? "w-10 bg-blue-400" : index < active ? "w-4 bg-blue-500/40" : "w-4 bg-white/10"}`}
-            />
-          ))}
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
+              <span className="text-xs text-slate-600">Handled today</span>
+              <strong className="mt-2 block text-3xl font-semibold">17</strong>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
+              <span className="text-xs text-slate-600">Waiting unnoticed</span>
+              <strong className="mt-2 block text-3xl font-semibold text-emerald-400">0</strong>
+            </div>
+          </div>
         </div>
       </div>
+
+      <motion.div
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -bottom-6 -left-2 hidden items-center gap-3 rounded-2xl border border-white/10 bg-black/90 p-3 pr-5 shadow-2xl sm:flex"
+      >
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400">
+          <CheckCircle2 className="h-4 w-4" />
+        </span>
+        <div>
+          <strong className="block text-xs">Next step created</strong>
+          <span className="mt-0.5 block text-[10px] text-slate-600">No chasing required</span>
+        </div>
+      </motion.div>
     </div>
   );
 }
 
 function SectionIntro({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
   return (
-    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger} className="mx-auto max-w-3xl text-center">
-      <motion.span variants={reveal} className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">
-        {eyebrow}
-      </motion.span>
-      <motion.h2 variants={reveal} className="mt-4 text-4xl font-semibold tracking-[-0.035em] md:text-5xl">
-        {title}
-      </motion.h2>
-      <motion.p variants={reveal} className="mx-auto mt-5 max-w-2xl leading-relaxed text-slate-400">
-        {text}
-      </motion.p>
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+      variants={stagger}
+      className="mx-auto max-w-3xl text-center"
+    >
+      <motion.span variants={reveal} className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">{eyebrow}</motion.span>
+      <motion.h2 variants={reveal} className="mt-4 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">{title}</motion.h2>
+      <motion.p variants={reveal} className="mx-auto mt-5 max-w-2xl leading-relaxed text-slate-400">{text}</motion.p>
+    </motion.div>
+  );
+}
+
+function ProblemCard({ icon: Icon, number, title, text }: { icon: LucideIcon; number: string; title: string; text: string }) {
+  return (
+    <motion.div variants={reveal} className="group min-h-64 rounded-[28px] border border-white/[0.08] bg-white/[0.025] p-6 transition hover:border-blue-500/20 hover:bg-blue-500/[0.035]">
+      <div className="flex items-center justify-between">
+        <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/5 text-slate-400 transition group-hover:bg-blue-500/10 group-hover:text-blue-400">
+          <Icon className="h-5 w-5" />
+        </span>
+        <span className="font-mono text-xs text-slate-700">{number}</span>
+      </div>
+      <h3 className="mt-14 text-xl font-semibold">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-slate-500">{text}</p>
+    </motion.div>
+  );
+}
+
+function WorkflowStep({
+  step,
+  index,
+  active,
+}: {
+  step: { readonly title: string; readonly detail: string; readonly icon: LucideIcon };
+  index: number;
+  active: boolean;
+}) {
+  const Icon = step.icon;
+  return (
+    <motion.div
+      animate={{
+        opacity: active ? 1 : 0.35,
+        y: active ? 0 : 8,
+        borderColor: active ? "rgba(96,165,250,.22)" : "rgba(255,255,255,.07)",
+      }}
+      transition={{ duration: 0.5, delay: active ? index * 0.18 : 0 }}
+      className="relative rounded-2xl border bg-black/35 p-4"
+    >
+      <div className="flex items-start gap-3">
+        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${active ? "bg-blue-500/10 text-blue-400" : "bg-white/5 text-slate-600"}`}>
+          <Icon className="h-4 w-4" />
+        </span>
+        <div>
+          <strong className="block text-sm font-semibold text-slate-200">{step.title}</strong>
+          <span className="mt-1 block text-xs leading-relaxed text-slate-600">{step.detail}</span>
+        </div>
+      </div>
+      {active && (
+        <motion.span
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: index * 0.18 + 0.25 }}
+          className="absolute right-3 top-3 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,.7)]"
+        />
+      )}
     </motion.div>
   );
 }
 
 function OutcomeCard({ icon: Icon, title, text }: { icon: LucideIcon; title: string; text: string }) {
   return (
-    <motion.div variants={reveal} className="rounded-3xl border border-white/[0.08] bg-white/[0.025] p-6">
+    <motion.div variants={reveal} className="rounded-[28px] border border-white/[0.08] bg-white/[0.025] p-6">
       <span className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-500/10 text-blue-400">
         <Icon className="h-5 w-5" />
       </span>
-      <h3 className="mt-5 text-lg font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-slate-400">{text}</p>
+      <h3 className="mt-7 text-xl font-semibold">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-slate-500">{text}</p>
     </motion.div>
-  );
-}
-
-function RangeControl({
-  label,
-  value,
-  min,
-  max,
-  onChange,
-  prefix = "",
-  suffix = "",
-}: {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  onChange: (value: number) => void;
-  prefix?: string;
-  suffix?: string;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-3 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500">
-        {label}
-        <strong className="font-mono text-base text-white">
-          {prefix}
-          {value}
-          {suffix}
-        </strong>
-      </span>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-        className="w-full accent-blue-500"
-      />
-    </label>
-  );
-}
-
-function ImpactMetric({
-  label,
-  value,
-  icon: Icon,
-  featured = false,
-}: {
-  label: string;
-  value: string;
-  icon: LucideIcon;
-  featured?: boolean;
-}) {
-  return (
-    <div className={`flex min-h-40 flex-col justify-between rounded-3xl border p-5 md:min-h-52 md:p-6 ${featured ? "border-blue-500/30 bg-blue-500/[0.07]" : "border-white/[0.08] bg-black/30"}`}>
-      <Icon className={`h-5 w-5 ${featured ? "text-blue-400" : "text-slate-500"}`} />
-      <div>
-        <strong className="block text-3xl font-semibold tracking-tight md:text-4xl">{value}</strong>
-        <span className="mt-2 block text-xs font-bold uppercase tracking-wider text-slate-500">{label}</span>
-      </div>
-    </div>
-  );
-}
-
-function WorkflowColumn({
-  title,
-  items,
-  faded = false,
-  active = false,
-}: {
-  title: string;
-  items: readonly string[];
-  faded?: boolean;
-  active?: boolean;
-}) {
-  return (
-    <div className="p-5 sm:p-8">
-      <h3 className={`text-sm font-bold uppercase tracking-[0.18em] ${active ? "text-emerald-400" : "text-slate-500"}`}>{title}</h3>
-      <div className="mt-6 space-y-3">
-        {items.map((item, index) => (
-          <motion.div
-            key={item}
-            animate={{
-              opacity: faded ? 0.25 : active ? 1 : 0.5,
-              x: active ? [10, 0] : 0,
-              borderColor: active ? "rgba(52,211,153,.25)" : "rgba(255,255,255,.07)",
-            }}
-            transition={{ duration: 0.5, delay: active ? index * 0.12 : 0 }}
-            className="flex items-center gap-3 rounded-2xl border bg-white/[0.025] p-4"
-          >
-            <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${active ? "bg-emerald-500/10 text-emerald-400" : "bg-white/5 text-slate-600"}`}>
-              {active ? <Check className="h-3.5 w-3.5" /> : <span className="h-1.5 w-1.5 rounded-full bg-current" />}
-            </span>
-            <span className="text-sm font-medium text-slate-300">{item}</span>
-          </motion.div>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -990,13 +732,168 @@ function TrustItem({ icon: Icon, title, text }: { icon: LucideIcon; title: strin
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-3xl border border-white/[0.08] bg-white/[0.025] p-6"
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="rounded-3xl border border-white/[0.08] bg-white/[0.025] p-5"
     >
       <Icon className="h-5 w-5 text-blue-400" />
-      <h3 className="mt-4 font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-slate-400">{text}</p>
+      <h3 className="mt-5 font-semibold">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-slate-500">{text}</p>
     </motion.div>
+  );
+}
+
+function ReviewPanel({
+  formStatus,
+  onClose,
+  onSubmit,
+  onReset,
+}: {
+  formStatus: "idle" | "sending" | "success";
+  onClose: () => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onReset: () => void;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-5"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="review-panel-title"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 50, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 30, scale: 0.98 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#080a0e] shadow-2xl sm:rounded-[32px]"
+      >
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[#080a0e]/95 px-5 py-4 backdrop-blur sm:px-7">
+          <div className="flex items-center gap-3">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-blue-500/10 text-blue-400">
+              <Sparkles className="h-4 w-4" />
+            </span>
+            <span className="text-sm font-bold tracking-[0.12em]">MOTUS</span>
+          </div>
+          <button
+            id="review-close-btn"
+            type="button"
+            onClick={onClose}
+            className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-400 transition hover:text-white"
+            aria-label="Close workflow review form"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="grid md:grid-cols-[0.85fr_1.15fr]">
+          <div className="border-b border-white/[0.08] bg-blue-600 p-6 sm:p-8 md:border-b-0 md:border-r">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-blue-100/70">Free workflow review</span>
+            <h2 id="review-panel-title" className="mt-4 text-3xl font-semibold tracking-tight">
+              Tell us what keeps getting repeated.
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-blue-100/80">
+              We will look at the process and explain where automation could genuinely help.
+            </p>
+            <div className="mt-8 space-y-4">
+              <PanelPromise icon={CheckCircle2} text="A practical first opinion" />
+              <PanelPromise icon={MessageSquareText} text="Plain-English explanation" />
+              <PanelPromise icon={LockKeyhole} text="No obligation or hard sell" />
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8">
+            {formStatus === "success" ? (
+              <div className="flex min-h-96 flex-col items-center justify-center text-center">
+                <span className="grid h-16 w-16 place-items-center rounded-full bg-emerald-500/10 text-emerald-400">
+                  <CheckCircle2 className="h-8 w-8" />
+                </span>
+                <h3 className="mt-6 text-2xl font-semibold">Your request is in.</h3>
+                <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
+                  We will review what you shared and contact you about the most useful next step.
+                </p>
+                <button
+                  id="review-finish-btn"
+                  type="button"
+                  onClick={() => {
+                    onReset();
+                    onClose();
+                  }}
+                  className="mt-7 rounded-full border border-white/10 px-6 py-3 text-sm font-semibold text-slate-300"
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <form id="workflow-review-form" onSubmit={onSubmit} className="space-y-5">
+                <FormField
+                  id="review-name"
+                  name="full_name"
+                  label="Your name"
+                  placeholder="Jane Doe"
+                  icon={User}
+                  required
+                />
+                <FormField
+                  id="review-email"
+                  name="email"
+                  type="email"
+                  label="Work email"
+                  placeholder="jane@yourbusiness.co.uk"
+                  icon={Mail}
+                  required
+                />
+                <label>
+                  <span className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-300">
+                    <Workflow className="h-4 w-4" />
+                    Which task causes the most frustration?
+                  </span>
+                  <textarea
+                    id="review-frustration"
+                    name="admin_headache"
+                    required
+                    rows={5}
+                    placeholder="For example: We miss calls while on jobs and often reply too late..."
+                    className="w-full resize-none rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-white outline-none transition placeholder:text-slate-700 focus:border-blue-500/60 focus:bg-blue-950/20"
+                  />
+                </label>
+
+                <input type="hidden" name="source" value="motus-workflow-review" />
+
+                <button
+                  id="review-submit-btn"
+                  type="submit"
+                  disabled={formStatus === "sending"}
+                  className="group flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-blue-600 px-6 font-semibold transition hover:bg-blue-500 disabled:cursor-wait disabled:opacity-70"
+                >
+                  {formStatus === "sending" ? "Sending your request..." : "Request my free review"}
+                  {formStatus === "idle" && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                </button>
+                <p className="text-center text-xs leading-relaxed text-slate-700">
+                  We only use these details to respond to your request.
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function PanelPromise({ icon: Icon, text }: { icon: LucideIcon; text: string }) {
+  return (
+    <div className="flex items-center gap-3 text-sm font-medium text-blue-50">
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/10">
+        <Icon className="h-4 w-4" />
+      </span>
+      {text}
+    </div>
   );
 }
 
@@ -1029,7 +926,7 @@ function FormField({
         type={type}
         required={required}
         placeholder={placeholder}
-        className="w-full rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-white outline-none transition focus:border-blue-500/60 focus:bg-blue-950/20"
+        className="w-full rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-white outline-none transition placeholder:text-slate-700 focus:border-blue-500/60 focus:bg-blue-950/20"
       />
     </label>
   );
@@ -1040,7 +937,7 @@ function BackgroundField() {
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
       <div className="absolute left-1/2 top-[-20%] h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-blue-600/[0.08] blur-[160px]" />
       <div className="absolute bottom-[5%] right-[-15%] h-[500px] w-[500px] rounded-full bg-indigo-600/[0.04] blur-[140px]" />
-      <div className="absolute inset-0 opacity-[0.018] noise-layer" />
+      <div className="noise-layer absolute inset-0 opacity-[0.018]" />
     </div>
   );
 }
