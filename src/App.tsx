@@ -293,11 +293,11 @@ export default function App() {
               </motion.div>
             </motion.div>
 
-            <SignalSwitchboard />
+            <OperationsConsole />
           </div>
         </section>
 
-        <Ticker />
+        <ProofTicker />
 
         <section id="friction" className="relative min-h-[85vh] overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-32">
           <div className="mx-auto max-w-7xl">
@@ -454,6 +454,209 @@ function SignalRail({ progress, reducedMotion }: { progress: ReturnType<typeof u
         className="absolute -left-[5px] h-[11px] w-[11px] -translate-y-1/2 rounded-full border-2 border-[#a9c1ff] bg-[#2864ff] shadow-[0_0_18px_rgba(40,100,255,.9)]"
       />
     </div>
+  );
+}
+
+function OperationsConsole() {
+  const events = [
+    { icon: PhoneMissed, title: "Missed call", detail: "Callback text prepared", state: "Received", owner: "Phone", delay: 0.55 },
+    { icon: MessageSquareText, title: "Helpful reply", detail: "Customer told what happens next", state: "Sent", owner: "SMS", delay: 0.82 },
+    { icon: FileCheck2, title: "Customer record", detail: "Name, reason and source logged", state: "Updated", owner: "CRM", delay: 1.09 },
+    { icon: BellRing, title: "Team follow-up", detail: "Owner receives the context", state: "Assigned", owner: "Seun", delay: 1.36 },
+  ];
+
+  return (
+    <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }} className="relative mx-auto w-full max-w-[650px]">
+      <div className="absolute -inset-8 rounded-full bg-[#2864ff]/20 blur-[110px]" />
+      <div className="absolute -right-7 top-10 hidden h-28 w-28 rounded-full border border-[#6f95ff]/20 bg-[#101826]/80 backdrop-blur sm:block" />
+
+      <div className="relative overflow-hidden rounded-[30px] border border-white/[0.1] bg-[#090d13] shadow-[0_40px_120px_rgba(0,0,0,.58)]">
+        <div className="signal-grid absolute inset-0 opacity-35" />
+        <motion.div animate={{ y: ["-10%", "900%"] }} transition={{ duration: 5.2, repeat: Infinity, repeatDelay: 1.1, ease: "linear" }} className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#6f95ff] to-transparent shadow-[0_0_22px_rgba(111,149,255,.9)]" />
+
+        <div className="relative z-10 flex items-center justify-between border-b border-white/[0.08] bg-white/[0.025] px-4 py-3 sm:px-5">
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#e77387]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#d7b96b]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#77d7a8]" />
+          </div>
+          <span className="font-utility text-[8px] uppercase tracking-[0.18em] text-[#687485]">Motus operations console</span>
+          <span className="flex items-center gap-2 font-utility text-[8px] uppercase tracking-[0.14em] text-[#77d7a8]">
+            <span className="relative h-2 w-2 rounded-full bg-[#77d7a8]">
+              <span className="motion-status-ping absolute inset-0 rounded-full bg-[#77d7a8]" />
+            </span>
+            Live
+          </span>
+        </div>
+
+        <div className="relative z-10 grid border-b border-white/[0.08] sm:grid-cols-3">
+          <ConsoleMetric label="First reply" value="12 sec" />
+          <ConsoleMetric label="Manual copying" value="0" />
+          <ConsoleMetric label="Next steps set" value="3" />
+        </div>
+
+        <div className="relative z-10 grid lg:grid-cols-[0.72fr_1.28fr]">
+          <div className="border-b border-white/[0.08] p-5 lg:border-b-0 lg:border-r">
+            <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#596576]">Incoming today</span>
+            <div className="mt-5 space-y-3">
+              {[
+                ["09:41", "New enquiry", "Waiting for reply"],
+                ["10:02", "Missed call", "Auto text ready"],
+                ["10:18", "Booking request", "Needs owner"],
+              ].map(([time, title, note], index) => (
+                <motion.div
+                  key={title}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.55 + index * 0.14 }}
+                  className={`border border-white/[0.07] p-3 ${index === 1 ? "bg-[#2864ff]/10" : "bg-[#0d1219]"}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <strong className="text-xs text-[#dce1e8]">{title}</strong>
+                    <span className="font-utility text-[8px] text-[#687485]">{time}</span>
+                  </div>
+                  <span className="mt-2 block font-utility text-[8px] uppercase tracking-[0.12em] text-[#596576]">{note}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative p-5 sm:p-7">
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div>
+                <span className="font-utility text-[9px] uppercase tracking-[0.2em] text-[#566171]">Live route - 001</span>
+                <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tight">Customer enquiry</h2>
+              </div>
+              <span className="rounded-full border border-[#77d7a8]/20 bg-[#77d7a8]/10 px-3 py-1.5 font-utility text-[8px] font-bold uppercase tracking-[0.12em] text-[#77d7a8]">Moving</span>
+            </div>
+
+            <div className="relative">
+              <div className="absolute bottom-7 left-[19px] top-7 w-px bg-white/[0.08]" />
+              <motion.div initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 1.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }} className="absolute bottom-7 left-[19px] top-7 w-px origin-top bg-[#2864ff] shadow-[0_0_12px_rgba(40,100,255,.7)]" />
+              <motion.span
+                animate={{ top: ["8%", "88%"], opacity: [0, 1, 1, 0] }}
+                transition={{ duration: 3.8, delay: 1.2, repeat: Infinity, repeatDelay: 0.7, ease: "easeInOut" }}
+                className="absolute left-[14px] z-20 h-3 w-3 rounded-full border-2 border-[#a9c1ff] bg-[#2864ff] shadow-[0_0_18px_rgba(40,100,255,.95)]"
+              />
+              <div className="space-y-3">
+                {events.map((event, index) => {
+                  const Icon = event.icon;
+                  return (
+                    <motion.div
+                      key={event.title}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                        backgroundColor: ["#0e131b", "#101a2c", "#0e131b"],
+                      }}
+                      transition={{
+                        opacity: { duration: 0.65, delay: event.delay, ease: [0.16, 1, 0.3, 1] },
+                        x: { duration: 0.65, delay: event.delay, ease: [0.16, 1, 0.3, 1] },
+                        backgroundColor: { duration: 1.1, delay: 1.4 + index * 0.75, repeat: Infinity, repeatDelay: 2.7 },
+                      }}
+                      className="relative ml-8 grid gap-3 border border-white/[0.06] bg-[#0e131b] p-3 sm:grid-cols-[1fr_auto]"
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <span className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#2864ff]/30 bg-[#0a1020] text-[#7da0ff]">
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                          <strong className="block truncate text-sm font-semibold text-[#e5e8ed]">{event.title}</strong>
+                          <span className="mt-1 block truncate text-xs text-[#7f8b9a]">{event.detail}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between gap-4 pl-[52px] sm:block sm:pl-0 sm:text-right">
+                        <span className="block font-utility text-[8px] uppercase tracking-[0.12em] text-[#596576]">{event.owner}</span>
+                        <span className="mt-1 block font-utility text-[9px] font-bold uppercase tracking-[0.12em] text-[#77d7a8]">{event.state}</span>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-10 grid border-t border-white/[0.08] bg-[#070a0f]/70 sm:grid-cols-[1fr_auto]">
+          <div className="flex items-end gap-1 px-5 py-5" aria-hidden="true">
+            {[32, 44, 28, 58, 42, 72, 54, 83, 62, 78, 90, 68].map((height, index) => (
+              <motion.span
+                key={index}
+                initial={{ height: 8, opacity: 0.35 }}
+                animate={{ height, opacity: index > 7 ? 0.95 : 0.55 }}
+                transition={{ duration: 0.7, delay: 0.8 + index * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-7 rounded-t bg-[#2864ff]/70"
+              />
+            ))}
+          </div>
+          <div className="border-t border-white/[0.08] p-5 sm:border-l sm:border-t-0">
+            <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">Today</span>
+            <strong className="mt-2 block font-display text-3xl font-semibold uppercase">14 handled</strong>
+            <span className="mt-1 block text-xs text-[#7f8b9a]">without a manual chase</span>
+          </div>
+        </div>
+      </div>
+
+      <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} className="absolute -bottom-7 -left-3 hidden items-center gap-3 bg-[#f2f0ea] p-3 pr-5 text-[#11151b] shadow-2xl sm:flex">
+        <CheckCircle2 className="h-5 w-5 text-[#16885b]" />
+        <div>
+          <strong className="block text-xs">Nothing waiting unnoticed</strong>
+          <span className="mt-0.5 block font-utility text-[9px] uppercase tracking-wider text-[#7b8592]">Route complete</span>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function ConsoleMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="border-b border-white/[0.08] px-5 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+      <span className="block font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">{label}</span>
+      <strong className="mt-2 block font-display text-3xl font-semibold uppercase leading-none">{value}</strong>
+    </div>
+  );
+}
+
+function ProofTicker() {
+  const items = ["Calls", "Enquiries", "Bookings", "Records", "Reminders", "Handover"];
+  const proof = [
+    { icon: Clock3, label: "Speed", title: "First replies happen while your team is busy.", stat: "12 sec" },
+    { icon: FileCheck2, label: "Records", title: "Customer details reach the right place.", stat: "0 copy" },
+    { icon: ShieldCheck, label: "Control", title: "People stay in charge of the important calls.", stat: "human" },
+  ];
+
+  return (
+    <section className="relative overflow-hidden border-y border-white/[0.06] bg-[#070a0f]">
+      <div className="mx-auto grid max-w-7xl border-x border-white/[0.04] md:grid-cols-3">
+        {proof.map((item) => {
+          const Icon = item.icon;
+          return (
+            <div key={item.label} className="group relative overflow-hidden border-b border-white/[0.06] p-5 md:border-b-0 md:border-r md:last:border-r-0">
+              <div className="absolute inset-0 bg-[#2864ff]/[0.03] opacity-0 transition group-hover:opacity-100" />
+              <div className="relative flex items-start justify-between gap-4">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#2864ff]/25 bg-[#101826] text-[#7da0ff]">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <strong className="font-display text-3xl font-semibold uppercase text-[#4f5a69]">{item.stat}</strong>
+              </div>
+              <span className="relative mt-6 block font-utility text-[9px] uppercase tracking-[0.18em] text-[#6f95ff]">{item.label}</span>
+              <p className="relative mt-2 max-w-sm text-sm font-medium leading-6 text-[#b4becb]">{item.title}</p>
+            </div>
+          );
+        })}
+      </div>
+      <div className="relative overflow-hidden border-t border-white/[0.06] py-4" aria-hidden="true">
+        <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 22, repeat: Infinity, ease: "linear" }} className="flex w-max items-center">
+          {[...items, ...items].map((item, index) => (
+            <div key={`${item}-${index}`} className="flex items-center">
+              <span className="mx-7 whitespace-nowrap font-display text-lg font-semibold uppercase tracking-[0.12em] text-[#505b69] sm:mx-12">{item}</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-[#2864ff]" />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
