@@ -77,10 +77,10 @@ const EXAMPLES = {
   "Missed call": {
     trigger: "A customer calls while the team is busy.",
     steps: [
-      ["Call recognised", PhoneMissed],
-      ["Helpful text sent", MessageSquareText],
-      ["Lead recorded", FileCheck2],
-      ["Team alerted", BellRing],
+      ["Call logged", PhoneMissed],
+      ["Text reply sent", MessageSquareText],
+      ["Lead added", FileCheck2],
+      ["Team notified", BellRing],
     ] as const,
     result: "The opportunity remains warm without somebody watching the phone.",
   },
@@ -110,7 +110,7 @@ const EXPERIENCE_STAGES = [
   {
     month: "Month 1",
     title: "Find the bottleneck.",
-    text: "We map one repeated process, agree what should stay human and choose the first route worth fixing.",
+    text: "We map one repeated process, agree what should stay with a person and choose the first route worth fixing.",
     result: "Clear workflow map",
     icon: Route,
   },
@@ -124,7 +124,7 @@ const EXPERIENCE_STAGES = [
   {
     month: "Month 3",
     title: "Run it properly.",
-    text: "We tighten the handover, check what is working and leave you with a calmer way to manage the task.",
+    text: "We tighten the handover, check what is working and leave your team with a calmer way to manage the task.",
     result: "Handover and improvement plan",
     icon: ShieldCheck,
   },
@@ -297,7 +297,7 @@ export default function App() {
               </motion.h1>
 
               <motion.p variants={reveal} className="mt-8 max-w-xl text-base font-medium leading-8 text-[#909cab] sm:text-lg">
-                Motus connects the routine steps between your calls, enquiries, bookings and team—so customers move forward without the admin constantly pulling people back.
+                Motus connects the routine steps between your calls, enquiries, bookings and team follow-ups, so customers move forward without admin constantly pulling people back.
               </motion.p>
 
               <motion.div variants={reveal} className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -334,7 +334,7 @@ export default function App() {
                   <span className="block text-[#4f5a69]">A hundred small waits.</span>
                 </motion.h2>
                 <motion.p variants={reveal} className="mt-7 max-w-lg leading-8 text-[#8c98a8]">
-                  The cost hides between systems: waiting to reply, copying details, checking whether something happened and remembering who should follow up.
+                  The cost hides between systems: waiting to reply, copying details between tools, checking whether something happened and remembering who should follow up.
                 </motion.p>
               </motion.div>
 
@@ -417,7 +417,7 @@ export default function App() {
                     <span className="block pl-[0.5em] text-[#647184]">work gets stuck.</span>
                   </h2>
                   <p className="mt-7 max-w-xl text-base font-medium leading-8 text-[#536070]">
-                    We will look at one repetitive process and explain what can be improved, what should stay human and what a practical next step looks like.
+                    We will look at one repetitive process and explain what can be improved, what should stay with your team and what a practical next step looks like.
                   </p>
                 </div>
 
@@ -487,9 +487,9 @@ function SignalRail({ progress, reducedMotion }: { progress: ReturnType<typeof u
 function OperationsConsole() {
   const events = [
     { icon: PhoneMissed, title: "Missed call", detail: "Callback text prepared", state: "Received", owner: "Phone", delay: 0.55 },
-    { icon: MessageSquareText, title: "Helpful reply", detail: "Customer told what happens next", state: "Sent", owner: "SMS", delay: 0.82 },
-    { icon: FileCheck2, title: "Customer record", detail: "Name, reason and source logged", state: "Updated", owner: "CRM", delay: 1.09 },
-    { icon: BellRing, title: "Team follow-up", detail: "Owner receives the context", state: "Assigned", owner: "Seun", delay: 1.36 },
+    { icon: MessageSquareText, title: "Helpful reply", detail: "The customer knows what happens next", state: "Sent", owner: "SMS", delay: 0.82 },
+    { icon: FileCheck2, title: "Customer record", detail: "Name, reason and source are logged", state: "Updated", owner: "Record", delay: 1.09 },
+    { icon: BellRing, title: "Team follow-up", detail: "The right person gets the context", state: "Assigned", owner: "Team", delay: 1.36 },
   ];
 
   return (
@@ -518,7 +518,7 @@ function OperationsConsole() {
 
         <div className="relative z-10 grid border-b border-white/[0.08] sm:grid-cols-3">
           <ConsoleMetric label="First reply" value="12 sec" />
-          <ConsoleMetric label="Manual copying" value="0" />
+          <ConsoleMetric label="Manual copies" value="0" />
           <ConsoleMetric label="Next steps set" value="3" />
         </div>
 
@@ -551,7 +551,7 @@ function OperationsConsole() {
           <div className="relative p-5 sm:p-7">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <span className="font-utility text-[9px] uppercase tracking-[0.2em] text-[#566171]">Live route - 001</span>
+                <span className="font-utility text-[9px] uppercase tracking-[0.2em] text-[#566171]">Live route · 001</span>
                 <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tight">Customer enquiry</h2>
               </div>
               <span className="rounded-full border border-[#77d7a8]/20 bg-[#77d7a8]/10 px-3 py-1.5 font-utility text-[8px] font-bold uppercase tracking-[0.12em] text-[#77d7a8]">Moving</span>
@@ -620,7 +620,7 @@ function OperationsConsole() {
           <div className="border-t border-white/[0.08] p-5 sm:border-l sm:border-t-0">
             <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">Today</span>
             <strong className="mt-2 block font-display text-3xl font-semibold uppercase">14 handled</strong>
-            <span className="mt-1 block text-xs text-[#7f8b9a]">without a manual chase</span>
+            <span className="mt-1 block text-xs text-[#7f8b9a]">without being chased</span>
           </div>
         </div>
       </div>
@@ -649,8 +649,8 @@ function ProofTicker() {
   const items = ["Calls", "Enquiries", "Bookings", "Records", "Reminders", "Handover"];
   const proof = [
     { icon: Clock3, label: "Speed", title: "First replies happen while your team is busy.", stat: "12 sec" },
-    { icon: FileCheck2, label: "Records", title: "Customer details reach the right place.", stat: "0 copy" },
-    { icon: ShieldCheck, label: "Control", title: "People stay in charge of the important calls.", stat: "human" },
+    { icon: FileCheck2, label: "Records", title: "Customer details land in the right place.", stat: "0 copies" },
+    { icon: ShieldCheck, label: "Control", title: "People stay in charge of the important calls.", stat: "human-led" },
   ];
 
   return (
@@ -1038,13 +1038,13 @@ function NinetyDayExperience() {
       <div className="relative mx-auto max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger} className="lg:sticky lg:top-28">
-            <motion.span variants={reveal} className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">Three-month product experience</motion.span>
+            <motion.span variants={reveal} className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">90-day Motus experience</motion.span>
             <motion.h2 variants={reveal} className="mt-5 max-w-2xl font-display text-5xl font-semibold uppercase leading-[0.88] tracking-[-0.035em] md:text-7xl">
               From stuck admin
               <span className="block text-[#4f5a69]">to live routes.</span>
             </motion.h2>
             <motion.p variants={reveal} className="mt-7 max-w-lg leading-8 text-[#8c98a8]">
-              Instead of selling a vague automation project, Motus works like a focused 90-day product sprint around one process that actually slows the business down.
+              Instead of selling a vague automation project, Motus gives you a focused 90-day route around one process that is slowing the business down.
             </motion.p>
             <motion.div variants={reveal} className="mt-9 rounded-[28px] border border-white/[0.08] bg-[#090d13] p-5">
               <div className="flex items-center gap-3">
@@ -1053,7 +1053,7 @@ function NinetyDayExperience() {
                 </span>
                 <div>
                   <strong className="block text-sm text-[#e5e8ed]">One process. Ninety days. Clear handover.</strong>
-                  <span className="mt-1 block text-xs leading-5 text-[#7f8b9a]">Enough structure to feel real, not so much that it scares people away.</span>
+                  <span className="mt-1 block text-xs leading-5 text-[#7f8b9a]">Clear enough to feel real, simple enough for the team to use.</span>
                 </div>
               </div>
             </motion.div>
@@ -1098,7 +1098,7 @@ function NinetyDayExperience() {
                       </div>
 
                       <div className="rounded-[24px] border border-white/[0.08] bg-[#0e131b] p-5">
-                        <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">Output</span>
+                        <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">You leave with</span>
                         <strong className="mt-3 block text-lg text-[#f2f0ea]">{stage.result}</strong>
                         <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/[0.08]">
                           <motion.span
@@ -1109,7 +1109,7 @@ function NinetyDayExperience() {
                             className="block h-full rounded-full bg-[#2864ff]"
                           />
                         </div>
-                        <span className="mt-3 block font-utility text-[8px] uppercase tracking-[0.14em] text-[#687485]">Route confidence {index + 1}/3</span>
+                        <span className="mt-3 block font-utility text-[8px] uppercase tracking-[0.14em] text-[#687485]">Milestone {index + 1} of 3</span>
                       </div>
                     </div>
                   </motion.div>
@@ -1170,8 +1170,8 @@ function OperationsCalculator({
           <div>
             <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#2864ff]">Put a number on the friction</span>
             <h2 className="mt-5 font-display text-5xl font-semibold uppercase leading-[0.87] tracking-[-0.035em] md:text-7xl">
-              What is routine
-              <span className="block text-[#748092]">admin costing?</span>
+              What does routine
+              <span className="block text-[#748092]">admin cost?</span>
             </h2>
             <p className="mt-7 max-w-lg text-base font-medium leading-8 text-[#5d6877]">
               Use your own team figures. Switch between the annual cost of manual admin and the operational capacity that could be redirected.
@@ -1262,7 +1262,7 @@ function OperationsCalculator({
               <div className="relative z-10 flex h-full flex-col">
                 <div className="flex items-center justify-between">
                   <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#7f8b9a]">
-                    {mode === "cost" ? "Admin drain · annual" : "Capacity unlock · annual"}
+                    {mode === "cost" ? "Admin cost · annual" : "Capacity unlocked · annual"}
                   </span>
                   <span className={`grid h-10 w-10 place-items-center rounded-full ${mode === "cost" ? "bg-[#e77387]/10 text-[#e995a4]" : "bg-[#2864ff]/15 text-[#7da0ff]"}`}>
                     {mode === "cost" ? <PoundSterling className="h-5 w-5" /> : <Zap className="h-5 w-5" />}
@@ -1283,7 +1283,7 @@ function OperationsCalculator({
                         <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#e995a4]">Estimated annual admin cost</span>
                         <AnimatedValue prefix="£" value={values.annualCost.toLocaleString()} />
                         <p className="mt-5 max-w-sm text-sm leading-7 text-[#8d99aa]">
-                          Estimated employment cost tied to routine admin, using the figures you selected.
+                          Estimated employment cost spent on routine admin, using the figures you selected.
                         </p>
                       </div>
                       <div className="mt-auto grid grid-cols-2 border-t border-white/10 pt-7">
