@@ -181,6 +181,17 @@ Calculator section:
   - capacity unlocked.
 - Calculator wording should stay practical and plain.
 
+90-day experience:
+
+- Keep this as a productised buying journey, not a generic process list.
+- The purpose is to show that Motus is a focused three-month experience around one real operational bottleneck.
+- Use clear month labels with meaningful outputs:
+  - Month 1: identify the bottleneck and map the route;
+  - Month 2: build the live route;
+  - Month 3: run it properly, improve it, and hand it over.
+- Avoid random letters, decorative numbers, or labels that do not explain the content.
+- Keep the wording practical and low-pressure.
+
 Review modal:
 
 - Must feel trustworthy, clear, and low-pressure.
@@ -213,6 +224,7 @@ Use "automation" carefully. Explain the outcome before the technology.
 - Motion explains movement or interaction.
 - CTA styling feels deliberate.
 - The calculator still works.
+- The 90-day experience reads like a clear product journey, not random process cards.
 - The review form still opens and submits.
 - Important buttons and inputs have unique IDs.
 - Focus states are visible.

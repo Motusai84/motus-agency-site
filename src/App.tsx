@@ -40,6 +40,7 @@ const NAV_ITEMS = [
   { label: "See it move", id: "journey" },
   { label: "Examples", id: "examples" },
   { label: "Calculator", id: "calculator" },
+  { label: "90-day plan", id: "experience" },
 ];
 
 const JOURNEY_STAGES = [
@@ -104,6 +105,30 @@ const EXAMPLES = {
     result: "The booking moves forward with fewer messages and fewer no-shows.",
   },
 } as const;
+
+const EXPERIENCE_STAGES = [
+  {
+    month: "Month 1",
+    title: "Find the bottleneck.",
+    text: "We map one repeated process, agree what should stay human and choose the first route worth fixing.",
+    result: "Clear workflow map",
+    icon: Route,
+  },
+  {
+    month: "Month 2",
+    title: "Build the live route.",
+    text: "Calls, enquiries, bookings or records start moving through a simple system your team can understand.",
+    result: "Working operations route",
+    icon: Workflow,
+  },
+  {
+    month: "Month 3",
+    title: "Run it properly.",
+    text: "We tighten the handover, check what is working and leave you with a calmer way to manage the task.",
+    result: "Handover and improvement plan",
+    icon: ShieldCheck,
+  },
+] as const;
 
 const reveal: Variants = {
   hidden: { opacity: 0, y: 28 },
@@ -341,6 +366,8 @@ export default function App() {
           values={calculator}
         />
 
+        <NinetyDayExperience />
+
         <section id="outcomes" className="relative overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-36">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
@@ -357,9 +384,9 @@ export default function App() {
             </div>
 
             <div className="mt-16 border-y border-white/[0.08]">
-              <OutcomeLine index="A" title="Customers wait less" text="Routine acknowledgements and next steps happen while your team is occupied." icon={Clock3} />
-              <OutcomeLine index="B" title="Information stays in motion" text="Details reach the right record and the right person without repeated copying." icon={Route} />
-              <OutcomeLine index="C" title="Nothing important stays invisible" text="Completed work is recorded; failed steps are surfaced instead of quietly disappearing." icon={CheckCircle2} />
+              <OutcomeLine label="Reply speed" title="Customers wait less" text="Routine acknowledgements and next steps happen while your team is occupied." icon={Clock3} />
+              <OutcomeLine label="Clean records" title="Information stays in motion" text="Details reach the right record and the right person without repeated copying." icon={Route} />
+              <OutcomeLine label="Clear owner" title="Nothing important stays invisible" text="Completed work is recorded; failed steps are surfaced instead of quietly disappearing." icon={CheckCircle2} />
             </div>
           </div>
         </section>
@@ -1002,6 +1029,100 @@ function ExampleConsole({
   );
 }
 
+function NinetyDayExperience() {
+  return (
+    <section id="experience" className="relative overflow-hidden border-b border-white/[0.06] px-5 py-20 md:px-8 md:py-32">
+      <div className="signal-grid absolute inset-0 opacity-[0.08]" />
+      <div className="absolute left-1/2 top-0 h-px w-[82vw] max-w-6xl -translate-x-1/2 bg-gradient-to-r from-transparent via-[#2864ff]/70 to-transparent" />
+
+      <div className="relative mx-auto max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger} className="lg:sticky lg:top-28">
+            <motion.span variants={reveal} className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">Three-month product experience</motion.span>
+            <motion.h2 variants={reveal} className="mt-5 max-w-2xl font-display text-5xl font-semibold uppercase leading-[0.88] tracking-[-0.035em] md:text-7xl">
+              From stuck admin
+              <span className="block text-[#4f5a69]">to live routes.</span>
+            </motion.h2>
+            <motion.p variants={reveal} className="mt-7 max-w-lg leading-8 text-[#8c98a8]">
+              Instead of selling a vague automation project, Motus works like a focused 90-day product sprint around one process that actually slows the business down.
+            </motion.p>
+            <motion.div variants={reveal} className="mt-9 rounded-[28px] border border-white/[0.08] bg-[#090d13] p-5">
+              <div className="flex items-center gap-3">
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-[#2864ff]/15 text-[#7da0ff]">
+                  <CalendarCheck2 className="h-5 w-5" />
+                </span>
+                <div>
+                  <strong className="block text-sm text-[#e5e8ed]">One process. Ninety days. Clear handover.</strong>
+                  <span className="mt-1 block text-xs leading-5 text-[#7f8b9a]">Enough structure to feel real, not so much that it scares people away.</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <div className="relative">
+            <div className="absolute bottom-10 left-5 top-10 hidden w-px bg-white/[0.08] md:block" />
+            <motion.div
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute bottom-10 left-5 top-10 hidden w-px origin-top bg-[#2864ff] shadow-[0_0_12px_rgba(40,100,255,.75)] md:block"
+            />
+
+            <div className="space-y-5">
+              {EXPERIENCE_STAGES.map((stage, index) => {
+                const Icon = stage.icon;
+                return (
+                  <motion.div
+                    key={stage.month}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.75, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                    className="group relative overflow-hidden rounded-[30px] border border-white/[0.08] bg-[#090d13] p-5 shadow-[0_30px_90px_rgba(0,0,0,.25)] md:ml-14 md:p-7"
+                  >
+                    <span className="absolute left-[-3.25rem] top-7 hidden h-4 w-4 rounded-full border-2 border-[#a9c1ff] bg-[#2864ff] shadow-[0_0_18px_rgba(40,100,255,.95)] md:block" />
+                    <div className="signal-grid absolute inset-0 opacity-[0.12]" />
+                    <div className="relative grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-center">
+                      <div>
+                        <span className="font-utility text-[9px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">{stage.month}</span>
+                        <div className="mt-5 flex items-start gap-4">
+                          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[#2864ff]/30 bg-[#0a1020] text-[#7da0ff]">
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <h3 className="font-display text-3xl font-semibold uppercase leading-none">{stage.title}</h3>
+                            <p className="mt-4 max-w-xl text-sm leading-7 text-[#8d99aa]">{stage.text}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-[24px] border border-white/[0.08] bg-[#0e131b] p-5">
+                        <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">Output</span>
+                        <strong className="mt-3 block text-lg text-[#f2f0ea]">{stage.result}</strong>
+                        <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/[0.08]">
+                          <motion.span
+                            initial={{ width: "0%" }}
+                            whileInView={{ width: `${(index + 1) * 33.333}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                            className="block h-full rounded-full bg-[#2864ff]"
+                          />
+                        </div>
+                        <span className="mt-3 block font-utility text-[8px] uppercase tracking-[0.14em] text-[#687485]">Route confidence {index + 1}/3</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function OperationsCalculator({
   mode,
   onModeChange,
@@ -1276,10 +1397,10 @@ function CalculatorMiniMetric({ label, value }: { label: string; value: string }
   );
 }
 
-function OutcomeLine({ index, title, text, icon: Icon }: { index: string; title: string; text: string; icon: LucideIcon }) {
+function OutcomeLine({ label, title, text, icon: Icon }: { label: string; title: string; text: string; icon: LucideIcon }) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }} className="group grid gap-5 border-b border-white/[0.08] py-8 last:border-b-0 md:grid-cols-[80px_1fr_1fr_60px] md:items-center">
-      <span className="font-utility text-[10px] font-bold uppercase tracking-[0.18em] text-[#526071]">{index}</span>
+      <span className="font-utility text-[10px] font-bold uppercase leading-5 tracking-[0.14em] text-[#6f95ff]">{label}</span>
       <h3 className="font-display text-2xl font-semibold uppercase md:text-3xl">{title}</h3>
       <p className="max-w-lg text-sm leading-7 text-[#7f8b9a]">{text}</p>
       <span className="grid h-11 w-11 place-items-center rounded-full border border-white/[0.08] text-[#6f95ff] transition group-hover:border-[#2864ff]/40 group-hover:bg-[#2864ff]/10">
