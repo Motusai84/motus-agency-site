@@ -40,7 +40,7 @@ const NAV_ITEMS = [
   { label: "See it move", id: "journey" },
   { label: "Examples", id: "examples" },
   { label: "Calculator", id: "calculator" },
-  { label: "90-day plan", id: "experience" },
+  { label: "90-day route", id: "experience" },
 ];
 
 const JOURNEY_STAGES = [
@@ -109,25 +109,37 @@ const EXAMPLES = {
 const EXPERIENCE_STAGES = [
   {
     month: "Month 1",
+    phase: "Map",
     title: "Find the bottleneck.",
-    text: "We map one repeated process, agree what should stay with a person and choose the first route worth fixing.",
-    result: "Clear workflow map",
+    text: "We choose one repeated task, map how it moves today and decide what should stay with a person.",
+    result: "Workflow map and first route brief",
+    proof: "You know exactly which process is being fixed.",
     icon: Route,
   },
   {
     month: "Month 2",
+    phase: "Build",
     title: "Build the live route.",
-    text: "Calls, enquiries, bookings or records start moving through a simple system your team can understand.",
-    result: "Working operations route",
+    text: "The route starts moving real calls, enquiries, bookings or records through a simple operating system.",
+    result: "Working route with error checks",
+    proof: "Routine work moves without constant chasing.",
     icon: Workflow,
   },
   {
     month: "Month 3",
+    phase: "Run",
     title: "Run it properly.",
-    text: "We tighten the handover, check what is working and leave your team with a calmer way to manage the task.",
-    result: "Handover and improvement plan",
+    text: "We tighten the handover, review what happened and leave the team with a route they can trust.",
+    result: "Team handover and improvement plan",
+    proof: "The business has a calmer way to manage the task.",
     icon: ShieldCheck,
   },
+] as const;
+
+const EXPERIENCE_PROMISES = [
+  "One real bottleneck",
+  "Live route, not a slide deck",
+  "Plain-English handover",
 ] as const;
 
 const reveal: Variants = {
@@ -283,7 +295,7 @@ export default function App() {
                 <span className="font-utility text-[10px] font-semibold uppercase tracking-[0.22em] text-[#a9c1ff]">The invisible operations layer</span>
               </motion.div>
 
-              <motion.h1 variants={reveal} className="font-display text-[4.1rem] font-semibold uppercase leading-[0.82] tracking-[-0.045em] text-[#f2f0ea] sm:text-[5.6rem] md:text-[7.4rem]">
+              <motion.h1 aria-label="Work keeps moving." variants={reveal} className="font-display text-[4.1rem] font-semibold uppercase leading-[0.82] tracking-[-0.045em] text-[#f2f0ea] sm:text-[5.6rem] md:text-[7.4rem]">
                 Work keeps
                 <span className="relative mt-2 block pl-[0.72em] text-[#556171]">
                   moving.
@@ -297,7 +309,7 @@ export default function App() {
               </motion.h1>
 
               <motion.p variants={reveal} className="mt-8 max-w-xl text-base font-medium leading-8 text-[#909cab] sm:text-lg">
-                Motus connects the routine steps between your calls, enquiries, bookings and team follow-ups, so customers move forward without admin constantly pulling people back.
+                Motus connects the routine steps between calls, enquiries, bookings and follow-ups, so customers move forward without admin constantly pulling your team back.
               </motion.p>
 
               <motion.div variants={reveal} className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -442,7 +454,7 @@ export default function App() {
       <footer className="border-t border-white/[0.06] px-5 py-10 md:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 font-utility text-[10px] uppercase tracking-[0.16em] text-[#596576] sm:flex-row sm:items-center sm:justify-between">
           <span className="font-display text-base font-semibold tracking-[0.14em] text-[#aeb8c5]">Motus</span>
-          <span>Business automation for UK small businesses</span>
+          <span>Routine admin routes for UK small businesses</span>
           <span>© 2026</span>
         </div>
       </footer>
@@ -650,7 +662,7 @@ function ProofTicker() {
   const proof = [
     { icon: Clock3, label: "Speed", title: "First replies happen while your team is busy.", stat: "12 sec" },
     { icon: FileCheck2, label: "Records", title: "Customer details land in the right place.", stat: "0 copies" },
-    { icon: ShieldCheck, label: "Control", title: "People stay in charge of the important calls.", stat: "human-led" },
+    { icon: ShieldCheck, label: "Control", title: "People stay in charge of the important calls.", stat: "owner-ready" },
   ];
 
   return (
@@ -953,11 +965,14 @@ function ExampleConsole({
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]">
           <div>
-            <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">Try a real example</span>
+            <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">Try a real route</span>
             <h2 className="mt-5 font-display text-5xl font-semibold uppercase leading-[0.9] tracking-[-0.035em] md:text-7xl">
-              Pick the
-              <span className="block text-[#4f5a69]">starting point.</span>
+              Choose what
+              <span className="block text-[#4f5a69]">enters first.</span>
             </h2>
+            <p className="mt-6 max-w-md text-sm leading-7 text-[#8d99aa]">
+              Each example follows a common small-business task from first contact to clear handover.
+            </p>
             <div className="mt-10 border-t border-white/[0.08]">
               {(Object.keys(EXAMPLES) as Array<keyof typeof EXAMPLES>).map((name) => (
                 <button
@@ -1031,7 +1046,7 @@ function ExampleConsole({
 
 function NinetyDayExperience() {
   return (
-    <section id="experience" className="relative overflow-hidden border-b border-white/[0.06] px-5 py-20 md:px-8 md:py-32">
+    <section id="experience" className="experience-section relative overflow-hidden border-b border-white/[0.06] px-5 py-20 md:px-8 md:py-32">
       <div className="signal-grid absolute inset-0 opacity-[0.08]" />
       <div className="absolute left-1/2 top-0 h-px w-[82vw] max-w-6xl -translate-x-1/2 bg-gradient-to-r from-transparent via-[#2864ff]/70 to-transparent" />
 
@@ -1039,22 +1054,27 @@ function NinetyDayExperience() {
         <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger} className="lg:sticky lg:top-28">
             <motion.span variants={reveal} className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">90-day Motus experience</motion.span>
-            <motion.h2 variants={reveal} className="mt-5 max-w-2xl font-display text-5xl font-semibold uppercase leading-[0.88] tracking-[-0.035em] md:text-7xl">
-              From stuck admin
-              <span className="block text-[#4f5a69]">to live routes.</span>
+            <motion.h2 aria-label="One bottleneck. One live route." variants={reveal} className="mt-5 max-w-2xl font-display text-5xl font-semibold uppercase leading-[0.88] tracking-[-0.035em] md:text-7xl">
+              One bottleneck.
+              <span className="block text-[#4f5a69]">One live route.</span>
             </motion.h2>
             <motion.p variants={reveal} className="mt-7 max-w-lg leading-8 text-[#8c98a8]">
-              Instead of selling a vague automation project, Motus gives you a focused 90-day route around one process that is slowing the business down.
+              This is not an open-ended tech project. It is a focused three-month engagement around one routine process that is slowing the business down.
             </motion.p>
-            <motion.div variants={reveal} className="mt-9 rounded-[28px] border border-white/[0.08] bg-[#090d13] p-5">
-              <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-full bg-[#2864ff]/15 text-[#7da0ff]">
-                  <CalendarCheck2 className="h-5 w-5" />
-                </span>
-                <div>
-                  <strong className="block text-sm text-[#e5e8ed]">One process. Ninety days. Clear handover.</strong>
-                  <span className="mt-1 block text-xs leading-5 text-[#7f8b9a]">Clear enough to feel real, simple enough for the team to use.</span>
-                </div>
+            <motion.div variants={reveal} className="experience-offer mt-9 overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#090d13]">
+              <div className="border-b border-white/[0.08] p-5">
+                <span className="font-utility text-[8px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">What you are buying</span>
+                <strong className="mt-3 block text-lg leading-7 text-[#f2f0ea]">A working route for one repeated admin problem, with your team still in control.</strong>
+              </div>
+              <div className="grid divide-y divide-white/[0.08]">
+                {EXPERIENCE_PROMISES.map((promise) => (
+                  <div key={promise} className="flex items-center gap-3 px-5 py-4">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#2864ff]/15 text-[#7da0ff]">
+                      <Check className="h-4 w-4" />
+                    </span>
+                    <span className="text-sm font-semibold text-[#c8d0dc]">{promise}</span>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </motion.div>
@@ -1085,7 +1105,10 @@ function NinetyDayExperience() {
                     <div className="signal-grid absolute inset-0 opacity-[0.12]" />
                     <div className="relative grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-center">
                       <div>
-                        <span className="font-utility text-[9px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">{stage.month}</span>
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className="font-utility text-[9px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">{stage.month}</span>
+                          <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 font-utility text-[8px] font-bold uppercase tracking-[0.16em] text-[#8d99aa]">{stage.phase}</span>
+                        </div>
                         <div className="mt-5 flex items-start gap-4">
                           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[#2864ff]/30 bg-[#0a1020] text-[#7da0ff]">
                             <Icon className="h-5 w-5" />
@@ -1100,6 +1123,7 @@ function NinetyDayExperience() {
                       <div className="rounded-[24px] border border-white/[0.08] bg-[#0e131b] p-5">
                         <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">You leave with</span>
                         <strong className="mt-3 block text-lg text-[#f2f0ea]">{stage.result}</strong>
+                        <p className="mt-3 text-xs leading-6 text-[#7f8b9a]">{stage.proof}</p>
                         <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/[0.08]">
                           <motion.span
                             initial={{ width: "0%" }}

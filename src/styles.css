@@ -36,6 +36,13 @@ textarea {
   will-change: transform;
 }
 
+.motus-site button:focus-visible,
+.motus-site input:focus-visible,
+.motus-site textarea:focus-visible {
+  outline: 2px solid #a9c1ff;
+  outline-offset: 3px;
+}
+
 .motus-site section {
   scroll-margin-top: 1.5rem;
 }
@@ -168,9 +175,49 @@ input[type="range"] {
   transform: translateX(120%);
 }
 
+.experience-section {
+  background:
+    linear-gradient(180deg, rgba(40, 100, 255, 0.03), transparent 18rem),
+    #05070a;
+}
+
+.experience-offer {
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
 @media (max-width: 767px) {
   .motus-site button {
     will-change: auto;
+  }
+
+  .motus-site #top {
+    min-height: auto;
+    padding-top: 7rem;
+  }
+
+  .motus-site #top h1 {
+    font-size: 3.85rem;
+    line-height: 0.86;
+  }
+
+  .motus-site #top p {
+    margin-top: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  .motus-site #top [class*="gap-14"] {
+    gap: 2.25rem;
+  }
+
+  .experience-section {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .experience-offer {
+    border-radius: 1.25rem;
   }
 
   .motus-site > section {
@@ -209,5 +256,9 @@ input[type="range"] {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .signal-button::after {
+    display: none;
   }
 }
