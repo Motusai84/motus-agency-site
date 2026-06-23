@@ -278,7 +278,7 @@ export default function App() {
 
         <Ticker />
 
-        <section id="friction" className="relative min-h-[85vh] overflow-hidden border-b border-white/[0.06] px-5 py-24 md:px-8 md:py-32">
+        <section id="friction" className="relative min-h-[85vh] overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-32">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger}>
@@ -306,7 +306,7 @@ export default function App() {
           onRun={() => setExampleRunning(true)}
         />
 
-        <section id="outcomes" className="relative overflow-hidden border-b border-white/[0.06] px-5 py-24 md:px-8 md:py-36">
+        <section id="outcomes" className="relative overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-36">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
               <div>
@@ -329,7 +329,7 @@ export default function App() {
           </div>
         </section>
 
-        <section id="review" className="relative overflow-hidden px-5 py-24 md:px-8 md:py-36">
+        <section id="review" className="relative overflow-hidden px-5 py-20 md:px-8 md:py-36">
           <div className="mx-auto max-w-7xl">
             <div className="relative min-h-[560px] overflow-hidden rounded-[38px] bg-[#f2f0ea] px-6 py-12 text-[#101318] sm:px-10 md:px-16 md:py-16">
               <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
@@ -384,8 +384,6 @@ export default function App() {
           <span>© 2026</span>
         </div>
       </footer>
-
-      <FloatingReviewControl onClick={openReview} />
 
       <AnimatePresence>
         {reviewOpen && (
@@ -548,8 +546,45 @@ function SignalJourney() {
   const lineLength = useTransform(scrollYProgress, [0.05, 0.92], [0, 1]);
 
   return (
-    <section ref={sceneRef} id="journey" className="relative h-[300vh] border-b border-white/[0.06]">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden px-5 py-20 md:px-8">
+    <section ref={sceneRef} id="journey" className="relative border-b border-white/[0.06]">
+      <div className="relative px-5 py-20 md:hidden">
+        <div className="signal-grid absolute inset-0 opacity-[0.1]" />
+        <div className="relative mx-auto max-w-md">
+          <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">One connected route</span>
+          <h2 className="mt-4 font-display text-5xl font-semibold uppercase leading-[0.9] tracking-[-0.035em]">
+            Follow the work,
+            <span className="block text-[#4f5a69]">not the software.</span>
+          </h2>
+          <div className="relative mt-16 space-y-14 pl-9">
+            <div className="absolute bottom-0 left-[11px] top-0 w-px bg-[#2864ff]/40" />
+            {JOURNEY_STAGES.map((stage, index) => (
+              <motion.div
+                key={stage.id}
+                initial={{ opacity: 0.2, x: 22 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.55 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="relative"
+              >
+                <span className="absolute -left-[34px] top-1 grid h-6 w-6 place-items-center rounded-full border border-[#6f95ff] bg-[#090d13]">
+                  <span className="h-2 w-2 rounded-full bg-[#2864ff] shadow-[0_0_10px_rgba(40,100,255,.8)]" />
+                </span>
+                <span className="font-utility text-[9px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">{stage.label} · 0{index + 1}</span>
+                <stage.icon className="mt-5 h-6 w-6 text-[#a9c1ff]" />
+                <h3 className="mt-5 font-display text-3xl font-semibold uppercase leading-none">{stage.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-[#7f8b9a]">{stage.text}</p>
+                <div className="mt-6 border-l-2 border-[#2864ff] bg-[#0b0f15] p-4">
+                  <strong className="block text-xs text-[#dce1e8]">{stage.artefact}</strong>
+                  <span className="mt-2 block font-utility text-[8px] uppercase tracking-[0.12em] text-[#526071]">{stage.meta}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="relative hidden h-[300vh] md:block">
+        <div className="sticky top-0 flex h-screen items-center overflow-hidden px-8 py-20">
         <div className="signal-grid absolute inset-0 opacity-[0.12] [mask-image:radial-gradient(circle_at_center,black,transparent_80%)]" />
         <div className="relative mx-auto h-[78vh] w-full max-w-7xl">
           <div className="absolute left-0 top-0 max-w-xl">
@@ -578,6 +613,7 @@ function SignalJourney() {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );
@@ -629,7 +665,7 @@ function ExampleConsole({
 }) {
   const example = EXAMPLES[activeExample];
   return (
-    <section id="examples" className="relative border-b border-white/[0.06] px-5 py-24 md:px-8 md:py-36">
+    <section id="examples" className="relative border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-36">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]">
           <div>
@@ -719,30 +755,6 @@ function OutcomeLine({ index, title, text, icon: Icon }: { index: string; title:
         <Icon className="h-5 w-5" />
       </span>
     </motion.div>
-  );
-}
-
-function FloatingReviewControl({ onClick }: { onClick: () => void }) {
-  return (
-    <motion.button
-      id="floating-review-btn"
-      type="button"
-      onClick={onClick}
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ scale: 1.025 }}
-      whileTap={{ scale: 0.98 }}
-      className="group fixed bottom-4 right-4 z-40 flex h-14 items-center gap-3 rounded-full border border-white/10 bg-[#080b10]/90 p-2 pr-4 shadow-[0_18px_55px_rgba(0,0,0,.5)] backdrop-blur-xl sm:bottom-6 sm:right-6"
-      aria-label="Open free workflow review"
-    >
-      <MotusMark />
-      <span className="text-left">
-        <strong className="block text-xs font-semibold text-white">Free workflow review</strong>
-        <span className="mt-0.5 hidden font-utility text-[8px] uppercase tracking-[0.1em] text-[#596576] sm:block">Find where work gets stuck</span>
-      </span>
-      <ArrowRight className="h-3.5 w-3.5 text-[#596576] transition-transform group-hover:translate-x-1 group-hover:text-[#6f95ff]" />
-    </motion.button>
   );
 }
 
