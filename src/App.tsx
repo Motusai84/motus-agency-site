@@ -2,7 +2,6 @@ import {
   ArrowDown,
   ArrowRight,
   BellRing,
-  Building2,
   CalendarCheck2,
   Check,
   CheckCircle2,
@@ -32,7 +31,7 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 
 const NAV_ITEMS = [
   { label: "What we fix", id: "problems" },
@@ -320,42 +319,9 @@ export default function App() {
           </div>
         </section>
 
-        <section id="problems" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-28">
-          <div className="mx-auto max-w-7xl">
-            <SectionIntro
-              eyebrow="What we fix"
-              title="Good businesses lose time in small, repetitive gaps."
-              text="It is rarely one dramatic problem. It is the repeated copying, checking, chasing and updating that quietly consumes the week."
-            />
+        <MotionRibbon />
 
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={stagger}
-              className="mt-14 grid gap-4 md:grid-cols-3"
-            >
-              <ProblemCard
-                icon={PhoneMissed}
-                number="01"
-                title="Customers wait too long"
-                text="Missed calls and new enquiries sit until somebody has time to respond."
-              />
-              <ProblemCard
-                icon={Workflow}
-                number="02"
-                title="Information gets copied around"
-                text="The same details move between inboxes, sheets and systems by hand."
-              />
-              <ProblemCard
-                icon={BellRing}
-                number="03"
-                title="Follow-ups depend on memory"
-                text="Important next steps are easy to miss when the team gets busy."
-              />
-            </motion.div>
-          </div>
-        </section>
+        <ChaosToClarityScene />
 
         <section id="example" className="relative border-t border-white/5 px-5 py-24 md:px-8 md:py-28">
           <div className="mx-auto max-w-7xl">
@@ -545,6 +511,8 @@ export default function App() {
         </div>
       </footer>
 
+      <FloatingReviewControl onClick={openReview} />
+
       <AnimatePresence>
         {reviewOpen && (
           <ReviewPanel
@@ -569,8 +537,18 @@ function ActivityPreview() {
   return (
     <div className="relative">
       <div className="absolute inset-8 rounded-full bg-blue-600/20 blur-[100px]" />
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 42, repeat: Infinity, ease: "linear" }}
+        className="absolute -inset-8 rounded-full border border-dashed border-blue-500/10"
+      />
       <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#080a0f]/95 p-4 shadow-[0_40px_100px_rgba(0,0,0,.55)] backdrop-blur-xl sm:p-6">
         <div className="engine-grid absolute inset-0 opacity-20" />
+        <motion.div
+          animate={{ y: ["-10%", "620%"] }}
+          transition={{ duration: 4.8, repeat: Infinity, ease: "linear", repeatDelay: 1.2 }}
+          className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-400/70 to-transparent shadow-[0_0_24px_rgba(96,165,250,.7)]"
+        />
         <div className="relative z-10">
           <div className="flex items-center justify-between border-b border-white/[0.08] pb-5">
             <div>
@@ -638,7 +616,161 @@ function ActivityPreview() {
           <span className="mt-0.5 block text-[10px] text-slate-600">No chasing required</span>
         </div>
       </motion.div>
+
+      <motion.div
+        animate={{ y: [0, 7, 0], rotate: [-2, 1, -2] }}
+        transition={{ duration: 5.4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -right-3 top-24 hidden w-40 rounded-2xl border border-white/10 bg-black/90 p-3 shadow-2xl md:block"
+      >
+        <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-blue-400">
+          <Zap className="h-3 w-3" />
+          Response time
+        </span>
+        <strong className="mt-3 block text-2xl font-semibold">12 sec</strong>
+        <span className="mt-1 block text-[10px] text-slate-600">Previously: 3 hours</span>
+      </motion.div>
     </div>
+  );
+}
+
+function MotionRibbon() {
+  const items = ["Missed calls", "New enquiries", "Bookings", "Follow-ups", "Customer records", "Team alerts"];
+  return (
+    <div className="relative overflow-hidden border-y border-white/[0.06] bg-blue-500/[0.025] py-4" aria-hidden="true">
+      <motion.div
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+        className="flex w-max items-center"
+      >
+        {[...items, ...items].map((item, index) => (
+          <div key={`${item}-${index}`} className="flex items-center">
+            <span className="mx-6 whitespace-nowrap text-xs font-bold uppercase tracking-[0.22em] text-slate-600 sm:mx-10">{item}</span>
+            <Sparkles className="h-3.5 w-3.5 text-blue-500/50" />
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+function ChaosToClarityScene() {
+  const sceneRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sceneRef,
+    offset: ["start start", "end end"],
+  });
+  const introOpacity = useTransform(scrollYProgress, [0, 0.15, 0.32], [1, 1, 0.25]);
+  const sourceOpacity = useTransform(scrollYProgress, [0.05, 0.25, 0.55], [0, 1, 0.15]);
+  const coreScale = useTransform(scrollYProgress, [0.2, 0.48, 0.68], [0.75, 1, 1.08]);
+  const coreGlow = useTransform(scrollYProgress, [0.25, 0.58], [0.15, 0.65]);
+  const resultOpacity = useTransform(scrollYProgress, [0.48, 0.7, 0.92], [0, 1, 1]);
+  const progressWidth = useTransform(scrollYProgress, [0.08, 0.88], ["0%", "100%"]);
+  const clutter = [
+    { icon: PhoneMissed, label: "Missed call", left: "5%", top: "29%", rotate: -8 },
+    { icon: Mail, label: "Unread enquiry", left: "13%", top: "59%", rotate: 5 },
+    { icon: FileCheck2, label: "Update the sheet", left: "3%", top: "76%", rotate: -3 },
+  ];
+  const results = [
+    { icon: MessageSquareText, label: "Reply sent", right: "5%", top: "29%" },
+    { icon: CalendarCheck2, label: "Next step booked", right: "12%", top: "57%" },
+    { icon: BellRing, label: "Team notified", right: "4%", top: "75%" },
+  ];
+
+  return (
+    <section ref={sceneRef} id="problems" className="relative h-[220vh] border-b border-white/5">
+      <div className="sticky top-0 flex h-screen items-center overflow-hidden px-5 py-20 md:px-8">
+        <div className="engine-grid absolute inset-0 opacity-[0.12] [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" />
+        <motion.div
+          style={{ opacity: coreGlow }}
+          className="absolute left-1/2 top-1/2 h-[50vw] max-h-[700px] w-[50vw] max-w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/20 blur-[130px]"
+        />
+
+        <div className="relative mx-auto h-[78vh] w-full max-w-7xl">
+          <motion.div style={{ opacity: introOpacity }} className="absolute left-0 top-0 max-w-xl">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">What Motus changes</span>
+            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
+              From scattered admin
+              <span className="block text-slate-600">to one clear flow.</span>
+            </h2>
+            <p className="mt-5 max-w-lg leading-relaxed text-slate-400">
+              Scroll to see routine work move from separate messages and reminders into a process your team can follow.
+            </p>
+          </motion.div>
+
+          <motion.div style={{ opacity: sourceOpacity }}>
+            {clutter.map((item, index) => (
+              <motion.div
+                key={item.label}
+                animate={{ y: [0, index % 2 ? 7 : -7, 0], rotate: [item.rotate, item.rotate + 2, item.rotate] }}
+                transition={{ duration: 5 + index, repeat: Infinity, ease: "easeInOut" }}
+                style={{ left: item.left, top: item.top }}
+                className="absolute flex items-center gap-3 rounded-2xl border border-rose-400/15 bg-[#0b090c]/90 p-3 pr-5 shadow-2xl"
+              >
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-rose-500/10 text-rose-300">
+                  <item.icon className="h-4 w-4" />
+                </span>
+                <div>
+                  <strong className="block text-xs">{item.label}</strong>
+                  <span className="mt-1 block text-[10px] text-slate-700">Waiting for somebody</span>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            style={{ scale: coreScale }}
+            className="absolute left-1/2 top-[58%] z-20 -translate-x-1/2 -translate-y-1/2"
+          >
+            <motion.div
+              animate={{ boxShadow: ["0 0 20px rgba(59,130,246,.15)", "0 0 70px rgba(59,130,246,.4)", "0 0 20px rgba(59,130,246,.15)"] }}
+              transition={{ duration: 3.5, repeat: Infinity }}
+              className="relative grid h-32 w-32 place-items-center rounded-full border border-blue-400/35 bg-black/90 sm:h-44 sm:w-44"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-4 rounded-full border border-dashed border-blue-400/20"
+              />
+              <div className="text-center">
+                <Workflow className="mx-auto h-7 w-7 text-blue-400 sm:h-9 sm:w-9" />
+                <strong className="mt-2 block text-xs tracking-[0.2em] sm:text-sm">MOTUS</strong>
+                <span className="mt-1 hidden text-[9px] uppercase tracking-widest text-slate-600 sm:block">Connected process</span>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div style={{ opacity: resultOpacity }}>
+            {results.map((item, index) => (
+              <motion.div
+                key={item.label}
+                initial={{ x: 16 }}
+                whileInView={{ x: 0 }}
+                style={{ right: item.right, top: item.top }}
+                className="absolute flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-[#07100d]/90 p-3 pr-5 shadow-2xl"
+              >
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400">
+                  <item.icon className="h-4 w-4" />
+                </span>
+                <div>
+                  <strong className="block text-xs">{item.label}</strong>
+                  <span className="mt-1 block text-[10px] text-slate-600">Completed and recorded</span>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <div className="absolute bottom-0 left-0 right-0">
+            <div className="mb-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-700">
+              <span>Scattered</span>
+              <span>Connected</span>
+            </div>
+            <div className="h-px overflow-hidden bg-white/10">
+              <motion.div style={{ width: progressWidth }} className="h-full bg-gradient-to-r from-blue-600 to-emerald-400 shadow-[0_0_14px_#60a5fa]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -654,21 +786,6 @@ function SectionIntro({ eyebrow, title, text }: { eyebrow: string; title: string
       <motion.span variants={reveal} className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">{eyebrow}</motion.span>
       <motion.h2 variants={reveal} className="mt-4 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">{title}</motion.h2>
       <motion.p variants={reveal} className="mx-auto mt-5 max-w-2xl leading-relaxed text-slate-400">{text}</motion.p>
-    </motion.div>
-  );
-}
-
-function ProblemCard({ icon: Icon, number, title, text }: { icon: LucideIcon; number: string; title: string; text: string }) {
-  return (
-    <motion.div variants={reveal} className="group min-h-64 rounded-[28px] border border-white/[0.08] bg-white/[0.025] p-6 transition hover:border-blue-500/20 hover:bg-blue-500/[0.035]">
-      <div className="flex items-center justify-between">
-        <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/5 text-slate-400 transition group-hover:bg-blue-500/10 group-hover:text-blue-400">
-          <Icon className="h-5 w-5" />
-        </span>
-        <span className="font-mono text-xs text-slate-700">{number}</span>
-      </div>
-      <h3 className="mt-14 text-xl font-semibold">{title}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-slate-500">{text}</p>
     </motion.div>
   );
 }
@@ -739,6 +856,33 @@ function TrustItem({ icon: Icon, title, text }: { icon: LucideIcon; title: strin
       <h3 className="mt-5 font-semibold">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-slate-500">{text}</p>
     </motion.div>
+  );
+}
+
+function FloatingReviewControl({ onClick }: { onClick: () => void }) {
+  return (
+    <motion.button
+      id="floating-review-btn"
+      type="button"
+      onClick={onClick}
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      className="group fixed bottom-4 right-4 z-40 flex h-14 items-center gap-3 rounded-full border border-white/10 bg-black/85 p-2 pr-4 shadow-[0_18px_55px_rgba(0,0,0,.5)] backdrop-blur-xl sm:bottom-6 sm:right-6"
+      aria-label="Open free workflow review"
+    >
+      <span className="relative grid h-10 w-10 place-items-center rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+        <Sparkles className="h-4 w-4" />
+        <span className="motion-status-ping absolute inset-0 rounded-full bg-blue-500/40" />
+      </span>
+      <span className="text-left">
+        <strong className="block text-xs font-semibold text-white">Free workflow review</strong>
+        <span className="mt-0.5 hidden text-[10px] text-slate-600 sm:block">Show us what slows you down</span>
+      </span>
+      <ArrowRight className="h-3.5 w-3.5 text-slate-600 transition-transform group-hover:translate-x-1 group-hover:text-blue-400" />
+    </motion.button>
   );
 }
 
