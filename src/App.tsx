@@ -47,62 +47,92 @@ const JOURNEY_STAGES = [
   {
     id: "receive",
     label: "Receive",
-    title: "The request arrives.",
-    text: "A call, enquiry or booking enters one visible route instead of disappearing into a busy inbox.",
+    title: "The work arrives.",
+    text: "An invoice, receipt, enquiry, quote, job update or Gmail message enters one visible route instead of sitting in the wrong place.",
     icon: Inbox,
-    artefact: "New website enquiry",
-    meta: "Today · 09:41",
+    artefact: "Supplier invoice received",
+    meta: "Gmail accounts label",
   },
   {
-    id: "respond",
-    label: "Respond",
-    title: "The routine next step happens.",
-    text: "The customer receives a useful reply and your records are updated without somebody copying details around.",
-    icon: MessageSquareText,
-    artefact: "Reply sent in 12 seconds",
-    meta: "Customer knows what happens next",
+    id: "sort",
+    label: "Sort",
+    title: "The route decides what it is.",
+    text: "The workflow checks the details, adds the right tag, finds missing fields and separates ready work from anything needing review.",
+    icon: Route,
+    artefact: "Invoice review needed",
+    meta: "PO missing owner queue",
   },
   {
     id: "handover",
     label: "Handover",
     title: "A person takes over where they matter.",
-    text: "The right team member receives the context, the next action and a clear record of what already happened.",
+    text: "The right person receives the context, the next action and a clear record without searching Gmail, sheets or folders.",
     icon: BellRing,
-    artefact: "Follow-up assigned",
-    meta: "Owner · Seun · Due 10:00",
+    artefact: "Daily action digest",
+    meta: "Owner due today",
   },
 ] as const;
 
 const EXAMPLES = {
-  "Missed call": {
-    trigger: "A customer calls while the team is busy.",
+  "Invoice chaser": {
+    trigger: "An unpaid invoice reaches the next chase stage.",
     steps: [
-      ["Call logged", PhoneMissed],
-      ["Text reply sent", MessageSquareText],
-      ["Lead added", FileCheck2],
-      ["Team notified", BellRing],
+      ["Invoice checked", PoundSterling],
+      ["Chase stage set", Clock3],
+      ["Owner digest prepared", Mail],
+      ["Chase log updated", FileCheck2],
     ] as const,
-    result: "The opportunity remains warm without somebody watching the phone.",
+    result: "The owner gets one clean list of invoices needing attention, without relying on memory.",
   },
-  Enquiry: {
-    trigger: "A customer submits a question through the website.",
+  "Receipt organiser": {
+    trigger: "Receipts and supplier invoices arrive by Gmail, Drive or upload.",
     steps: [
-      ["Enquiry received", Inbox],
-      ["Details checked", FileCheck2],
-      ["Reply prepared", Mail],
-      ["Next step created", Route],
+      ["Attachment captured", Inbox],
+      ["Fields extracted", FileCheck2],
+      ["Review items flagged", BellRing],
+      ["Bookkeeping log updated", Route],
     ] as const,
-    result: "Every enquiry receives a consistent first response and a clear owner.",
+    result: "Receipts and invoices stay organised for cleaner bookkeeping and easier accountant handoff.",
   },
-  Booking: {
-    trigger: "A customer wants to arrange an appointment or site visit.",
+  "Lead responder": {
+    trigger: "A new enquiry arrives from a form, email or ad.",
     steps: [
-      ["Request received", Inbox],
-      ["Time confirmed", CalendarCheck2],
-      ["Record updated", FileCheck2],
-      ["Reminder scheduled", BellRing],
+      ["Lead normalised", Inbox],
+      ["Intent classified", Route],
+      ["First reply drafted", MessageSquareText],
+      ["Owner route assigned", BellRing],
     ] as const,
-    result: "The booking moves forward with fewer messages and fewer no-shows.",
+    result: "New enquiries are answered, qualified and sent to the right next step before they go cold.",
+  },
+  "Quote follow-up": {
+    trigger: "A quote has been sent but no one has followed up.",
+    steps: [
+      ["Quote status checked", FileCheck2],
+      ["Follow-up timing set", Clock3],
+      ["Message prepared", Mail],
+      ["Hot quote flagged", BellRing],
+    ] as const,
+    result: "Good opportunities stop disappearing after the quote leaves the inbox.",
+  },
+  "Job to invoice": {
+    trigger: "A job is complete but the invoice details are still scattered.",
+    steps: [
+      ["Job completion logged", CheckCircle2],
+      ["Details validated", FileCheck2],
+      ["Invoice record prepared", PoundSterling],
+      ["Accounts notified", BellRing],
+    ] as const,
+    result: "Finished work becomes invoice-ready without someone chasing job sheets, photos or notes.",
+  },
+  "Gmail task sorter": {
+    trigger: "A busy inbox receives invoices, customer messages and internal requests.",
+    steps: [
+      ["Email read", Mail],
+      ["Label applied", Route],
+      ["Task owner suggested", User],
+      ["Review queue updated", FileCheck2],
+    ] as const,
+    result: "Important Gmail messages become labelled tasks instead of staying buried in the inbox.",
   },
 } as const;
 
@@ -120,7 +150,7 @@ const EXPERIENCE_STAGES = [
     month: "Month 2",
     phase: "Build",
     title: "Build the live route.",
-    text: "The route starts moving real calls, enquiries, bookings or records through a simple operating system.",
+    text: "The route starts moving real inboxes, invoices, receipts, quotes, job notes or enquiries through a simple operating system.",
     result: "Working route with error checks",
     proof: "Routine work moves without constant chasing.",
     icon: Workflow,
@@ -164,7 +194,7 @@ export default function App() {
   const navScale = useTransform(scrollYProgress, [0, 0.06], [1, 0.96]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [activeExample, setActiveExample] = useState<keyof typeof EXAMPLES>("Missed call");
+  const [activeExample, setActiveExample] = useState<keyof typeof EXAMPLES>("Invoice chaser");
   const [exampleRunning, setExampleRunning] = useState(false);
   const [calculatorMode, setCalculatorMode] = useState<"cost" | "capacity">("cost");
   const [teamSize, setTeamSize] = useState(10);
@@ -309,7 +339,7 @@ export default function App() {
               </motion.h1>
 
               <motion.p variants={reveal} className="mt-8 max-w-xl text-base font-medium leading-8 text-[#909cab] sm:text-lg">
-                Motus connects the routine steps between calls, enquiries, bookings and follow-ups, so customers move forward without admin constantly pulling your team back.
+                Motus turns messy inboxes, unpaid invoices, receipts, quotes, job notes and new enquiries into clear routes your team can actually run.
               </motion.p>
 
               <motion.div variants={reveal} className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -346,7 +376,7 @@ export default function App() {
                   <span className="block text-[#4f5a69]">A hundred small waits.</span>
                 </motion.h2>
                 <motion.p variants={reveal} className="mt-7 max-w-lg leading-8 text-[#8c98a8]">
-                  The cost hides between systems: waiting to reply, copying details between tools, checking whether something happened and remembering who should follow up.
+                  The cost hides between systems: Gmail labels, invoice checks, receipt filing, quote follow-up, job paperwork and the daily list of what needs attention.
                 </motion.p>
               </motion.div>
 
@@ -391,14 +421,14 @@ export default function App() {
                 </h2>
               </div>
               <p className="max-w-2xl text-lg leading-8 text-[#8e9aaa]">
-                The outcome is not “more technology.” It is fewer interruptions, faster first responses and less work depending on somebody remembering the next step.
+                The outcome is not more software. It is cleaner inboxes, clearer invoice action, fewer loose documents and less work depending on somebody remembering the next step.
               </p>
             </div>
 
             <div className="mt-16 border-y border-white/[0.08]">
-              <OutcomeLine label="Reply speed" title="Customers wait less" text="Routine acknowledgements and next steps happen while your team is occupied." icon={Clock3} />
-              <OutcomeLine label="Clean records" title="Information stays in motion" text="Details reach the right record and the right person without repeated copying." icon={Route} />
-              <OutcomeLine label="Clear owner" title="Nothing important stays invisible" text="Completed work is recorded; failed steps are surfaced instead of quietly disappearing." icon={CheckCircle2} />
+              <OutcomeLine label="Cash" title="Invoices get a next action" text="Overdue invoices, chase stages and owner reminders live in one clean route." icon={PoundSterling} />
+              <OutcomeLine label="Inbox" title="Gmail becomes a work queue" text="Important messages are labelled, routed and owned instead of sitting unseen." icon={Mail} />
+              <OutcomeLine label="Records" title="Documents stop floating around" text="Receipts, job notes and invoice details land where the team can review them." icon={FileCheck2} />
             </div>
           </div>
         </section>
@@ -429,7 +459,7 @@ export default function App() {
                     <span className="block pl-[0.5em] text-[#647184]">work gets stuck.</span>
                   </h2>
                   <p className="mt-7 max-w-xl text-base font-medium leading-8 text-[#536070]">
-                    We will look at one repetitive process and explain what can be improved, what should stay with your team and what a practical next step looks like.
+                    We will look at one repetitive process such as invoices, Gmail sorting, receipts, quote follow-up, job paperwork or lead response, then explain what a practical next step looks like.
                   </p>
                 </div>
 
@@ -498,10 +528,10 @@ function SignalRail({ progress, reducedMotion }: { progress: ReturnType<typeof u
 
 function OperationsConsole() {
   const events = [
-    { icon: PhoneMissed, title: "Missed call", detail: "Callback text prepared", state: "Received", owner: "Phone", delay: 0.55 },
-    { icon: MessageSquareText, title: "Helpful reply", detail: "The customer knows what happens next", state: "Sent", owner: "SMS", delay: 0.82 },
-    { icon: FileCheck2, title: "Customer record", detail: "Name, reason and source are logged", state: "Updated", owner: "Record", delay: 1.09 },
-    { icon: BellRing, title: "Team follow-up", detail: "The right person gets the context", state: "Assigned", owner: "Team", delay: 1.36 },
+    { icon: Mail, title: "Gmail labelled", detail: "Invoice moved to accounts review", state: "Tagged", owner: "Inbox", delay: 0.55 },
+    { icon: PoundSterling, title: "Invoice checked", detail: "Chase stage and suggested action set", state: "Due", owner: "Cash", delay: 0.82 },
+    { icon: FileCheck2, title: "Receipt logged", detail: "Supplier, date and VAT captured", state: "Filed", owner: "Books", delay: 1.09 },
+    { icon: BellRing, title: "Owner digest", detail: "One clean list of today's actions", state: "Ready", owner: "Team", delay: 1.36 },
   ];
 
   return (
@@ -529,9 +559,9 @@ function OperationsConsole() {
         </div>
 
         <div className="relative z-10 grid border-b border-white/[0.08] sm:grid-cols-3">
-          <ConsoleMetric label="First reply" value="12 sec" />
+          <ConsoleMetric label="Inbox labels" value="6" />
           <ConsoleMetric label="Manual copies" value="0" />
-          <ConsoleMetric label="Next steps set" value="3" />
+          <ConsoleMetric label="Actions ready" value="4" />
         </div>
 
         <div className="relative z-10 grid lg:grid-cols-[0.72fr_1.28fr]">
@@ -539,9 +569,9 @@ function OperationsConsole() {
             <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#596576]">Incoming today</span>
             <div className="mt-5 space-y-3">
               {[
-                ["09:41", "New enquiry", "Waiting for reply"],
-                ["10:02", "Missed call", "Auto text ready"],
-                ["10:18", "Booking request", "Needs owner"],
+                ["09:41", "Supplier invoice", "Needs PO check"],
+                ["10:02", "Gmail request", "Label applied"],
+                ["10:18", "Quote follow-up", "Owner action due"],
               ].map(([time, title, note], index) => (
                 <motion.div
                   key={title}
@@ -563,8 +593,8 @@ function OperationsConsole() {
           <div className="relative p-5 sm:p-7">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <span className="font-utility text-[9px] uppercase tracking-[0.2em] text-[#566171]">Live route · 001</span>
-                <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tight">Customer enquiry</h2>
+                <span className="font-utility text-[9px] uppercase tracking-[0.2em] text-[#566171]">Live route · template shelf</span>
+                <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tight">Invoice ops route</h2>
               </div>
               <span className="rounded-full border border-[#77d7a8]/20 bg-[#77d7a8]/10 px-3 py-1.5 font-utility text-[8px] font-bold uppercase tracking-[0.12em] text-[#77d7a8]">Moving</span>
             </div>
@@ -632,7 +662,7 @@ function OperationsConsole() {
           <div className="border-t border-white/[0.08] p-5 sm:border-l sm:border-t-0">
             <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">Today</span>
             <strong className="mt-2 block font-display text-3xl font-semibold uppercase">14 handled</strong>
-            <span className="mt-1 block text-xs text-[#7f8b9a]">without being chased</span>
+            <span className="mt-1 block text-xs text-[#7f8b9a]">ready for review</span>
           </div>
         </div>
       </div>
@@ -658,11 +688,11 @@ function ConsoleMetric({ label, value }: { label: string; value: string }) {
 }
 
 function ProofTicker() {
-  const items = ["Calls", "Enquiries", "Bookings", "Records", "Reminders", "Handover"];
+  const items = ["Unpaid invoices", "Receipts", "Gmail labels", "Quote follow-up", "Job sheets", "Lead routing"];
   const proof = [
-    { icon: Clock3, label: "Speed", title: "First replies happen while your team is busy.", stat: "12 sec" },
-    { icon: FileCheck2, label: "Records", title: "Customer details land in the right place.", stat: "0 copies" },
-    { icon: ShieldCheck, label: "Control", title: "People stay in charge of the important calls.", stat: "owner-ready" },
+    { icon: PoundSterling, label: "Cash", title: "Unpaid invoices become a clear daily action list.", stat: "chase log" },
+    { icon: FileCheck2, label: "Admin", title: "Receipts and attachments land in a clean review queue.", stat: "filed" },
+    { icon: Mail, label: "Inbox", title: "Gmail messages get labelled, routed and owned.", stat: "tagged" },
   ];
 
   return (
@@ -802,11 +832,11 @@ function Ticker() {
 
 function FrictionField() {
   const items = [
-    { icon: PhoneMissed, label: "Missed call", note: "Waiting 2h 14m", x: "2%", y: "6%", rotate: -5 },
-    { icon: Mail, label: "Unread enquiry", note: "No owner", x: "45%", y: "0%", rotate: 4 },
-    { icon: FileCheck2, label: "Copy to spreadsheet", note: "Still manual", x: "17%", y: "39%", rotate: 3 },
-    { icon: BellRing, label: "Remember to follow up", note: "Due yesterday", x: "53%", y: "48%", rotate: -4 },
-    { icon: CalendarCheck2, label: "Confirm booking", note: "3 messages", x: "7%", y: "75%", rotate: -2 },
+    { icon: PoundSterling, label: "Unpaid invoice", note: "No chase stage", x: "2%", y: "6%", rotate: -5 },
+    { icon: Mail, label: "Gmail unlabelled", note: "No owner", x: "45%", y: "0%", rotate: 4 },
+    { icon: FileCheck2, label: "Receipt in inbox", note: "Not filed", x: "17%", y: "39%", rotate: 3 },
+    { icon: BellRing, label: "Quote follow-up", note: "Due yesterday", x: "53%", y: "48%", rotate: -4 },
+    { icon: CalendarCheck2, label: "Job sheet missing", note: "Invoice delayed", x: "7%", y: "75%", rotate: -2 },
   ];
   return (
     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger} className="relative min-h-[520px]">
@@ -965,18 +995,18 @@ function ExampleConsole({
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]">
           <div>
-            <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">Try a real route</span>
-            <h2 className="mt-5 font-display text-5xl font-semibold uppercase leading-[0.9] tracking-[-0.035em] md:text-7xl">
-              Choose what
-              <span className="block text-[#4f5a69]">enters first.</span>
+            <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">Reusable workflow templates</span>
+            <h2 aria-label="Pick the first workflow to fix." className="mt-5 font-display text-5xl font-semibold uppercase leading-[0.9] tracking-[-0.035em] md:text-7xl">
+              Pick the first
+              <span className="block text-[#4f5a69]">workflow to fix.</span>
             </h2>
             <p className="mt-6 max-w-md text-sm leading-7 text-[#8d99aa]">
-              Each example follows a common small-business task from first contact to clear handover.
+              These are the first Motus template routes: practical workflows for cash, admin, inboxes, quotes, job paperwork and lead response.
             </p>
             <div className="mt-10 border-t border-white/[0.08]">
               {(Object.keys(EXAMPLES) as Array<keyof typeof EXAMPLES>).map((name) => (
                 <button
-                  id={`example-${name.toLowerCase().replace(" ", "-")}`}
+                  id={`example-${name.toLowerCase().replace(/\s+/g, "-")}`}
                   key={name}
                   type="button"
                   onClick={() => onChoose(name)}
@@ -1478,7 +1508,7 @@ function ReviewPanel({
             <div className="relative z-10">
               <span className="font-utility text-[9px] font-bold uppercase tracking-[0.2em] text-[#d5e0ff]">Free workflow review</span>
               <h2 id="review-panel-title" className="mt-5 font-display text-4xl font-semibold uppercase leading-[0.9] tracking-tight">Where does work slow down?</h2>
-              <p className="mt-5 text-sm leading-7 text-[#d9e3ff]">Give us one repeated task. We will explain where automation could genuinely help and where a person should remain in control.</p>
+              <p className="mt-5 text-sm leading-7 text-[#d9e3ff]">Give us one repeated task: Gmail sorting, invoices, receipts, quote follow-up, job paperwork or lead response. We will explain where automation could genuinely help and where a person should remain in control.</p>
               <div className="mt-9 space-y-4">
                 <PanelPromise icon={CheckCircle2} text="A practical first opinion" />
                 <PanelPromise icon={MessageSquareText} text="A plain-English explanation" />
@@ -1501,7 +1531,7 @@ function ReviewPanel({
                 <FormField id="review-email" name="email" type="email" label="Work email" placeholder="jane@yourbusiness.co.uk" icon={Mail} required />
                 <label>
                   <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#cbd2dc]"><Workflow className="h-4 w-4" />Which task causes the most frustration?</span>
-                  <textarea id="review-frustration" name="admin_headache" required rows={5} placeholder="For example: We miss calls while on jobs and often reply too late…" className="w-full resize-none border border-white/10 bg-[#070a0f] px-5 py-4 text-white outline-none transition placeholder:text-[#46515f] focus:border-[#6f95ff]" />
+                  <textarea id="review-frustration" name="admin_headache" required rows={5} placeholder="For example: unpaid invoices, Gmail labels, receipts, quotes, job sheets or leads..." className="w-full resize-none border border-white/10 bg-[#070a0f] px-5 py-4 text-white outline-none transition placeholder:text-[#46515f] focus:border-[#6f95ff]" />
                 </label>
                 <input type="hidden" name="source" value="motus-workflow-review" />
                 <button id="review-submit-btn" type="submit" disabled={formStatus === "sending"} className="group flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-[#2864ff] px-6 font-bold transition hover:bg-[#477cff] disabled:cursor-wait disabled:opacity-70">
