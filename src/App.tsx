@@ -76,6 +76,13 @@ const JOURNEY_STAGES = [
 const EXAMPLES = {
   "Invoice chaser": {
     trigger: "An unpaid invoice reaches the next chase stage.",
+    route: "Cash route",
+    pulse: ["Overdue", "Stage set", "Owner list"],
+    live: [
+      ["Detected", "Invoice overdue"],
+      ["Decision", "Owner chase only"],
+      ["Logged", "ChaseLog updated"],
+    ] as const,
     steps: [
       ["Invoice checked", PoundSterling],
       ["Chase stage set", Clock3],
@@ -86,6 +93,13 @@ const EXAMPLES = {
   },
   "Receipt organiser": {
     trigger: "Receipts and supplier invoices arrive by Gmail, Drive or upload.",
+    route: "Books route",
+    pulse: ["Captured", "Fields read", "Review queue"],
+    live: [
+      ["Detected", "Supplier document"],
+      ["Decision", "Flag unclear VAT"],
+      ["Logged", "Bookkeeping row"],
+    ] as const,
     steps: [
       ["Attachment captured", Inbox],
       ["Fields extracted", FileCheck2],
@@ -96,6 +110,13 @@ const EXAMPLES = {
   },
   "Lead responder": {
     trigger: "A new enquiry arrives from a form, email or ad.",
+    route: "Enquiry route",
+    pulse: ["New lead", "Intent read", "Next step"],
+    live: [
+      ["Detected", "Quote intent"],
+      ["Decision", "Route to owner"],
+      ["Logged", "Lead record saved"],
+    ] as const,
     steps: [
       ["Lead normalised", Inbox],
       ["Intent classified", Route],
@@ -106,6 +127,13 @@ const EXAMPLES = {
   },
   "Quote follow-up": {
     trigger: "A quote has been sent but no one has followed up.",
+    route: "Quote route",
+    pulse: ["Quote aged", "Timing set", "Hot flag"],
+    live: [
+      ["Detected", "No reply yet"],
+      ["Decision", "Follow-up due"],
+      ["Logged", "Quote status"],
+    ] as const,
     steps: [
       ["Quote status checked", FileCheck2],
       ["Follow-up timing set", Clock3],
@@ -116,6 +144,13 @@ const EXAMPLES = {
   },
   "Job to invoice": {
     trigger: "A job is complete but the invoice details are still scattered.",
+    route: "Job route",
+    pulse: ["Complete", "Validated", "Accounts"],
+    live: [
+      ["Detected", "Job complete"],
+      ["Decision", "Ready to invoice"],
+      ["Logged", "Accounts task"],
+    ] as const,
     steps: [
       ["Job completion logged", CheckCircle2],
       ["Details validated", FileCheck2],
@@ -126,6 +161,13 @@ const EXAMPLES = {
   },
   "Gmail task sorter": {
     trigger: "A busy inbox receives invoices, customer messages and internal requests.",
+    route: "Inbox route",
+    pulse: ["Message read", "Label chosen", "Owner set"],
+    live: [
+      ["Detected", "Customer request"],
+      ["Decision", "Review queue"],
+      ["Logged", "Task created"],
+    ] as const,
     steps: [
       ["Email read", Mail],
       ["Label applied", Route],
@@ -157,11 +199,11 @@ const EXPERIENCE_STAGES = [
   },
   {
     month: "Month 3",
-    phase: "Run",
+    phase: "Care",
     title: "Run it properly.",
-    text: "We tighten the handover, review what happened and leave the team with a route they can trust.",
-    result: "Team handover and improvement plan",
-    proof: "The business has a calmer way to manage the task.",
+    text: "We tighten the handover, monitor the route, fix rough edges and agree whether Motus keeps caring for it after launch.",
+    result: "Live route, team handover and care option",
+    proof: "The business is not left with a workflow nobody watches.",
     icon: ShieldCheck,
   },
 ] as const;
@@ -169,7 +211,14 @@ const EXPERIENCE_STAGES = [
 const EXPERIENCE_PROMISES = [
   "One real bottleneck",
   "Live route, not a slide deck",
-  "Plain-English handover",
+  "Ongoing care available",
+] as const;
+
+const CARE_SIGNALS = [
+  "Hosted route",
+  "Failure alerts",
+  "Small fixes",
+  "Quarterly improvement",
 ] as const;
 
 const reveal: Variants = {
@@ -1150,10 +1199,23 @@ function ExampleConsole({
               <span>route active</span>
               <ArrowRight className="h-3 w-3" />
             </motion.div>
+            <div className="example-orbit-map" aria-hidden="true">
+              <motion.span
+                animate={{ rotate: running ? 360 : 0 }}
+                transition={{ duration: 10, repeat: running ? Infinity : 0, ease: "linear" }}
+              />
+              <motion.i
+                animate={{ scale: running ? [1, 1.18, 1] : 1, opacity: running ? [0.6, 1, 0.6] : 0.35 }}
+                transition={{ duration: 1.6, repeat: running ? Infinity : 0, ease: "easeInOut" }}
+              />
+            </div>
             <div className="relative z-10 flex h-full flex-col">
               <div className="flex flex-col gap-5 border-b border-white/[0.08] pb-6 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#596576]">Trigger</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#596576]">Trigger</span>
+                    <span className="rounded-full border border-[#2864ff]/25 bg-[#2864ff]/10 px-3 py-1 font-utility text-[8px] font-bold uppercase tracking-[0.14em] text-[#7da0ff]">{example.route}</span>
+                  </div>
                   <p className="mt-2 max-w-lg text-lg font-semibold text-[#dce1e8]">{example.trigger}</p>
                 </div>
                 <button id="run-example-btn" type="button" onClick={onRun} className="group flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-full bg-[#f2f0ea] px-5 text-sm font-bold text-[#101318] transition hover:bg-white">
@@ -1162,33 +1224,80 @@ function ExampleConsole({
                 </button>
               </div>
 
-              <div className="relative mt-10 flex-1">
-                <div className="absolute bottom-7 left-[23px] top-7 w-px bg-white/[0.08]" />
-                <motion.div animate={{ scaleY: running ? 1 : 0 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="absolute bottom-7 left-[23px] top-7 w-px origin-top bg-[#2864ff] shadow-[0_0_12px_rgba(40,100,255,.7)]" />
-                <div className="space-y-4">
-                  {example.steps.map(([label, Icon], index) => (
-                    <motion.div
-                      key={label}
-                      animate={{ opacity: running ? 1 : 0.28, x: running ? 0 : 12 }}
-                      transition={{ duration: 0.5, delay: running ? index * 0.18 : 0 }}
-                      className="relative flex items-center gap-5"
-                    >
-                      <span className={`relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full border ${running ? "border-[#2864ff]/40 bg-[#0b1327] text-[#7da0ff]" : "border-white/10 bg-[#11151b] text-[#526071]"}`}>
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <div className="flex-1 border-b border-white/[0.07] py-4">
-                        <strong className="font-display text-lg font-semibold uppercase">{label}</strong>
-                        <span className="ml-3 font-utility text-[8px] uppercase tracking-[0.14em] text-[#526071]">0{index + 1}</span>
-                      </div>
-                      {running && <Check className="h-4 w-4 text-[#77d7a8]" />}
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeExample}
+                  initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -12, filter: "blur(8px)" }}
+                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative mt-8 flex-1"
+                >
+                  <div className="example-live-grid">
+                    {example.live.map(([label, value], index) => (
+                      <motion.div
+                        key={`${label}-${value}`}
+                        animate={{
+                          borderColor: running ? ["rgba(255,255,255,.08)", "rgba(40,100,255,.35)", "rgba(255,255,255,.08)"] : "rgba(255,255,255,.08)",
+                          y: running ? [0, -3, 0] : 0,
+                        }}
+                        transition={{ duration: 1.2, delay: running ? index * 0.18 : 0, repeat: running ? Infinity : 0, repeatDelay: 2.2, ease: "easeInOut" }}
+                        className="example-live-cell"
+                      >
+                        <span>{label}</span>
+                        <strong>{value}</strong>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className="example-pulse-row" aria-hidden="true">
+                    {example.pulse.map((pulse, index) => (
+                      <motion.span
+                        key={pulse}
+                        animate={{ opacity: running ? [0.42, 1, 0.42] : 0.36, x: running ? [0, 4, 0] : 0 }}
+                        transition={{ duration: 1.4, delay: index * 0.22, repeat: running ? Infinity : 0, repeatDelay: 1.8 }}
+                      >
+                        {pulse}
+                      </motion.span>
+                    ))}
+                  </div>
+
+                  <div className="relative mt-7">
+                    <div className="absolute bottom-7 left-[23px] top-7 w-px bg-white/[0.08]" />
+                    <motion.div animate={{ scaleY: running ? 1 : 0 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="absolute bottom-7 left-[23px] top-7 w-px origin-top bg-[#2864ff] shadow-[0_0_12px_rgba(40,100,255,.7)]" />
+                    <div className="space-y-4">
+                      {example.steps.map(([label, Icon], index) => (
+                        <motion.div
+                          key={label}
+                          animate={{ opacity: running ? 1 : 0.28, x: running ? 0 : 12 }}
+                          transition={{ duration: 0.5, delay: running ? index * 0.18 : 0 }}
+                          className="relative flex items-center gap-5"
+                        >
+                          <motion.span
+                            animate={{ boxShadow: running ? ["0 0 0 rgba(40,100,255,0)", "0 0 24px rgba(40,100,255,.34)", "0 0 0 rgba(40,100,255,0)"] : "0 0 0 rgba(40,100,255,0)" }}
+                            transition={{ duration: 1.4, delay: running ? index * 0.2 : 0, repeat: running ? Infinity : 0, repeatDelay: 2.3 }}
+                            className={`relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full border ${running ? "border-[#2864ff]/40 bg-[#0b1327] text-[#7da0ff]" : "border-white/10 bg-[#11151b] text-[#526071]"}`}
+                          >
+                            <Icon className="h-5 w-5" />
+                          </motion.span>
+                          <div className="flex-1 border-b border-white/[0.07] py-4">
+                            <strong className="font-display text-lg font-semibold uppercase">{label}</strong>
+                            <span className="ml-3 font-utility text-[8px] uppercase tracking-[0.14em] text-[#526071]">0{index + 1}</span>
+                          </div>
+                          {running && <Check className="h-4 w-4 text-[#77d7a8]" />}
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
 
               <motion.div animate={{ opacity: running ? 1 : 0.35, borderColor: running ? "rgba(119,215,168,.32)" : "rgba(255,255,255,.08)" }} className="mt-7 flex items-start gap-3 border border-white/[0.08] bg-[#77d7a8]/[0.04] p-4">
                 <CheckCircle2 className={`mt-0.5 h-5 w-5 shrink-0 ${running ? "text-[#77d7a8]" : "text-[#526071]"}`} />
-                <p className="text-sm font-medium leading-6 text-[#b9c2cf]">{running ? example.result : "Run the route to see how the work moves."}</p>
+                <div>
+                  <span className="font-utility text-[8px] font-bold uppercase tracking-[0.16em] text-[#77d7a8]">{running ? "Route complete" : "Waiting to run"}</span>
+                  <p className="mt-1 text-sm font-medium leading-6 text-[#b9c2cf]">{running ? example.result : "Run the route to see how the work moves."}</p>
+                </div>
               </motion.div>
             </div>
           </motion.div>
@@ -1213,7 +1322,7 @@ function NinetyDayExperience() {
               <span className="block text-[#4f5a69]">One live route.</span>
             </motion.h2>
             <motion.p variants={reveal} className="mt-7 max-w-lg leading-8 text-[#8c98a8]">
-              This is not an open-ended tech project. It is a focused three-month engagement around one routine process that is slowing the business down.
+              This starts as a focused three-month engagement around one routine process. After launch, Motus can keep hosting, monitoring and improving the route so it does not get dropped back on your team.
             </motion.p>
             <motion.div variants={reveal} className="experience-offer mt-9 overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#090d13]">
               <div className="experience-signal-strip" aria-hidden="true">
@@ -1224,7 +1333,7 @@ function NinetyDayExperience() {
               </div>
               <div className="border-b border-white/[0.08] p-5">
                 <span className="font-utility text-[8px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">What you are buying</span>
-                <strong className="mt-3 block text-lg leading-7 text-[#f2f0ea]">A working route for one repeated admin problem, with your team still in control.</strong>
+                <strong className="mt-3 block text-lg leading-7 text-[#f2f0ea]">A working route for one repeated admin problem, with a clear option for ongoing care.</strong>
               </div>
               <div className="grid divide-y divide-white/[0.08]">
                 {EXPERIENCE_PROMISES.map((promise) => (
@@ -1235,6 +1344,15 @@ function NinetyDayExperience() {
                     <span className="text-sm font-semibold text-[#c8d0dc]">{promise}</span>
                   </div>
                 ))}
+              </div>
+              <div className="border-t border-white/[0.08] bg-[#070a0f]/70 p-5">
+                <span className="font-utility text-[8px] font-bold uppercase tracking-[0.18em] text-[#77d7a8]">After day 90</span>
+                <p className="mt-3 text-sm leading-6 text-[#98a4b3]">If the route is business-critical, Motus can stay close: monitor it, host it, make small fixes and review the next improvement.</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {CARE_SIGNALS.map((signal) => (
+                    <span key={signal} className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 font-utility text-[8px] font-bold uppercase tracking-[0.14em] text-[#aeb8c5]">{signal}</span>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </motion.div>
