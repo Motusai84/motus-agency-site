@@ -339,7 +339,7 @@ export default function App() {
               </motion.h1>
 
               <motion.p variants={reveal} className="mt-8 max-w-xl text-base font-medium leading-8 text-[#909cab] sm:text-lg">
-                Motus turns messy inboxes, unpaid invoices, receipts, quotes, job notes and new enquiries into clear routes your team can actually run.
+                Motus helps UK small-business owners turn messy inboxes, unpaid invoices, receipts, quotes, job notes and new enquiries into clear routes your team can actually run.
               </motion.p>
 
               <motion.div variants={reveal} className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -365,6 +365,8 @@ export default function App() {
         </section>
 
         <ProofTicker />
+
+        <OwnerFitBand />
 
         <section id="friction" className="relative min-h-[85vh] overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-32">
           <div className="mx-auto max-w-7xl">
@@ -459,7 +461,7 @@ export default function App() {
                     <span className="block pl-[0.5em] text-[#647184]">work gets stuck.</span>
                   </h2>
                   <p className="mt-7 max-w-xl text-base font-medium leading-8 text-[#536070]">
-                    We will look at one repetitive process such as invoices, Gmail sorting, receipts, quote follow-up, job paperwork or lead response, then explain what a practical next step looks like.
+                    We will look at one repeated process, explain what should be automated, what should stay with a person and what a practical next step looks like.
                   </p>
                 </div>
 
@@ -535,7 +537,7 @@ function OperationsConsole() {
   ];
 
   return (
-    <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }} className="relative mx-auto w-full max-w-[650px]">
+    <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }} className="operations-console relative mx-auto w-full max-w-[650px]">
       <div className="absolute -inset-8 rounded-full bg-[#2864ff]/20 blur-[110px]" />
       <div className="absolute -right-7 top-10 hidden h-28 w-28 rounded-full border border-[#6f95ff]/20 bg-[#101826]/80 backdrop-blur sm:block" />
 
@@ -558,16 +560,16 @@ function OperationsConsole() {
           </span>
         </div>
 
-        <div className="relative z-10 grid border-b border-white/[0.08] sm:grid-cols-3">
+        <div className="console-metrics relative z-10 grid border-b border-white/[0.08] sm:grid-cols-3">
           <ConsoleMetric label="Inbox labels" value="6" />
           <ConsoleMetric label="Manual copies" value="0" />
           <ConsoleMetric label="Actions ready" value="4" />
         </div>
 
-        <div className="relative z-10 grid lg:grid-cols-[0.72fr_1.28fr]">
-          <div className="border-b border-white/[0.08] p-5 lg:border-b-0 lg:border-r">
+        <div className="console-body relative z-10 grid lg:grid-cols-[0.72fr_1.28fr]">
+          <div className="console-incoming border-b border-white/[0.08] p-5 lg:border-b-0 lg:border-r">
             <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#596576]">Incoming today</span>
-            <div className="mt-5 space-y-3">
+            <div className="console-incoming-list mt-5 space-y-3">
               {[
                 ["09:41", "Supplier invoice", "Needs PO check"],
                 ["10:02", "Gmail request", "Label applied"],
@@ -578,7 +580,7 @@ function OperationsConsole() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.55 + index * 0.14 }}
-                  className={`border border-white/[0.07] p-3 ${index === 1 ? "bg-[#2864ff]/10" : "bg-[#0d1219]"}`}
+                  className={`console-incoming-card border border-white/[0.07] p-3 ${index === 1 ? "bg-[#2864ff]/10" : "bg-[#0d1219]"}`}
                 >
                   <div className="flex items-center justify-between">
                     <strong className="text-xs text-[#dce1e8]">{title}</strong>
@@ -590,7 +592,7 @@ function OperationsConsole() {
             </div>
           </div>
 
-          <div className="relative p-5 sm:p-7">
+          <div className="console-route relative p-5 sm:p-7">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <span className="font-utility text-[9px] uppercase tracking-[0.2em] text-[#566171]">Live route · template shelf</span>
@@ -647,7 +649,7 @@ function OperationsConsole() {
           </div>
         </div>
 
-        <div className="relative z-10 grid border-t border-white/[0.08] bg-[#070a0f]/70 sm:grid-cols-[1fr_auto]">
+        <div className="console-output relative z-10 grid border-t border-white/[0.08] bg-[#070a0f]/70 sm:grid-cols-[1fr_auto]">
           <div className="flex items-end gap-1 px-5 py-5" aria-hidden="true">
             {[32, 44, 28, 58, 42, 72, 54, 83, 62, 78, 90, 68].map((height, index) => (
               <motion.span
@@ -667,7 +669,7 @@ function OperationsConsole() {
         </div>
       </div>
 
-      <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} className="absolute -bottom-7 -left-3 hidden items-center gap-3 bg-[#f2f0ea] p-3 pr-5 text-[#11151b] shadow-2xl sm:flex">
+      <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} className="console-complete-badge absolute -bottom-7 -left-3 hidden items-center gap-3 bg-[#f2f0ea] p-3 pr-5 text-[#11151b] shadow-2xl sm:flex">
         <CheckCircle2 className="h-5 w-5 text-[#16885b]" />
         <div>
           <strong className="block text-xs">Nothing waiting unnoticed</strong>
@@ -680,7 +682,7 @@ function OperationsConsole() {
 
 function ConsoleMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border-b border-white/[0.08] px-5 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+    <div className="console-metric border-b border-white/[0.08] px-5 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
       <span className="block font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">{label}</span>
       <strong className="mt-2 block font-display text-3xl font-semibold uppercase leading-none">{value}</strong>
     </div>
@@ -724,6 +726,50 @@ function ProofTicker() {
             </div>
           ))}
         </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function OwnerFitBand() {
+  const points = [
+    {
+      label: "Who it is for",
+      title: "UK owners with admin drag.",
+      text: "You are not looking for a giant tech project. You want invoices, enquiries, Gmail, receipts and follow-up to stop slowing the day down.",
+    },
+    {
+      label: "How it starts",
+      title: "One bottleneck, clearly mapped.",
+      text: "The free review starts with one repeated task, then shows where automation helps, where it does not and what your team still controls.",
+    },
+    {
+      label: "How it feels",
+      title: "Plain English, calm handover.",
+      text: "No jargon-heavy pitch. The aim is a route your business understands, with cleaner records, clearer next steps and less chasing.",
+    },
+  ] as const;
+
+  return (
+    <section id="owner-fit" className="relative border-b border-white/[0.06] bg-[#05070a] px-5 py-14 md:px-8 md:py-20">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+        <div>
+          <span className="font-utility text-[10px] font-bold uppercase tracking-[0.22em] text-[#6f95ff]">Built for cautious owners</span>
+          <h2 className="mt-4 max-w-md font-display text-4xl font-semibold uppercase leading-[0.9] tracking-[-0.03em] text-[#f2f0ea] md:text-5xl">
+            Useful automation,
+            <span className="block text-[#596576]">without the overwhelm.</span>
+          </h2>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-3">
+          {points.map((point) => (
+            <div key={point.label} className="border border-white/[0.08] bg-[#090d13] p-5">
+              <span className="font-utility text-[8px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">{point.label}</span>
+              <h3 className="mt-4 font-display text-2xl font-semibold uppercase leading-none text-[#f2f0ea]">{point.title}</h3>
+              <p className="mt-4 text-sm leading-6 text-[#8d99aa]">{point.text}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -1508,7 +1554,7 @@ function ReviewPanel({
             <div className="relative z-10">
               <span className="font-utility text-[9px] font-bold uppercase tracking-[0.2em] text-[#d5e0ff]">Free workflow review</span>
               <h2 id="review-panel-title" className="mt-5 font-display text-4xl font-semibold uppercase leading-[0.9] tracking-tight">Where does work slow down?</h2>
-              <p className="mt-5 text-sm leading-7 text-[#d9e3ff]">Give us one repeated task: Gmail sorting, invoices, receipts, quote follow-up, job paperwork or lead response. We will explain where automation could genuinely help and where a person should remain in control.</p>
+              <p className="mt-5 text-sm leading-7 text-[#d9e3ff]">Give us one repeated task: Gmail sorting, invoices, receipts, quote follow-up, job paperwork or lead response. We will explain where automation could genuinely help, where a person should remain in control and what the first useful route could look like.</p>
               <div className="mt-9 space-y-4">
                 <PanelPromise icon={CheckCircle2} text="A practical first opinion" />
                 <PanelPromise icon={MessageSquareText} text="A plain-English explanation" />

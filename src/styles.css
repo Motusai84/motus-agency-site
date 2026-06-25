@@ -211,6 +211,76 @@ input[type="range"] {
     gap: 2.25rem;
   }
 
+  .operations-console {
+    max-width: 350px;
+  }
+
+  .operations-console .console-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .operations-console .console-metric {
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 0;
+    padding: 0.8rem 0.7rem;
+  }
+
+  .operations-console .console-metric:last-child {
+    border-right: 0;
+  }
+
+  .operations-console .console-metric span {
+    font-size: 0.42rem;
+    line-height: 1.25;
+    letter-spacing: 0.12em;
+  }
+
+  .operations-console .console-metric strong {
+    margin-top: 0.4rem;
+    font-size: 1.65rem;
+  }
+
+  .operations-console .console-incoming,
+  .operations-console .console-route {
+    padding: 1rem;
+  }
+
+  .operations-console .console-incoming-list {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .operations-console .console-incoming-card {
+    min-width: 0;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .operations-console .console-incoming-card + .console-incoming-card {
+    margin-top: 0.5rem;
+  }
+
+  .operations-console .console-incoming-card strong,
+  .operations-console .console-incoming-card span {
+    white-space: nowrap;
+  }
+
+  .operations-console .console-route h2 {
+    font-size: 1.45rem;
+  }
+
+  .operations-console .console-route .ml-8 {
+    margin-left: 1.75rem;
+  }
+
+  .operations-console .console-route .p-3 {
+    padding: 0.7rem;
+  }
+
+  .operations-console .console-output,
+  .operations-console .console-complete-badge {
+    display: none;
+  }
+
   .experience-section {
     padding-top: 4.5rem;
     padding-bottom: 4.5rem;
