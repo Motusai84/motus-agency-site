@@ -317,7 +317,8 @@ export default function App() {
       </motion.header>
 
       <main>
-        <section id="top" className="relative flex min-h-screen items-center px-5 pb-16 pt-32 md:px-8 md:pt-36">
+        <section id="top" className="relative flex min-h-screen items-center overflow-hidden px-5 pb-16 pt-32 md:px-8 md:pt-36">
+          <RoutePacketField variant="hero" />
           <div className="mx-auto grid w-full max-w-7xl items-center gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-20">
             <motion.div initial="hidden" animate="visible" variants={stagger} className="relative z-10">
               <motion.div variants={reveal} className="mb-7 flex items-center gap-3">
@@ -369,6 +370,7 @@ export default function App() {
         <OwnerFitBand />
 
         <section id="friction" className="relative min-h-[85vh] overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-32">
+          <RoutePacketField variant="quiet" />
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger}>
@@ -413,6 +415,7 @@ export default function App() {
         <NinetyDayExperience />
 
         <section id="outcomes" className="relative overflow-hidden border-b border-white/[0.06] px-5 pb-16 pt-20 md:px-8 md:py-36">
+          <RoutePacketField variant="quiet" />
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
               <div>
@@ -528,6 +531,48 @@ function SignalRail({ progress, reducedMotion }: { progress: ReturnType<typeof u
   );
 }
 
+function RoutePacketField({ variant }: { variant: "hero" | "quiet" }) {
+  const packets = [
+    { label: "Gmail", top: "15%", left: "61%", delay: 0, width: 130 },
+    { label: "Invoice", top: "31%", left: "77%", delay: 0.8, width: 150 },
+    { label: "Receipt", top: "67%", left: "57%", delay: 1.55, width: 142 },
+    { label: "Quote", top: "79%", left: "82%", delay: 2.25, width: 126 },
+  ] as const;
+
+  return (
+    <div className={`route-packet-field route-packet-field-${variant}`} aria-hidden="true">
+      <div className="route-packet-lane route-packet-lane-a" />
+      <div className="route-packet-lane route-packet-lane-b" />
+      <div className="route-packet-lane route-packet-lane-c" />
+      {packets.map((packet, index) => (
+        <motion.div
+          key={packet.label}
+          initial={{ opacity: 0, x: -16 }}
+          animate={{ opacity: [0, variant === "hero" ? 0.75 : 0.3, 0.14], x: [-16, 12, 34] }}
+          transition={{ duration: 4.8, delay: packet.delay, repeat: Infinity, repeatDelay: 1.4, ease: "easeInOut" }}
+          className="route-packet"
+          style={{ top: packet.top, left: packet.left, width: packet.width }}
+        >
+          <span className="route-packet-dot" />
+          <span>{packet.label}</span>
+          <ArrowRight className="h-3 w-3" />
+          <span className="route-packet-code">0{index + 1}</span>
+        </motion.div>
+      ))}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        className="route-orbit route-orbit-a"
+      />
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+        className="route-orbit route-orbit-b"
+      />
+    </div>
+  );
+}
+
 function OperationsConsole() {
   const events = [
     { icon: Mail, title: "Gmail labelled", detail: "Invoice moved to accounts review", state: "Tagged", owner: "Inbox", delay: 0.55 },
@@ -544,6 +589,18 @@ function OperationsConsole() {
       <div className="relative overflow-hidden rounded-[30px] border border-white/[0.1] bg-[#090d13] shadow-[0_40px_120px_rgba(0,0,0,.58)]">
         <div className="signal-grid absolute inset-0 opacity-35" />
         <motion.div animate={{ y: ["-10%", "900%"] }} transition={{ duration: 5.2, repeat: Infinity, repeatDelay: 1.1, ease: "linear" }} className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#6f95ff] to-transparent shadow-[0_0_22px_rgba(111,149,255,.9)]" />
+        <div className="console-arrow-field" aria-hidden="true">
+          {[0, 1, 2, 3, 4].map((index) => (
+            <motion.span
+              key={index}
+              animate={{ x: ["-18%", "118%"], opacity: [0, 0.55, 0] }}
+              transition={{ duration: 4.2, delay: index * 0.7, repeat: Infinity, repeatDelay: 1.8, ease: "easeInOut" }}
+              className="console-arrow"
+            >
+              <ArrowRight className="h-3 w-3" />
+            </motion.span>
+          ))}
+        </div>
 
         <div className="relative z-10 flex items-center justify-between border-b border-white/[0.08] bg-white/[0.025] px-4 py-3 sm:px-5">
           <div className="flex items-center gap-2">
@@ -978,6 +1035,18 @@ function SignalJourney() {
               style={{ pathLength: lineLength }}
             />
           </svg>
+          <div className="journey-arrow-field" aria-hidden="true">
+            {[0, 1, 2, 3].map((index) => (
+              <motion.span
+                key={index}
+                animate={{ x: ["-10vw", "108vw"], opacity: [0, 0.56, 0] }}
+                transition={{ duration: 7.4, delay: index * 1.35, repeat: Infinity, repeatDelay: 1.1, ease: "easeInOut" }}
+                className={`journey-arrow journey-arrow-${index + 1}`}
+              >
+                <ArrowRight className="h-4 w-4" />
+              </motion.span>
+            ))}
+          </div>
 
           <div className="absolute inset-x-0 bottom-10 top-[36%]">
             {JOURNEY_STAGES.map((stage, index) => (
@@ -1072,6 +1141,15 @@ function ExampleConsole({
 
           <motion.div layout className="relative min-h-[590px] overflow-hidden border border-white/[0.09] bg-[#090d13] p-5 sm:p-8">
             <div className="signal-grid absolute inset-0 opacity-30" />
+            <motion.div
+              animate={{ x: running ? ["-30%", "130%"] : "-30%", opacity: running ? [0, 0.5, 0] : 0 }}
+              transition={{ duration: 2.8, repeat: running ? Infinity : 0, repeatDelay: 0.6, ease: "easeInOut" }}
+              className="example-scan-packet"
+              aria-hidden="true"
+            >
+              <span>route active</span>
+              <ArrowRight className="h-3 w-3" />
+            </motion.div>
             <div className="relative z-10 flex h-full flex-col">
               <div className="flex flex-col gap-5 border-b border-white/[0.08] pb-6 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -1138,6 +1216,12 @@ function NinetyDayExperience() {
               This is not an open-ended tech project. It is a focused three-month engagement around one routine process that is slowing the business down.
             </motion.p>
             <motion.div variants={reveal} className="experience-offer mt-9 overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#090d13]">
+              <div className="experience-signal-strip" aria-hidden="true">
+                <motion.span
+                  animate={{ x: ["-20%", "118%"] }}
+                  transition={{ duration: 4.5, repeat: Infinity, repeatDelay: 0.9, ease: "easeInOut" }}
+                />
+              </div>
               <div className="border-b border-white/[0.08] p-5">
                 <span className="font-utility text-[8px] font-bold uppercase tracking-[0.18em] text-[#6f95ff]">What you are buying</span>
                 <strong className="mt-3 block text-lg leading-7 text-[#f2f0ea]">A working route for one repeated admin problem, with your team still in control.</strong>
