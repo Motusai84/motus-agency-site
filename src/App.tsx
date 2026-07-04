@@ -243,6 +243,7 @@ export default function App() {
   const navScale = useTransform(scrollYProgress, [0, 0.06], [1, 0.96]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const [activeExample, setActiveExample] = useState<keyof typeof EXAMPLES>("Invoice chaser");
   const [exampleRunning, setExampleRunning] = useState(false);
   const [calculatorMode, setCalculatorMode] = useState<"cost" | "capacity">("cost");
@@ -283,6 +284,16 @@ export default function App() {
 
   const closeReview = () => {
     if (formStatus !== "sending") setReviewOpen(false);
+  };
+
+  const openPrivacy = () => {
+    setMenuOpen(false);
+    setPrivacyOpen(true);
+  };
+
+  const openPrivacy = () => {
+    setMenuOpen(false);
+    setPrivacyOpen(true);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -535,11 +546,25 @@ export default function App() {
         </section>
       </main>
 
-      <footer className="border-t border-white/[0.06] px-5 py-10 md:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 font-utility text-[10px] uppercase tracking-[0.16em] text-[#596576] sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-display text-base font-semibold tracking-[0.14em] text-[#aeb8c5]">Motus</span>
-          <span>Routine admin routes for UK small businesses</span>
-          <span>© 2026</span>
+      <footer className="relative z-10 border-t border-white/[0.06] px-5 py-10 md:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 text-[#596576] md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="font-display text-base font-semibold uppercase tracking-[0.14em] text-[#aeb8c5]">Motus</span>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-[#7f8b9a]">
+              Routine admin routes for UK small businesses. Motus is the trading name of Seun Oyepitan.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 font-utility text-[10px] uppercase tracking-[0.16em] md:items-end">
+            <button
+              id="footer-privacy-btn"
+              type="button"
+              onClick={openPrivacy}
+              className="relative z-30 inline-flex min-h-11 items-center border border-white/[0.08] px-4 text-left text-[#aeb8c5] transition hover:border-[#6f95ff]/40 hover:bg-white/[0.04] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f95ff] md:text-right"
+            >
+              Privacy policy
+            </button>
+            <span>© 2026</span>
+          </div>
         </div>
       </footer>
 
@@ -550,7 +575,20 @@ export default function App() {
             onClose={closeReview}
             onSubmit={handleSubmit}
             onReset={() => setFormStatus("idle")}
+            onPrivacyOpen={openPrivacy}
           />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {privacyOpen && (
+          <PrivacyPanel onClose={() => setPrivacyOpen(false)} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {privacyOpen && (
+          <PrivacyPanel onClose={() => setPrivacyOpen(false)} />
         )}
       </AnimatePresence>
     </div>
@@ -1717,11 +1755,13 @@ function ReviewPanel({
   onClose,
   onSubmit,
   onReset,
+  onPrivacyOpen,
 }: {
   formStatus: "idle" | "sending" | "success";
   onClose: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onReset: () => void;
+  onPrivacyOpen: () => void;
 }) {
   return (
     <motion.div
@@ -1786,10 +1826,149 @@ function ReviewPanel({
                   {formStatus === "sending" ? "Sending your request…" : "Request my free review"}
                   {formStatus === "idle" && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
                 </button>
-                <p className="text-center font-utility text-[9px] uppercase leading-5 tracking-[0.1em] text-[#526071]">We only use these details to respond to your request.</p>
+                <p className="text-center text-xs leading-6 text-[#657181]">
+                  We only use these details to respond to your request.{" "}
+                  <button
+                    id="review-privacy-btn"
+                    type="button"
+                    onClick={onPrivacyOpen}
+                    className="font-semibold text-[#a9c1ff] underline-offset-4 transition hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f95ff]"
+                  >
+                    Read the privacy policy
+                  </button>
+                  .
+                </p>
               </form>
             )}
           </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function PrivacyPanel({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[110] flex items-end justify-center bg-[#020407]/80 p-0 backdrop-blur-sm sm:items-center sm:p-5"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="privacy-panel-title"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.985 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 35, scale: 0.985 }}
+        transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#090d13] shadow-2xl sm:rounded-[32px]"
+      >
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[#090d13]/95 px-5 py-4 backdrop-blur sm:px-7">
+          <div>
+            <span className="font-utility text-[9px] font-bold uppercase tracking-[0.2em] text-[#6f95ff]">Motus</span>
+            <h2 id="privacy-panel-title" className="mt-1 font-display text-2xl font-semibold uppercase text-[#f2f0ea]">
+              Privacy policy
+            </h2>
+          </div>
+          <button id="privacy-close-btn" type="button" onClick={onClose} className="grid h-11 w-11 place-items-center rounded-full border border-white/10 text-[#8d99aa] transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f95ff]" aria-label="Close privacy policy">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="space-y-7 p-6 text-sm leading-7 text-[#aeb8c5] sm:p-8">
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">Who we are</h3>
+            <p className="mt-3">Motus is the trading name of Seun Oyepitan, based in Hackney, London. You can contact Motus at ayomideautomations@gmail.com.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">What we collect</h3>
+            <p className="mt-3">Motus may collect your name, business name, email address, phone number if you choose to provide it, and details you send in an enquiry or workflow review request.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">How we use it</h3>
+            <p className="mt-3">Motus uses enquiry information to reply, arrange a call, understand whether Motus can help, prepare a proposal, and keep basic business records. Motus does not sell your personal information.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">Tools and storage</h3>
+            <p className="mt-3">Information may be handled through email, calendar, document, hosting, booking, and automation tools used to run Motus. Some providers may process or access information outside the UK.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">Your choices</h3>
+            <p className="mt-3">You can ask Motus to correct or delete your details where appropriate, or to stop contacting you. Email ayomideautomations@gmail.com. You can also complain to the Information Commissioner's Office at ico.org.uk.</p>
+          </section>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function PrivacyPanel({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[110] flex items-end justify-center bg-[#020407]/80 p-0 backdrop-blur-sm sm:items-center sm:p-5"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="privacy-panel-title"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.985 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 35, scale: 0.985 }}
+        transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#090d13] shadow-2xl sm:rounded-[32px]"
+      >
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[#090d13]/95 px-5 py-4 backdrop-blur sm:px-7">
+          <div>
+            <span className="font-utility text-[9px] font-bold uppercase tracking-[0.2em] text-[#6f95ff]">Motus</span>
+            <h2 id="privacy-panel-title" className="mt-1 font-display text-2xl font-semibold uppercase text-[#f2f0ea]">
+              Privacy policy
+            </h2>
+          </div>
+          <button id="privacy-close-btn" type="button" onClick={onClose} className="grid h-11 w-11 place-items-center rounded-full border border-white/10 text-[#8d99aa] transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f95ff]" aria-label="Close privacy policy">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="space-y-7 p-6 text-sm leading-7 text-[#aeb8c5] sm:p-8">
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">Who we are</h3>
+            <p className="mt-3">Motus is the trading name of Seun Oyepitan, based in Hackney, London. You can contact Motus at ayomideautomations@gmail.com.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">What we collect</h3>
+            <p className="mt-3">Motus may collect your name, business name, email address, phone number if you choose to provide it, and details you send in an enquiry or workflow review request.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">How we use it</h3>
+            <p className="mt-3">Motus uses enquiry information to reply, arrange a call, understand whether Motus can help, prepare a proposal, and keep basic business records. Motus does not sell your personal information.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">Tools and storage</h3>
+            <p className="mt-3">Information may be handled through email, calendar, document, hosting, booking, and automation tools used to run Motus. Some providers may process or access information outside the UK.</p>
+          </section>
+
+          <section>
+            <h3 className="font-display text-2xl font-semibold uppercase text-white">Your choices</h3>
+            <p className="mt-3">You can ask Motus to correct or delete your details where appropriate, or to stop contacting you. Email ayomideautomations@gmail.com. You can also complain to the Information Commissioner's Office at ico.org.uk.</p>
+          </section>
         </div>
       </motion.div>
     </motion.div>

@@ -94,6 +94,14 @@ textarea {
   z-index: 2;
 }
 
+.motus-site footer {
+  z-index: 20;
+}
+
+.motus-site footer {
+  z-index: 20;
+}
+
 .signal-grid {
   background-image:
     linear-gradient(rgba(169, 193, 255, 0.055) 1px, transparent 1px),
