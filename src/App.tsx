@@ -33,7 +33,7 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 
 const NAV_ITEMS = [
   { label: "The problem", id: "friction" },
@@ -253,6 +253,23 @@ export default function App() {
   const [includeOverheads, setIncludeOverheads] = useState(true);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success">("idle");
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [menuOpen]);
+
   const calculator = useMemo(() => {
     const hoursPerWeek = teamSize * 40 * (adminTime / 100);
     const hoursPerYear = hoursPerWeek * 52;
@@ -291,11 +308,6 @@ export default function App() {
     setPrivacyOpen(true);
   };
 
-  const openPrivacy = () => {
-    setMenuOpen(false);
-    setPrivacyOpen(true);
-  };
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formStatus !== "idle") return;
@@ -322,13 +334,13 @@ export default function App() {
 
       <motion.header
         style={{ top: reduceMotion ? 14 : navTop }}
-        className="fixed left-1/2 z-50 w-[calc(100%-24px)] max-w-5xl -translate-x-1/2"
+        className="motus-header fixed left-1/2 z-50 w-[calc(100%-24px)] max-w-5xl -translate-x-1/2"
       >
         <motion.div
           style={{ scale: reduceMotion ? 1 : navScale }}
           className="nav-shell flex origin-top items-center justify-between rounded-full border border-white/10 bg-[#080b10]/90 px-2.5 py-2 backdrop-blur-xl sm:px-4"
         >
-          <button id="nav-home-btn" type="button" onClick={() => scrollTo("top")} className="flex items-center gap-3 rounded-full px-2 py-1.5" aria-label="Back to top">
+          <button id="nav-home-btn" type="button" onClick={() => scrollTo("top")} className="flex min-h-11 items-center gap-3 rounded-full px-2 py-1.5" aria-label="Back to top">
             <MotusMark />
             <span className="hidden font-display text-lg font-semibold uppercase tracking-[0.13em] sm:block">Motus</span>
           </button>
@@ -348,10 +360,11 @@ export default function App() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <button id="nav-review-btn" type="button" onClick={openReview} className="rounded-full bg-[#2864ff] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#477cff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:px-5 sm:text-sm">
-              Free review
+            <button id="nav-review-btn" type="button" onClick={openReview} className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#2864ff] px-3.5 py-2.5 text-xs font-bold text-white transition hover:bg-[#477cff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:px-5 sm:text-sm">
+              <span className="sm:hidden">Review</span>
+              <span className="hidden sm:inline">Free review</span>
             </button>
-            <button id="mobile-menu-btn" type="button" onClick={() => setMenuOpen((open) => !open)} className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 md:hidden" aria-label="Toggle navigation" aria-expanded={menuOpen}>
+            <button id="mobile-menu-btn" type="button" onClick={() => setMenuOpen((open) => !open)} className="grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/5 md:hidden" aria-label="Toggle navigation" aria-controls="mobile-nav-menu" aria-expanded={menuOpen}>
               {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
           </div>
@@ -363,7 +376,8 @@ export default function App() {
               initial={{ opacity: 0, y: -10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              className="mt-2 rounded-[28px] border border-white/10 bg-[#080b10]/95 p-3 shadow-2xl backdrop-blur-xl md:hidden"
+              id="mobile-nav-menu"
+              className="motus-mobile-menu mt-2 rounded-[28px] border border-white/10 bg-[#080b10]/95 p-3 shadow-2xl backdrop-blur-xl md:hidden"
             >
               {NAV_ITEMS.map((item) => (
                 <button id={`mobile-nav-${item.id}`} key={item.id} type="button" onClick={() => scrollTo(item.id)} className="flex min-h-12 w-full items-center justify-between rounded-2xl px-4 text-left text-sm font-semibold text-[#b9c2cf] hover:bg-white/5">
@@ -405,7 +419,8 @@ export default function App() {
 
               <motion.div variants={reveal} className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <button id="hero-review-btn" type="button" onClick={openReview} className="signal-button group flex min-h-14 items-center justify-center gap-4 rounded-full bg-[#2864ff] px-7 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
-                  Book a free workflow review
+                  <span className="sm:hidden">Book a free review</span>
+                  <span className="hidden sm:inline">Book a free workflow review</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
                 <button id="hero-journey-btn" type="button" onClick={() => scrollTo("journey")} className="flex min-h-14 items-center justify-center gap-3 px-5 font-semibold text-[#aeb8c5] transition hover:text-white">
@@ -1029,7 +1044,7 @@ function FrictionField() {
     { icon: CalendarCheck2, label: "Job sheet missing", note: "Invoice delayed", x: "7%", y: "75%", rotate: -2 },
   ];
   return (
-    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger} className="relative min-h-[520px]">
+    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger} className="friction-field relative min-h-[520px]">
       <div className="signal-grid absolute inset-0 opacity-25 [mask-image:radial-gradient(circle,black,transparent_75%)]" />
       <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 700 520" aria-hidden="true">
         <path d="M80 80 C220 40 230 220 350 180 S470 380 610 280" fill="none" stroke="#384353" strokeWidth="1" strokeDasharray="5 8" />
@@ -1042,7 +1057,7 @@ function FrictionField() {
           animate={{ y: [0, index % 2 ? 7 : -7, 0], rotate: [item.rotate, item.rotate + 1.5, item.rotate] }}
           transition={{ duration: 5 + index * 0.5, repeat: Infinity, ease: "easeInOut" }}
           style={{ left: item.x, top: item.y }}
-          className="absolute w-[190px] border border-[#ff7890]/15 bg-[#100d12] p-4 shadow-2xl sm:w-[220px]"
+          className="friction-card absolute w-[190px] border border-[#ff7890]/15 bg-[#100d12] p-4 shadow-2xl sm:w-[220px]"
         >
           <div className="flex items-start justify-between">
             <item.icon className="h-5 w-5 text-[#d57889]" />
@@ -1205,13 +1220,14 @@ function ExampleConsole({
             <p className="mt-6 max-w-md text-sm leading-7 text-[#8d99aa]">
               These are the first Motus template routes: practical workflows for cash, admin, inboxes, quotes, job paperwork and lead response.
             </p>
-            <div className="mt-10 border-t border-white/[0.08]">
+            <div className="example-picker mt-10 border-t border-white/[0.08]">
               {(Object.keys(EXAMPLES) as Array<keyof typeof EXAMPLES>).map((name) => (
                 <button
                   id={`example-${name.toLowerCase().replace(/\s+/g, "-")}`}
                   key={name}
                   type="button"
                   onClick={() => onChoose(name)}
+                  aria-pressed={activeExample === name}
                   className={`group flex min-h-16 w-full items-center justify-between border-b border-white/[0.08] text-left font-display text-xl font-semibold uppercase transition ${
                     activeExample === name ? "text-white" : "text-[#596576] hover:text-[#aeb8c5]"
                   }`}
@@ -1226,7 +1242,7 @@ function ExampleConsole({
             </div>
           </div>
 
-          <motion.div layout className="relative min-h-[590px] overflow-hidden border border-white/[0.09] bg-[#090d13] p-5 sm:p-8">
+          <motion.div layout className="example-console relative min-h-[590px] overflow-hidden border border-white/[0.09] bg-[#090d13] p-5 sm:p-8">
             <div className="signal-grid absolute inset-0 opacity-30" />
             <motion.div
               animate={{ x: running ? ["-30%", "130%"] : "-30%", opacity: running ? [0, 0.5, 0] : 0 }}
@@ -1247,14 +1263,14 @@ function ExampleConsole({
                 transition={{ duration: 1.6, repeat: running ? Infinity : 0, ease: "easeInOut" }}
               />
             </div>
-            <div className="relative z-10 flex h-full flex-col">
-              <div className="flex flex-col gap-5 border-b border-white/[0.08] pb-6 sm:flex-row sm:items-end sm:justify-between">
+              <div className="relative z-10 flex h-full flex-col">
+                <div className="example-console-header flex flex-col gap-5 border-b border-white/[0.08] pb-6 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="font-utility text-[9px] uppercase tracking-[0.18em] text-[#596576]">Trigger</span>
                     <span className="rounded-full border border-[#2864ff]/25 bg-[#2864ff]/10 px-3 py-1 font-utility text-[8px] font-bold uppercase tracking-[0.14em] text-[#7da0ff]">{example.route}</span>
                   </div>
-                  <p className="mt-2 max-w-lg text-lg font-semibold text-[#dce1e8]">{example.trigger}</p>
+                  <p className="example-trigger mt-2 max-w-lg text-lg font-semibold text-[#dce1e8]">{example.trigger}</p>
                 </div>
                 <button id="run-example-btn" type="button" onClick={onRun} className="group flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-full bg-[#f2f0ea] px-5 text-sm font-bold text-[#101318] transition hover:bg-white">
                   {running ? "Route running" : "Run this route"}
@@ -1300,16 +1316,16 @@ function ExampleConsole({
                     ))}
                   </div>
 
-                  <div className="relative mt-7">
+                  <div className="example-route-steps relative mt-7">
                     <div className="absolute bottom-7 left-[23px] top-7 w-px bg-white/[0.08]" />
                     <motion.div animate={{ scaleY: running ? 1 : 0 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="absolute bottom-7 left-[23px] top-7 w-px origin-top bg-[#2864ff] shadow-[0_0_12px_rgba(40,100,255,.7)]" />
-                    <div className="space-y-4">
+                    <div className="example-step-list space-y-4">
                       {example.steps.map(([label, Icon], index) => (
                         <motion.div
                           key={label}
                           animate={{ opacity: running ? 1 : 0.28, x: running ? 0 : 12 }}
                           transition={{ duration: 0.5, delay: running ? index * 0.18 : 0 }}
-                          className="relative flex items-center gap-5"
+                          className="example-route-step relative flex items-center gap-5"
                         >
                           <motion.span
                             animate={{ boxShadow: running ? ["0 0 0 rgba(40,100,255,0)", "0 0 24px rgba(40,100,255,.34)", "0 0 0 rgba(40,100,255,0)"] : "0 0 0 rgba(40,100,255,0)" }}
@@ -1318,7 +1334,7 @@ function ExampleConsole({
                           >
                             <Icon className="h-5 w-5" />
                           </motion.span>
-                          <div className="flex-1 border-b border-white/[0.07] py-4">
+                          <div className="example-route-step-copy flex-1 border-b border-white/[0.07] py-4">
                             <strong className="font-display text-lg font-semibold uppercase">{label}</strong>
                             <span className="ml-3 font-utility text-[8px] uppercase tracking-[0.14em] text-[#526071]">0{index + 1}</span>
                           </div>
@@ -1330,7 +1346,7 @@ function ExampleConsole({
                 </motion.div>
               </AnimatePresence>
 
-              <motion.div animate={{ opacity: running ? 1 : 0.35, borderColor: running ? "rgba(119,215,168,.32)" : "rgba(255,255,255,.08)" }} className="mt-7 flex items-start gap-3 border border-white/[0.08] bg-[#77d7a8]/[0.04] p-4">
+              <motion.div animate={{ opacity: running ? 1 : 0.35, borderColor: running ? "rgba(119,215,168,.32)" : "rgba(255,255,255,.08)" }} className="example-route-result mt-7 flex items-start gap-3 border border-white/[0.08] bg-[#77d7a8]/[0.04] p-4">
                 <CheckCircle2 className={`mt-0.5 h-5 w-5 shrink-0 ${running ? "text-[#77d7a8]" : "text-[#526071]"}`} />
                 <div>
                   <span className="font-utility text-[8px] font-bold uppercase tracking-[0.16em] text-[#77d7a8]">{running ? "Route complete" : "Waiting to run"}</span>
@@ -1415,7 +1431,7 @@ function NinetyDayExperience() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.75, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                    className="group relative overflow-hidden rounded-[30px] border border-white/[0.08] bg-[#090d13] p-5 shadow-[0_30px_90px_rgba(0,0,0,.25)] md:ml-14 md:p-7"
+                    className="experience-stage group relative overflow-hidden rounded-[30px] border border-white/[0.08] bg-[#090d13] p-5 shadow-[0_30px_90px_rgba(0,0,0,.25)] md:ml-14 md:p-7"
                   >
                     <span className="absolute left-[-3.25rem] top-7 hidden h-4 w-4 rounded-full border-2 border-[#a9c1ff] bg-[#2864ff] shadow-[0_0_18px_rgba(40,100,255,.95)] md:block" />
                     <div className="signal-grid absolute inset-0 opacity-[0.12]" />
@@ -1436,7 +1452,7 @@ function NinetyDayExperience() {
                         </div>
                       </div>
 
-                      <div className="rounded-[24px] border border-white/[0.08] bg-[#0e131b] p-5">
+                      <div className="experience-stage-result rounded-[24px] border border-white/[0.08] bg-[#0e131b] p-5">
                         <span className="font-utility text-[8px] uppercase tracking-[0.16em] text-[#596576]">You leave with</span>
                         <strong className="mt-3 block text-lg text-[#f2f0ea]">{stage.result}</strong>
                         <p className="mt-3 text-xs leading-6 text-[#7f8b9a]">{stage.proof}</p>
@@ -1526,7 +1542,8 @@ function OperationsCalculator({
                   mode === "cost" ? "bg-[#101318] text-white shadow-lg" : "text-[#657181] hover:text-[#101318]"
                 }`}
               >
-                Admin cost
+                <span className="sm:hidden">Cost</span>
+                <span className="hidden sm:inline">Admin cost</span>
               </button>
               <button
                 id="calculator-capacity-mode"
@@ -1536,7 +1553,8 @@ function OperationsCalculator({
                   mode === "capacity" ? "bg-[#2864ff] text-white shadow-lg" : "text-[#657181] hover:text-[#101318]"
                 }`}
               >
-                Capacity unlocked
+                <span className="sm:hidden">Capacity</span>
+                <span className="hidden sm:inline">Capacity unlocked</span>
               </button>
             </div>
           </div>
@@ -1592,7 +1610,7 @@ function OperationsCalculator({
               </button>
             </div>
 
-            <div className="relative min-h-[520px] overflow-hidden bg-[#101318] p-6 text-white sm:p-9">
+            <div className="calculator-result relative min-h-[520px] overflow-hidden bg-[#101318] p-6 text-white sm:p-9">
               <div className="signal-grid absolute inset-0 opacity-25" />
               <motion.div
                 animate={{ rotate: 360 }}
@@ -1781,7 +1799,7 @@ function ReviewPanel({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 35, scale: 0.985 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#090d13] shadow-2xl sm:rounded-[32px]"
+        className="motus-sheet max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#090d13] shadow-2xl sm:rounded-[32px]"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[#090d13]/95 px-5 py-4 backdrop-blur sm:px-7">
           <div className="flex items-center gap-3"><MotusMark /><span className="font-display text-lg font-semibold uppercase tracking-[0.13em]">Motus</span></div>
@@ -1866,71 +1884,7 @@ function PrivacyPanel({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 35, scale: 0.985 }}
         transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#090d13] shadow-2xl sm:rounded-[32px]"
-      >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[#090d13]/95 px-5 py-4 backdrop-blur sm:px-7">
-          <div>
-            <span className="font-utility text-[9px] font-bold uppercase tracking-[0.2em] text-[#6f95ff]">Motus</span>
-            <h2 id="privacy-panel-title" className="mt-1 font-display text-2xl font-semibold uppercase text-[#f2f0ea]">
-              Privacy policy
-            </h2>
-          </div>
-          <button id="privacy-close-btn" type="button" onClick={onClose} className="grid h-11 w-11 place-items-center rounded-full border border-white/10 text-[#8d99aa] transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f95ff]" aria-label="Close privacy policy">
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="space-y-7 p-6 text-sm leading-7 text-[#aeb8c5] sm:p-8">
-          <section>
-            <h3 className="font-display text-2xl font-semibold uppercase text-white">Who we are</h3>
-            <p className="mt-3">Motus is the trading name of Seun Oyepitan, based in Hackney, London. You can contact Motus at ayomideautomations@gmail.com.</p>
-          </section>
-
-          <section>
-            <h3 className="font-display text-2xl font-semibold uppercase text-white">What we collect</h3>
-            <p className="mt-3">Motus may collect your name, business name, email address, phone number if you choose to provide it, and details you send in an enquiry or workflow review request.</p>
-          </section>
-
-          <section>
-            <h3 className="font-display text-2xl font-semibold uppercase text-white">How we use it</h3>
-            <p className="mt-3">Motus uses enquiry information to reply, arrange a call, understand whether Motus can help, prepare a proposal, and keep basic business records. Motus does not sell your personal information.</p>
-          </section>
-
-          <section>
-            <h3 className="font-display text-2xl font-semibold uppercase text-white">Tools and storage</h3>
-            <p className="mt-3">Information may be handled through email, calendar, document, hosting, booking, and automation tools used to run Motus. Some providers may process or access information outside the UK.</p>
-          </section>
-
-          <section>
-            <h3 className="font-display text-2xl font-semibold uppercase text-white">Your choices</h3>
-            <p className="mt-3">You can ask Motus to correct or delete your details where appropriate, or to stop contacting you. Email ayomideautomations@gmail.com. You can also complain to the Information Commissioner's Office at ico.org.uk.</p>
-          </section>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function PrivacyPanel({ onClose }: { onClose: () => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[110] flex items-end justify-center bg-[#020407]/80 p-0 backdrop-blur-sm sm:items-center sm:p-5"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="privacy-panel-title"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 60, scale: 0.985 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 35, scale: 0.985 }}
-        transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#090d13] shadow-2xl sm:rounded-[32px]"
+        className="motus-sheet max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#090d13] shadow-2xl sm:rounded-[32px]"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[#090d13]/95 px-5 py-4 backdrop-blur sm:px-7">
           <div>

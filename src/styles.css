@@ -30,6 +30,7 @@ textarea {
 .motus-site input,
 .motus-site textarea {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .motus-site button {
@@ -44,7 +45,7 @@ textarea {
 }
 
 .motus-site section {
-  scroll-margin-top: 1.5rem;
+  scroll-margin-top: 5.5rem;
 }
 
 @keyframes softPulse {
@@ -451,6 +452,14 @@ textarea {
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+.motus-mobile-menu {
+  overscroll-behavior: contain;
+}
+
+.motus-sheet {
+  overscroll-behavior: contain;
+}
+
 input[type="range"] {
   height: 4px;
 }
@@ -520,6 +529,30 @@ input[type="range"] {
 }
 
 @media (max-width: 767px) {
+  .motus-header {
+    left: max(12px, env(safe-area-inset-left)) !important;
+    right: max(12px, env(safe-area-inset-right));
+    top: max(12px, env(safe-area-inset-top)) !important;
+    width: auto !important;
+    transform: none !important;
+  }
+
+  .motus-header .nav-shell {
+    min-height: 56px;
+    padding-right: 0.5rem;
+  }
+
+  .motus-mobile-menu {
+    max-height: calc(100dvh - max(5rem, env(safe-area-inset-top)));
+    overflow-y: auto;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .motus-sheet {
+    max-height: calc(100dvh - max(1rem, env(safe-area-inset-top))) !important;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   .motus-site button {
     will-change: auto;
   }
@@ -613,6 +646,36 @@ input[type="range"] {
     display: none;
   }
 
+  .motus-site #friction,
+  .motus-site #examples,
+  .motus-site #calculator {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .friction-field {
+    display: grid;
+    min-height: auto;
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+
+  .friction-field > svg {
+    display: none;
+  }
+
+  .friction-card {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+
+  .friction-card strong {
+    margin-top: 1.25rem;
+  }
+
   .experience-section {
     padding-top: 4.5rem;
     padding-bottom: 4.5rem;
@@ -689,6 +752,164 @@ input[type="range"] {
     padding: 0.75rem;
   }
 
+  .example-console {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .example-picker {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.75rem -0.25rem 0;
+    overflow-x: auto;
+    border: 0;
+    padding: 0.25rem 0.25rem 0.75rem;
+    scrollbar-width: none;
+  }
+
+  .example-picker::-webkit-scrollbar {
+    display: none;
+  }
+
+  .example-picker button {
+    width: auto;
+    min-height: 2.75rem;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    padding: 0 0.9rem;
+    background: rgba(255, 255, 255, 0.03);
+    font-family: "Manrope", system-ui, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .example-picker button[aria-pressed="true"] {
+    border-color: rgba(111, 149, 255, 0.75);
+    background: rgba(40, 100, 255, 0.14);
+  }
+
+  .example-picker button > span > span:first-child,
+  .example-picker button > svg {
+    display: none;
+  }
+
+  .example-console .mt-8 {
+    margin-top: 1.5rem;
+  }
+
+  .example-console-header {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .example-console-header > div {
+    min-width: 0;
+  }
+
+  .example-console-header #run-example-btn {
+    width: 100%;
+  }
+
+  .example-trigger {
+    max-width: 100%;
+    font-size: 1rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .example-console .example-live-grid,
+  .example-console .example-pulse-row {
+    display: none;
+  }
+
+  .example-route-steps {
+    margin-top: 1.25rem;
+  }
+
+  .example-route-steps > :not(.example-step-list) {
+    display: none;
+  }
+
+  .example-step-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .example-route-step {
+    min-width: 0;
+    align-items: flex-start;
+    gap: 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.025);
+    padding: 0.75rem;
+  }
+
+  .example-route-step > span {
+    height: 2rem;
+    width: 2rem;
+    flex-basis: 2rem;
+  }
+
+  .example-route-step > span svg {
+    height: 0.9rem;
+    width: 0.9rem;
+  }
+
+  .example-route-step-copy {
+    min-width: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .example-route-step-copy strong {
+    display: block;
+    font-size: 0.82rem;
+    line-height: 1.05;
+  }
+
+  .example-route-step-copy span {
+    display: block;
+    margin: 0.35rem 0 0;
+  }
+
+  .example-route-step > svg {
+    display: none;
+  }
+
+  .example-route-step,
+  .example-route-result {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .example-route-result {
+    margin-top: 1rem;
+    padding: 0.9rem;
+  }
+
+  .experience-stage {
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+  }
+
+  .experience-stage-result {
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .calculator-result {
+    min-height: 25rem;
+    padding: 1.5rem;
+  }
+
+  .calculator-result .mt-14 {
+    margin-top: 3.5rem;
+  }
+
   .example-orbit-map {
     bottom: auto;
     right: -4.5rem;
@@ -700,6 +921,12 @@ input[type="range"] {
 
   .motus-site footer {
     padding-block: 2.5rem;
+  }
+}
+
+@media (hover: none) {
+  .motus-site button:active {
+    transform: scale(0.98);
   }
 }
 
