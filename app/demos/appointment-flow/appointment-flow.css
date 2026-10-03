@@ -32,6 +32,40 @@
   background: #f7f4ef;
 }
 
+.appointment-flow-route__loading {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  padding: 60px 40px;
+  color: #1c1a18;
+}
+
+.appointment-flow-route__loading > div {
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.appointment-flow-route__eyebrow {
+  margin-bottom: 28px;
+  color: #9b9189;
+  font: 500 11px "Instrument Sans", sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.appointment-flow-route__loading h1 {
+  max-width: 580px;
+  margin-bottom: 22px;
+  font: italic 400 clamp(38px, 5.5vw, 64px)/1.06 "Fraunces", serif;
+}
+
+.appointment-flow-route__loading p:last-child {
+  max-width: 400px;
+  font: 400 17px/1.68 "Instrument Sans", sans-serif;
+  color: #3e3a36;
+}
+
 .appointment-flow-route__controls {
   position: fixed;
   z-index: 20;
@@ -69,6 +103,19 @@
 }
 
 @media (max-width: 640px) {
+  .appointment-flow-route__loading {
+    align-items: flex-start;
+    padding: 80px 20px 56px;
+  }
+
+  .appointment-flow-route__loading h1 {
+    font-size: 36px;
+  }
+
+  .appointment-flow-route__loading p:last-child {
+    font-size: 15px;
+  }
+
   .appointment-flow-route__controls {
     top: 10px;
     right: 10px;

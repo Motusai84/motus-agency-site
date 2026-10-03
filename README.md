@@ -15,6 +15,17 @@ The repository is still connected to Vercel. Its `main` branch contains an older
 Vite build until the reviewed Next.js source migration is merged. Do not treat a
 Vercel deployment as the current Cloudflare production site.
 
+## Search visibility
+
+The `motusautomation.co.uk` domain property was verified in Google Search Console
+under `ayomideautomations@gmail.com` on 3 October 2026 using a Cloudflare DNS
+TXT record. Keep that record in place to retain verification; the token itself
+must not be copied into this repository.
+
+The Next.js `/sitemap.xml` route lists the canonical public pages and only demos
+marked `ready` in `lib/demo-catalog.ts`. `/robots.txt` allows crawling and points
+to the sitemap. Submit the sitemap in Search Console after these routes are live.
+
 ## Local Development
 
 ```bash

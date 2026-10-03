@@ -5,7 +5,21 @@ import dynamic from "next/dynamic";
 
 const FigmaAppointmentFlow = dynamic(
   () => import("@/components/appointment-flow/FigmaAppointmentFlow"),
-  { ssr: false },
+  {
+    ssr: false,
+    loading: () => (
+      <section className="appointment-flow-route__loading">
+        <div>
+          <p className="appointment-flow-route__eyebrow">Appointment Flow · Illustrative demo</p>
+          <h1>What happens after a customer books?</h1>
+          <p>
+            A short illustrated walkthrough of every moment in the booking journey, from time selection through to a
+            safely stored record.
+          </p>
+        </div>
+      </section>
+    ),
+  },
 );
 
 const fixedButtonIds: Record<string, string> = {

@@ -5,7 +5,22 @@ import dynamic from "next/dynamic";
 
 const FigmaLedgerDesk = dynamic(
   () => import("@/components/ledger-desk/FigmaLedgerDesk"),
-  { ssr: false },
+  {
+    ssr: false,
+    loading: () => (
+      <section className="ledger-desk-route__loading">
+        <div>
+          <p className="ledger-desk-route__eyebrow">Interactive system preview</p>
+          <h1>What tells you it is time to invoice?</h1>
+          <p>
+            Choose how your business charges, then follow one piece of completed work as it becomes ready for invoice
+            review.
+          </p>
+          <p className="ledger-desk-route__disclosure">This is a fictional demonstration. Nothing is sent or changed.</p>
+        </div>
+      </section>
+    ),
+  },
 );
 
 const fixedButtonIds: Array<[RegExp, string]> = [
