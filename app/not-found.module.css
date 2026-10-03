@@ -1,0 +1,112 @@
+.page {
+  min-height: 100vh;
+  overflow: clip;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(199, 167, 108, 0.12), transparent 30rem),
+    var(--carbon);
+}
+
+.content {
+  width: var(--content);
+  min-height: min(760px, calc(100vh - 82px));
+  display: grid;
+  grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: clamp(48px, 10vw, 150px);
+  margin: 0 auto;
+  padding: clamp(80px, 11vw, 160px) 0;
+}
+
+.code {
+  color: transparent;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(9rem, 22vw, 21rem);
+  font-weight: 600;
+  letter-spacing: -0.1em;
+  line-height: 0.65;
+  -webkit-text-stroke: 1px rgba(199, 167, 108, 0.5);
+  user-select: none;
+}
+
+.message > p {
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.message h1 {
+  max-width: 760px;
+  margin-top: 24px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(3rem, 6vw, 6.8rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.message > span {
+  max-width: 620px;
+  display: block;
+  margin-top: 27px;
+  color: var(--taupe);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+  margin-top: 34px;
+}
+
+.actions a {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  padding: 12px 17px;
+  border: 1px solid var(--gold);
+  color: var(--paper);
+  font-size: 0.76rem;
+  font-weight: 750;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.actions a:first-child {
+  background: var(--gold);
+  color: var(--carbon);
+}
+
+@media (hover: hover) {
+  .actions a:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.actions a:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 760px) {
+  .content {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 52px;
+  }
+
+  .code {
+    font-size: clamp(8rem, 48vw, 12rem);
+  }
+}
+
+@media (max-width: 430px) {
+  .actions {
+    display: grid;
+  }
+}
