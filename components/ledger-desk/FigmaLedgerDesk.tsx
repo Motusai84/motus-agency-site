@@ -8,6 +8,14 @@ import Link from 'next/link'
 type PatternId = 'recurring' | 'milestone' | 'job'
 type Decision = 'approve' | 'hold' | null
 
+const subscribeToReducedMotion = (onChange: () => void) => {
+  const query = window.matchMedia('(prefers-reduced-motion: reduce)')
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
+const getReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const getServerReducedMotion = () => false
+
 interface PatternData {
   id: PatternId
   label: string
@@ -1606,15 +1614,7 @@ export default function App() {
   const [stage, setStage] = useState(0)
   const [following, setFollowing] = useState(false)
   const [decision, setDecision] = useState<Decision>(null)
-  const reducedMotion = useSyncExternalStore(
-    (onChange) => {
-      const query = window.matchMedia('(prefers-reduced-motion: reduce)')
-      query.addEventListener('change', onChange)
-      return () => query.removeEventListener('change', onChange)
-    },
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    () => false,
-  )
+  const reducedMotion = useSyncExternalStore(subscribeToReducedMotion, getReducedMotion, getServerReducedMotion)
   const stageAreaRef = useRef<HTMLDivElement>(null)
 
   const data = PATTERNS[pattern]
@@ -1666,7 +1666,7 @@ export default function App() {
             <div key={`${pattern}-${stage}`}>
               {stage === 1 && <Stage1 data={data} onAdvance={advance} />}
               {stage === 2 && <Stage2 data={data} onAdvance={advance} />}
-              {stage === 3 && <Stage3 key={pattern} data={data} onAdvance={advance} reducedMotion={reducedMotion} />}
+              {stage === 3 && <Stage3 key={`${pattern}-${reducedMotion}`} data={data} onAdvance={advance} reducedMotion={reducedMotion} />}
               {stage === 4 && <Stage4 data={data} onAdvance={advance} />}
               {stage === 5 && (
                 <Stage5
