@@ -209,3 +209,117 @@ html[data-theme="light"] .background-video { opacity: .17; filter: saturate(.6) 
   .dashboard-greeting h2 { font-size: 18px; }
   .dashboard-greeting a { display: none; }
 }
+
+/* Phone-only reading rhythm. Desktop and tablet retain the approved composition. */
+@media (max-width: 600px) {
+  .landing-page {
+    --phone-copy: #bac4c9;
+    --phone-meta: #aab5bb;
+    --phone-link: #c3c9ff;
+  }
+  html[data-theme="light"] .landing-page {
+    --phone-copy: #505b62;
+    --phone-meta: #626d73;
+    --phone-link: #4e58c5;
+  }
+
+  .landing-page .site-section { gap: 30px; padding: 56px 0; }
+  .landing-page .section-intro > span { margin-bottom: 12px; font-size: 12px; }
+  .landing-page .section-intro h2 { margin-bottom: 15px; text-wrap: balance; }
+  .landing-page .section-intro > p { color: var(--phone-copy); font-size: 15px; line-height: 1.6; }
+  .landing-page .section-intro .muted-note { color: var(--phone-meta); font-size: 13px; }
+  .landing-page .solutions-section .section-intro,
+  .landing-page .pricing-section .section-intro { margin-bottom: 27px; }
+
+  .landing-page .dashboard-actions {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 7px;
+    margin-bottom: 12px;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+  .landing-page .dashboard-actions button {
+    min-height: 44px;
+    font-size: 11px;
+    scroll-snap-align: none;
+  }
+  .landing-page .dashboard-action-status { font-size: 11px; }
+
+  .landing-page .solution-grid { gap: 10px; }
+  .landing-page .solution-item {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    column-gap: 10px;
+    min-height: 0;
+    padding: 21px 22px 18px;
+  }
+  .landing-page .solution-item small { align-self: center; font-size: 12px; }
+  .landing-page .solution-item > span {
+    align-self: center;
+    min-height: 0;
+    margin: 0;
+    color: var(--phone-meta);
+    font-size: 12px;
+  }
+  .landing-page .solution-item h3 { grid-column: 1 / -1; margin: 18px 0 8px; font-size: 21px; }
+  .landing-page .solution-item p {
+    grid-column: 1 / -1;
+    margin: 0 0 10px;
+    color: var(--phone-copy);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .landing-page .solution-item a {
+    grid-column: 1 / -1;
+    min-height: 44px;
+    margin-top: 0;
+    color: var(--phone-link);
+    font-size: 14px;
+    touch-action: manipulation;
+  }
+  .landing-page .text-route { min-height: 44px; margin-top: 20px; color: var(--phone-link); font-size: 14px; line-height: 1.35; }
+
+  .landing-page .light-control-desk header span,
+  .landing-page .light-control-desk header p,
+  .landing-page .desk-rows small { color: var(--phone-meta); font-size: 11px; }
+  .landing-page .desk-filters button { min-height: 40px; font-size: 12px; }
+  .landing-page .desk-rows strong { font-size: 13px; }
+  .landing-page .desk-rows p { color: var(--phone-copy); font-size: 12px; }
+  .landing-page .desk-rows em { font-size: 11px; }
+  .landing-page .principles { color: var(--phone-copy); font-size: 13px; line-height: 1.5; }
+  .landing-page .section-intro aside { color: var(--phone-copy); font-size: 13px; }
+  .landing-page .light-calculator label { font-size: 13px; }
+  .landing-page .light-calculator dt { color: var(--phone-meta); font-size: 11px; }
+  .landing-page .light-calculator dd small { color: var(--phone-meta); font-size: 12px; }
+  .landing-page .light-calculator a { min-height: 44px; color: var(--phone-link); font-size: 14px; }
+  .landing-page .ledger-card > div { font-size: 11px; }
+  .landing-page .ledger-card > p { color: rgba(255, 255, 255, .82); font-size: 14px; line-height: 1.6; }
+  .landing-page .ledger-card .ledger-boundary { color: rgba(255, 255, 255, .68); font-size: 12px; }
+  .landing-page .ledger-card a { min-height: 44px; font-size: 14px; touch-action: manipulation; }
+
+  .landing-page .package { padding: 23px; }
+  .landing-page .package > em { min-height: 0; color: var(--phone-link); font-size: 12px; }
+  .landing-page .package > span { color: var(--phone-meta); font-size: 12px; }
+  .landing-page .package > small { color: var(--phone-meta); font-size: 12px; }
+  .landing-page .package > p { margin: 17px 0; color: var(--phone-copy); font-size: 14px; line-height: 1.55; }
+  .landing-page .package ul { gap: 8px; margin-bottom: 17px; color: var(--phone-copy); font-size: 13px; }
+  .landing-page .package a { min-height: 44px; color: var(--phone-link); font-size: 14px; touch-action: manipulation; }
+  .landing-page .vat-note { color: var(--phone-meta); font-size: 12px; }
+
+  .landing-page .process-list span { font-size: 12px; }
+  .landing-page .process-list p { color: var(--phone-copy); font-size: 14px; }
+
+  .landing-page .contact-trust p { color: var(--phone-copy); font-size: 13px; }
+  .landing-page .light-form { gap: 12px; padding: 21px; }
+  .landing-page .light-form label { font-size: 13px; }
+  .landing-page .light-form input,
+  .landing-page .light-form select,
+  .landing-page .light-form textarea { min-height: 44px; font-size: 16px; }
+  .landing-page .light-form > p { color: var(--phone-copy); font-size: 13px; }
+  .landing-page .light-form button { min-height: 44px; font-size: 14px; }
+  .landing-page .site-footer { gap: 18px; }
+  .landing-page .site-footer p,
+  .landing-page .site-footer small,
+  .landing-page .site-footer nav a { font-size: 12px; }
+}
