@@ -94,6 +94,7 @@ export default function App() {
   const rootRef = useRef<HTMLElement>(null);
   const [theme, setTheme] = useState<Theme>("dark");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuMotion, setMobileMenuMotion] = useState(false);
   const [dashboardHighlighted, setDashboardHighlighted] = useState(false);
   const [dashboardView, setDashboardView] = useState<DashboardView>("Overview");
   const [dashboardSearch, setDashboardSearch] = useState("");
@@ -102,6 +103,7 @@ export default function App() {
   const [hasPreviewEnquiry, setHasPreviewEnquiry] = useState(false);
   const [hasPreviewItem, setHasPreviewItem] = useState(false);
   const [dashboardOptionsOpen, setDashboardOptionsOpen] = useState(false);
+  const [dashboardOptionsMotion, setDashboardOptionsMotion] = useState(false);
   const [queueFilter, setQueueFilter] = useState<QueueFilter>("all");
   const [teamSize, setTeamSize] = useState(5);
   const [adminTime, setAdminTime] = useState(20);
@@ -141,7 +143,11 @@ export default function App() {
     if (!mobileMenuOpen) return;
     const previousOverflow = document.body.style.overflow;
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMobileMenuOpen(false);
+      if (event.key === "Escape") {
+        setMobileMenuMotion(false);
+        setMobileMenuOpen(false);
+        document.getElementById("mobile-menu-toggle")?.focus();
+      }
     };
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", closeOnEscape);
@@ -150,6 +156,19 @@ export default function App() {
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    if (!dashboardOptionsOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDashboardOptionsMotion(false);
+        setDashboardOptionsOpen(false);
+        document.getElementById("dashboard-more-options")?.focus();
+      }
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [dashboardOptionsOpen]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -239,6 +258,7 @@ export default function App() {
     setHasPreviewEnquiry(false);
     setHasPreviewItem(false);
     setDashboardOptionsOpen(false);
+    setDashboardOptionsMotion(false);
     setDashboardMessage("Preview reset. All records remain fictional and local to this page.");
   };
 
@@ -283,17 +303,20 @@ export default function App() {
             aria-controls="mobile-navigation"
             aria-expanded={mobileMenuOpen}
             aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"}
-            onClick={() => setMobileMenuOpen((open) => !open)}
+            onClick={(event) => {
+              setMobileMenuMotion(event.detail > 0);
+              setMobileMenuOpen((open) => !open);
+            }}
           >
             <span aria-hidden="true">{mobileMenuOpen ? "×" : "☰"}</span>
           </button>
         </div>
-        {mobileMenuOpen && <nav id="mobile-navigation" className="mobile-navigation" aria-label="Mobile navigation">
-          <a href="#top" onClick={() => setMobileMenuOpen(false)}>Home</a>
-          <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-          <a href="#automation" onClick={() => setMobileMenuOpen(false)}>Automation</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a>
-        </nav>}
+        <nav id="mobile-navigation" className="mobile-navigation" data-open={mobileMenuOpen} data-motion={mobileMenuMotion ? "on" : "off"} aria-label="Mobile navigation" aria-hidden={!mobileMenuOpen} inert={!mobileMenuOpen}>
+          <a id="mobile-nav-home-link" href="#top" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Home</a>
+          <a id="mobile-nav-pricing-link" href="#pricing" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Pricing</a>
+          <a id="mobile-nav-automation-link" href="#automation" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Automation</a>
+          <a id="mobile-nav-contact-link" href="#contact" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Contact</a>
+        </nav>
       </header>
 
       <section className="hero" id="main-content" tabIndex={-1} aria-labelledby="hero-title">
@@ -334,7 +357,38 @@ export default function App() {
                 <output className="dashboard-action-status" aria-live="polite">{dashboardMessage}</output>
                 <div className="dashboard-cards">
                   <article className="opportunity-card"><div className="card-title"><span>{dashboardViewInfo.eyebrow}</span><b>✓</b></div><strong>{dashboardMetric}<span> {dashboardViewInfo.metricLabel}</span></strong><p>{dashboardViewInfo.metricDescription}</p><div className="mini-stats">{dashboardStats.map((stat) => <span key={stat.label}>{stat.label} <b className={stat.tone === "attention" ? "attention" : undefined}>{stat.value}</b></span>)}</div><svg viewBox="0 0 310 92" role="img" aria-label="Illustrative activity chart"><defs><linearGradient id="activity-fill" x1="0" x2="0" y1="0" y2="1"><stop stopColor="#5964f2" stopOpacity=".22" /><stop offset="1" stopColor="#5964f2" stopOpacity="0" /></linearGradient></defs><path d="M0 76 C23 69, 31 38, 58 57 S85 46, 109 54 S138 14, 163 34 S194 22, 219 37 S253 12, 279 25 S295 9, 310 15 V92 H0Z" fill="url(#activity-fill)" /><path d="M0 76 C23 69, 31 38, 58 57 S85 46, 109 54 S138 14, 163 34 S194 22, 219 37 S253 12, 279 25 S295 9, 310 15" fill="none" stroke="#5964f2" strokeWidth="2" /></svg></article>
-                  <article className="work-card"><header><strong>{dashboardViewInfo.workTitle}</strong><button id="dashboard-add-item" type="button" aria-label="Add an illustrative work item" onClick={addDashboardItem}>+</button><div className="dashboard-options"><button id="dashboard-more-options" type="button" aria-expanded={dashboardOptionsOpen} aria-controls="dashboard-options-menu" aria-label="Open preview options" onClick={() => setDashboardOptionsOpen((open) => !open)}>•••</button>{dashboardOptionsOpen && <div className="dashboard-options-menu" id="dashboard-options-menu" role="group" aria-label="Preview options"><button id="dashboard-reset-preview" type="button" onClick={resetDashboardPreview}>Reset preview</button></div>}</div></header><ul>{visibleDashboardWork.length ? visibleDashboardWork.map((item) => <li key={item.id}><span className={`dot ${item.dot}`} /><span>{item.title}</span><b>{item.status}</b></li>) : <li className="empty">No illustrative work matches that search.</li>}</ul></article>
+                  <article className="work-card">
+                    <header>
+                      <strong>{dashboardViewInfo.workTitle}</strong>
+                      <button id="dashboard-add-item" type="button" aria-label="Add an illustrative work item" onClick={addDashboardItem}>+</button>
+                      <div className="dashboard-options">
+                        <button
+                          id="dashboard-more-options"
+                          type="button"
+                          aria-expanded={dashboardOptionsOpen}
+                          aria-controls="dashboard-options-menu"
+                          aria-label={dashboardOptionsOpen ? "Close preview options" : "Open preview options"}
+                          onClick={(event) => {
+                            setDashboardOptionsMotion(event.detail > 0);
+                            setDashboardOptionsOpen((open) => !open);
+                          }}
+                        >•••</button>
+                        <div
+                          className="dashboard-options-menu"
+                          id="dashboard-options-menu"
+                          role="group"
+                          aria-label="Preview options"
+                          data-open={dashboardOptionsOpen}
+                          data-motion={dashboardOptionsMotion ? "on" : "off"}
+                          aria-hidden={!dashboardOptionsOpen}
+                          inert={!dashboardOptionsOpen}
+                        >
+                          <button id="dashboard-reset-preview" type="button" onClick={resetDashboardPreview}>Reset preview</button>
+                        </div>
+                      </div>
+                    </header>
+                    <ul>{visibleDashboardWork.length ? visibleDashboardWork.map((item) => <li key={item.id}><span className={`dot ${item.dot}`} /><span>{item.title}</span><b>{item.status}</b></li>) : <li className="empty">No illustrative work matches that search.</li>}</ul>
+                  </article>
                 </div>
                 <section className="recent-activity"><h3>Recent activity</h3><div className="activity-table" role="table" aria-label="Illustrative activity register"><div role="row" className="table-head"><span role="columnheader">Date</span><span role="columnheader">Description</span><span role="columnheader">Outcome</span><span role="columnheader">Status</span></div>{dashboardActivityRows.map((activity, index) => <div role="row" key={`${activity.description}-${index}`}><span>{activity.date}</span><span>{activity.description}</span><span>{activity.outcome}</span><b className={activity.status}>{activity.status === "pending" ? "Needs review" : activity.status === "moving" ? "Moving" : "Complete"}</b></div>)}</div></section>
               </div>
