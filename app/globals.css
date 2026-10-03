@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@import "./motionsite.css";
+
+.skip-link {
+  position: fixed;
+  z-index: 30;
+  top: 12px;
+  left: 12px;
+  padding: 10px 14px;
+  background: #ffffff;
+  color: #252b31;
+  font-size: 12px;
+  transform: translateY(-180%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+}

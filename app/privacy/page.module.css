@@ -1,0 +1,364 @@
+.page {
+  min-height: 100svh;
+  background: var(--background);
+}
+
+.skipLink {
+  position: fixed;
+  z-index: 30;
+  top: 12px;
+  left: 12px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 12px;
+  transform: translateY(-180%);
+}
+
+.skipLink:focus {
+  transform: translateY(0);
+}
+
+.content {
+  width: min(100% - 48px, 1180px);
+  margin: 0 auto;
+}
+
+.hero {
+  display: flex;
+  max-width: 760px;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  padding: clamp(68px, 10vh, 112px) 0 clamp(62px, 8vw, 104px);
+  text-align: center;
+  animation: enter .7s var(--ease-out) .08s both;
+}
+
+.badge {
+  display: inline-flex;
+  margin: 0 0 24px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: rgba(22, 28, 32, .72);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.hero h1 {
+  max-width: 760px;
+  margin: 0;
+  color: var(--foreground);
+  font-family: "Instrument Serif", var(--font-display), Georgia, serif;
+  font-size: clamp(51px, 5.7vw, 82px);
+  font-weight: 400;
+  letter-spacing: -.055em;
+  line-height: .93;
+}
+
+.hero h1 em {
+  font-style: italic;
+}
+
+.intro {
+  max-width: 650px;
+  margin: 23px 0 0;
+  color: var(--muted);
+  font-size: clamp(14px, 1.5vw, 17px);
+  line-height: 1.62;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 930px;
+  margin-top: 52px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.summary p {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 18px 4px 18px 0;
+  color: #c2c9cf;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.summary p + p {
+  padding-left: 18px;
+  border-left: 1px solid var(--border);
+}
+
+.summary span,
+.sectionNav > p,
+.sectionNumber {
+  color: #b1b8ff;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.readingLayout {
+  display: grid;
+  grid-template-columns: minmax(150px, .4fr) minmax(0, 1fr);
+  gap: clamp(42px, 9vw, 150px);
+  padding-bottom: clamp(76px, 11vw, 150px);
+}
+
+.sectionNav {
+  align-self: start;
+  position: sticky;
+  top: 118px;
+  display: grid;
+  gap: 12px;
+  padding-top: 6px;
+}
+
+.sectionNav > p {
+  margin: 0 0 5px;
+}
+
+.sectionNav a {
+  width: fit-content;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  transition: color 180ms ease, transform 180ms var(--ease-out);
+}
+
+.sectionNav a:hover {
+  color: var(--foreground);
+  transform: translateX(3px);
+}
+
+.notice {
+  border-top: 1px solid var(--border);
+}
+
+.notice section {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 15px;
+  padding: 33px 0 38px;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 112px;
+}
+
+.sectionNumber {
+  margin: 5px 0 0;
+}
+
+.notice h2 {
+  margin: 0;
+  color: var(--foreground);
+  font-family: "Instrument Serif", var(--font-display), Georgia, serif;
+  font-size: clamp(34px, 3.5vw, 52px);
+  font-weight: 400;
+  letter-spacing: -.045em;
+  line-height: .98;
+}
+
+.notice h3 {
+  margin: 26px 0 0;
+  color: #cfd6da;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.notice section p,
+.notice li {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.72;
+}
+
+.notice section p {
+  margin: 15px 0 0;
+}
+
+.notice section ul {
+  display: grid;
+  gap: 10px;
+  margin: 17px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notice li {
+  position: relative;
+  padding-left: 17px;
+}
+
+.notice li::before {
+  position: absolute;
+  top: .7em;
+  left: 1px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #8d96fa;
+  content: "";
+}
+
+.notice a,
+.articleFooter a {
+  color: #c5caff;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.notice strong {
+  color: #d9e0e4;
+}
+
+.articleFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 31px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.articleFooter p {
+  margin: 0;
+}
+
+.articleFooter a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #b7beff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.articleFooter span {
+  font-size: 16px;
+  transition: transform 180ms ease;
+}
+
+.articleFooter a:hover span {
+  transform: translateX(3px);
+}
+
+.sectionNav a:focus-visible,
+.notice a:focus-visible,
+.articleFooter a:focus-visible,
+.page :global(.navbar) a:focus-visible,
+.page :global(.navbar) button:focus-visible,
+.page :global(.site-footer) a:focus-visible {
+  outline: 2px solid #9ba3ff;
+  outline-offset: 4px;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 860px) {
+  .readingLayout {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .sectionNav {
+    position: static;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 18px;
+    padding: 18px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sectionNav > p {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+}
+
+@media (max-width: 760px) {
+  .content {
+    width: min(100% - 36px, 1180px);
+  }
+
+  .hero {
+    padding-top: 74px;
+  }
+
+  .summary {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 39px;
+  }
+
+  .summary p,
+  .summary p + p {
+    padding: 14px 0;
+    border-left: 0;
+  }
+
+  .summary p + p {
+    border-top: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 560px) {
+  .sectionNav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .notice section {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 29px 0 34px;
+  }
+
+  .sectionNumber {
+    margin: 0;
+  }
+
+  .articleFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 450px) {
+  .hero h1 {
+    font-size: 50px;
+  }
+
+  .sectionNav {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    animation: none;
+  }
+
+  .sectionNav a,
+  .articleFooter span {
+    transition: none;
+  }
+}

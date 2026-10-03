@@ -5,14 +5,24 @@ These instructions apply inside `06_BUILDS/websites/motus-agency-site/`. They ar
 ## Project context
 
 - Site: Motus agency landing page
-- Live production URL: `https://motus-agency-site.vercel.app`
+- Live production URL: `https://motusautomation.co.uk`
 - Current benchmark reference: `https://www.modulox.io/`
 - Goal: build a website that feels comparable in quality to ModuloX without copying its visual identity, structure, copy, assets, or brand.
 - Audience: UK small-business owners who need operational admin to move faster without being scared by technical language.
 
+## Live deployment lock
+
+`https://motusautomation.co.uk` is the only canonical, public Motus website.
+
+- It is currently served by the Cloudflare Worker named `motus-site`.
+- This Next.js source was reconciled against the active Cloudflare Worker on 1 October 2026. Its GitHub `main` branch is still an older Vite version until the reviewed source migration is merged. Recheck the live Worker version before every production change; a previous reconciliation is not permission to overwrite later work.
+- Never roll back, replace, redirect, or otherwise alter `motusautomation.co.uk` unless Seun explicitly authorises that exact live change.
+- Before any future live-site work, first reconcile the active Cloudflare Worker source and create a recoverable backup/version. Do not infer that GitHub `main`, a Vercel deployment, or this directory matches production.
+- Old Vercel deployments may be reviewed and removed only after Seun explicitly confirms the exact deployments to delete. They are not a substitute for the live site.
+
 ## Design direction
 
-Use `DESIGN.md` as the visual source of truth before changing UI.
+Read `DESIGN.md` for the original Motus design intent, but preserve the currently deployed site's typography, colours, layout and interactions as the visual baseline. Do not use older design notes to trigger a wholesale redesign.
 
 The Motus site should feel like an invisible operations layer: work enters, gets routed, gets recorded, and keeps moving. The signature visual idea is the Motus signal, not generic luxury decoration.
 
@@ -112,3 +122,13 @@ If browser testing cannot be completed, say exactly what could not be verified b
 - Prefer updating existing components over creating parallel versions.
 - Avoid broad dependency or build-system changes unless the benefit, risk, and rollback path are clear.
 - Keep generated code readable for a future developer.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
