@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <main className={`landing-page ${styles.page}`}>
-      <a className={styles.skipLink} href="#main-content">Skip to privacy notice</a>
+      <a id="privacy-skip-link" className={styles.skipLink} href="#main-content">Skip to privacy notice</a>
       <PrivacyHeader />
 
       <div className={styles.content} id="main-content" tabIndex={-1}>
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
           <div className={styles.summary} aria-label="Privacy notice summary">
             <p><span>What</span> Business-enquiry details</p>
             <p><span>Why</span> To assess, respond and deliver accepted work</p>
-            <p><span>Questions</span> ayomideautomations@gmail.com</p>
+            <p><span>Questions</span> <Link id="privacy-summary-contact-link" href="/?privacy=1#contact">Contact Motus</Link></p>
           </div>
         </header>
 
@@ -50,8 +50,9 @@ export default function PrivacyPage() {
               <div>
                 <h2>Who is responsible for your information</h2>
                 <p>
-                  The controller is <strong>Oluwaseun Ayomide Oyepitan trading as Motus</strong>. For privacy
-                  questions, contact <a href="mailto:ayomideautomations@gmail.com">ayomideautomations@gmail.com</a>.
+                  <strong>Motus</strong> is responsible for the information described in this notice. For privacy
+                  questions, use the <Link id="privacy-responsible-contact-link" href="/?privacy=1#contact">contact form</Link>.
+                  You do not need to provide a business name for a privacy question or request.
                 </p>
               </div>
             </section>
@@ -61,10 +62,10 @@ export default function PrivacyPage() {
               <div>
                 <h2>What information the enquiry form collects</h2>
                 <ul>
-                  <li>Your name, business name and business email.</li>
-                  <li>The outcome you select and your description of what is happening now.</li>
-                  <li>Your estimated investment range and the systems you already use.</li>
-                  <li>An optional public website URL and any selected sector or demonstration interest.</li>
+                  <li>Your name and email, plus your business name for a business enquiry. A business name is optional for privacy questions.</li>
+                  <li>Your description of what you need help with, or your privacy question.</li>
+                  <li>An optional topic, budget range, description of the tools you use, and public website URL.</li>
+                  <li>Any selected demonstration interest, or a label identifying a privacy question.</li>
                   <li>A fixed source label showing that the enquiry came from the Motus website.</li>
                 </ul>
                 <p>
@@ -141,7 +142,7 @@ export default function PrivacyPage() {
                 <h2>Your rights</h2>
                 <p>
                   Depending on the circumstances, you may ask for access, correction, deletion, restriction or
-                  portability of your information, or object to its use. Contact Motus using the email above.
+                  portability of your information, or object to its use. Use the <Link id="privacy-rights-contact-link" href="/?privacy=1#contact">privacy contact form</Link> to contact Motus.
                 </p>
                 <p>
                   You can also complain to the{" "}
@@ -192,14 +193,14 @@ export default function PrivacyPage() {
         <Link id="privacy-footer-home-link" className="logo" href="/">
           <span aria-hidden="true">✦</span> Motus
         </Link>
-        <p>Tailored digital systems for UK businesses.</p>
+        <p>Custom websites and business tools for UK small businesses.</p>
         <nav aria-label="Footer navigation">
-          <Link id="privacy-footer-solutions-link" href="/#solutions">Solutions</Link>
+          <Link id="privacy-footer-solutions-link" href="/#solutions">What we build</Link>
           <Link id="privacy-footer-examples-link" href="/demos">Examples</Link>
           <Link id="privacy-footer-pricing-link" href="/#pricing">Website pricing</Link>
           <Link id="privacy-footer-link" href="/privacy">Privacy</Link>
         </nav>
-        <small>© 2026 Oluwaseun Ayomide Oyepitan trading as Motus.</small>
+        <small>© 2026 Motus.</small>
       </footer>
     </main>
   );

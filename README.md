@@ -105,6 +105,14 @@ rate limiting and upstream failures. No real enquiry was submitted during QA.
 Client testimonials remain unpublished pending approval of their exact wording.
 Production publication and any later animation changes require separate review.
 
+Public preview pages use the Motus name only, with no founder introduction,
+personal initials, personal location or displayed email address. Privacy links
+open `/?privacy=1#contact`, which does not require a business name and preserves
+the existing lead delivery format with a privacy-question label. Review the
+final business identity and contact disclosure before production publication;
+this preview does not establish legal compliance. Private delivery settings are
+unchanged.
+
 ## Validation
 
 ```bash

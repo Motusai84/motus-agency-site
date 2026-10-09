@@ -23,7 +23,7 @@ export default function PrivacyHeader() {
       <nav aria-label="Primary navigation">
         <Link id="privacy-nav-home" href="/">Home</Link>
         <Link id="privacy-nav-pricing" href="/#pricing">Pricing</Link>
-        <Link id="privacy-nav-automation" href="/#automation">Automation</Link>
+        <Link id="privacy-nav-automation" href="/#automation">How it works</Link>
         <Link id="privacy-nav-contact" href="/#contact">Contact</Link>
       </nav>
       <div className="header-actions">

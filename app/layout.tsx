@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://motusautomation.co.uk"),
   title: "Motus | Websites and tools made for your business",
   description:
-    "Custom websites and business tools for UK small businesses. Make bookings, customer enquiries and everyday work easier. Based in London.",
+    "Custom websites and business tools for UK small businesses. Make bookings, customer enquiries and everyday work easier.",
   alternates: {
     canonical: "/",
   },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "Motus | Websites and tools made for your business",
     description:
-      "Websites and tools made for your business. Based in London, working with UK small businesses.",
+      "Websites and tools made for your business. Built around the needs of UK small businesses.",
   },
   formatDetection: {
     email: false,

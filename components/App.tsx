@@ -84,10 +84,10 @@ const queueItems = [
 ] as const;
 
 const process = [
-  ["Talk it through", "Tell me what you want to make easier and how your business works today."],
-  ["Agree the work", "We agree what I will build, the price and what is included before work starts."],
-  ["Build and check", "I build it, we try it together, and you approve it before it goes live."],
-  ["Keep it looked after", "I explain how to use it and provide the support we have agreed."],
+  ["Talk it through", "Tell us what you want to make easier and how your business works today."],
+  ["Agree the work", "We agree what to build, the price and what is included before work starts."],
+  ["Build and check", "We build it, check it with you, and get your approval before it goes live."],
+  ["Keep it looked after", "Get a clear explanation of how to use it and the support we have agreed."],
 ] as const;
 
 function subscribeToExample(onChange: () => void) {
@@ -103,9 +103,20 @@ function getExampleSnapshot() {
   return new URLSearchParams(window.location.search).get("example") ?? "";
 }
 
+function getPrivacySnapshot() {
+  return new URLSearchParams(window.location.search).get("privacy") === "1";
+}
+
 function clearExampleInterest() {
   const url = new URL(window.location.href);
   url.searchParams.delete("example");
+  window.history.replaceState(window.history.state, "", url);
+  window.dispatchEvent(new Event("popstate"));
+}
+
+function clearPrivacyInterest() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("privacy");
   window.history.replaceState(window.history.state, "", url);
   window.dispatchEvent(new Event("popstate"));
 }
@@ -134,8 +145,9 @@ export default function App() {
 
   const showroomDemos = demoCatalog.filter((demo) => demo.status === "ready");
   const exampleSlug = useSyncExternalStore(subscribeToExample, getExampleSnapshot, () => "");
+  const privacyEnquiry = useSyncExternalStore(subscribeToExample, getPrivacySnapshot, () => false);
   const selectedDemo = showroomDemos.find((demo) => demo.slug === exampleSlug && demo.url);
-  const enquiryOutcome = selectedOutcome ?? selectedDemo?.enquiryOutcome ?? "";
+  const enquiryOutcome = selectedOutcome ?? (privacyEnquiry ? "Privacy question" : selectedDemo?.enquiryOutcome ?? "");
   const estimate = useMemo(() => {
     const weeklyHours = Math.round(teamSize * 40 * (adminTime / 100));
     return { weeklyHours, annualCost: weeklyHours * hourlyCost * 52 };
@@ -221,15 +233,15 @@ export default function App() {
     const data = new FormData(form);
     const payload = {
       fullName: String(data.get("fullName") ?? "").trim(),
-      businessName: String(data.get("businessName") ?? "").trim(),
+      businessName: String(data.get("businessName") ?? "").trim() || (privacyEnquiry ? "Privacy question" : ""),
       email: String(data.get("email") ?? "").trim(),
-      outcome: String(data.get("outcome") ?? "").trim() || "Something different",
+      outcome: privacyEnquiry ? "Privacy question" : String(data.get("outcome") ?? "").trim() || "Something different",
       headache: String(data.get("headache") ?? "").trim(),
       investment: String(data.get("investment") ?? "").trim() || "Not sure yet",
       existing: String(data.get("existing") ?? "").trim() || "Not provided yet",
       websiteUrl: String(data.get("websiteUrl") ?? "").trim(),
       website: String(data.get("website") ?? "").trim(),
-      system: selectedDemo?.title ?? "",
+      system: privacyEnquiry ? "" : selectedDemo?.title ?? "",
     };
     setFormStatus("sending");
     setFormMessage("Sending your enquiry…");
@@ -244,8 +256,9 @@ export default function App() {
       form.reset();
       setSelectedOutcome(null);
       clearExampleInterest();
+      clearPrivacyInterest();
       setFormStatus("success");
-      setFormMessage("Thanks. Your enquiry has been received. I’ll reply by email within two business days.");
+      setFormMessage("Thanks. Your enquiry has been received. Motus will reply by email within two business days.");
     } catch (error) {
       setFormStatus("error");
       setFormMessage(error instanceof Error ? error.message : "Your enquiry could not be sent.");
@@ -347,7 +360,7 @@ export default function App() {
 
       <section className="hero" id="main-content" tabIndex={-1} aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="badge" data-enter="60">For small businesses · Based in London</p>
+          <p className="badge" data-enter="60">For UK small businesses</p>
           <h1 id="hero-title" data-enter="150">Websites and tools <em>made for your business.</em></h1>
           <p className="subheading" data-enter="240">Make it easier for customers to book, get in touch and work with you. Keep your customers, jobs and everyday tasks organised.</p>
           <div className="hero-actions" data-enter="330">
@@ -370,7 +383,7 @@ export default function App() {
             <header className="dashboard-topbar">
               <div className="dashboard-brand"><span>M</span><strong>Motus</strong><i aria-hidden="true">⌄</i></div>
               <label className="search"><span aria-hidden="true">⌕</span><input id="dashboard-search" aria-describedby="dashboard-search-feedback" aria-label="Search illustrative preview" value={dashboardSearch} onChange={(event) => setDashboardSearch(event.target.value)} placeholder="Search work, people and actions" /><kbd>⌘ K</kbd><span className="dashboard-search-feedback" id="dashboard-search-feedback" role="status">{dashboardSearchTerm ? `${visibleDashboardWork.length} illustrative ${visibleDashboardWork.length === 1 ? "match" : "matches"}` : ""}</span></label>
-              <div className="dashboard-tools"><button id="dashboard-new-enquiry" type="button" aria-label="Add a fictional enquiry to the preview" onClick={() => handleDashboardAction("New enquiry")}>New enquiry</button><button id="dashboard-notifications" className="dashboard-notifications" type="button" aria-label="Read illustrative notifications" onClick={() => setDashboardMessage("No new notifications in this fictional preview.")}>◌</button><b>AY</b></div>
+              <div className="dashboard-tools"><button id="dashboard-new-enquiry" type="button" aria-label="Add a fictional enquiry to the preview" onClick={() => handleDashboardAction("New enquiry")}>New enquiry</button><button id="dashboard-notifications" className="dashboard-notifications" type="button" aria-label="Read illustrative notifications" onClick={() => setDashboardMessage("No new notifications in this fictional preview.")}>◌</button><b>M</b></div>
             </header>
             <div className="dashboard-body">
               <nav className="sidebar" aria-label="Illustrative dashboard navigation">
@@ -466,20 +479,26 @@ export default function App() {
 
       <section className="site-section pricing-section" id="pricing" aria-labelledby="pricing-title"><div className="section-intro reveal"><span>Website prices</span><h2 id="pricing-title">A clear place to start.</h2><p>We talk through what you need and choose a suitable website package. Workspaces and other business tools are priced separately once we agree the work.</p></div><div className="package-grid">{packages.map(([name, price, care, text, features], index) => <article className={`package${index === 1 ? " featured" : ""} reveal`} key={name}>{index === 1 && <em>Most useful for established businesses</em>}<span>{name}</span><strong>{price}</strong><small>{care} website care</small><p>{text}</p><ul>{features.map((feature) => <li key={feature}>{feature}</li>)}</ul><a id={`package-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(name)}>Tell us what you need <b aria-hidden="true">→</b></a></article>)}</div><p className="vat-note reveal">Motus is not currently VAT registered. VAT is not added to the prices shown.</p></section>
 
-      <section className="site-section process-section" id="about" aria-labelledby="process-title"><div className="section-intro reveal"><span>The person behind Motus</span><h2 id="process-title">Hi, I’m Seun.</h2><p>I’m based in London. I build custom websites and workspaces for small businesses, starting with what you want to make easier.</p><p className="muted-note">We talk it through, agree the work and check it together. You know who is building it and what support is included.</p></div><ol className="process-list">{process.map(([title, text], index) => <li className="reveal" key={title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{title}</strong><p>{text}</p></div></li>)}</ol></section>
+      <section className="site-section process-section" id="about" aria-labelledby="process-title"><div className="section-intro reveal"><span>Working with Motus</span><h2 id="process-title">Clear steps. Agreed from the start.</h2><p>Custom websites and workspaces, built around what your business needs.</p><p className="muted-note">We talk it through, agree the work and check it together. You know what is being built and what support is included.</p></div><ol className="process-list">{process.map(([title, text], index) => <li className="reveal" key={title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{title}</strong><p>{text}</p></div></li>)}</ol></section>
 
       <section className="site-section contact-section" id="contact" aria-labelledby="contact-title">
         <div className="section-intro reveal">
           <span>A useful first step</span>
-          <h2 id="contact-title" tabIndex={-1}>Tell us what you’d like to make easier.</h2>
-          <p>A few lines about your business and what you need are enough to start. I’ll normally reply by email within two business days with a next step.</p>
+          <h2 id="contact-title" tabIndex={-1}>{privacyEnquiry ? "Contact Motus about your information." : "Tell us what you’d like to make easier."}</h2>
+          <p>{privacyEnquiry ? "Use this form for a privacy question or a request about your information. A business name is optional. Motus normally replies by email within two business days." : "A few lines about your business and what you need are enough to start. Motus normally replies by email within two business days with a next step."}</p>
           <div className="contact-trust">
             <p><strong>We agree the work first.</strong> You know the price and what is included before building starts.</p>
             <p><strong>You stay in control.</strong> Anything important or unclear comes back to you to check.</p>
           </div>
         </div>
         <form className="light-form reveal" id="enquiry-form" onSubmit={handleSubmit}>
-          {selectedDemo && (
+          {privacyEnquiry && (
+            <div className="enquiry-interest" role="status">
+              <p><strong>Privacy question</strong></p>
+              <button id="enquiry-clear-privacy" type="button" onClick={() => { setSelectedOutcome(null); clearPrivacyInterest(); }}>Return to business enquiry</button>
+            </div>
+          )}
+          {!privacyEnquiry && selectedDemo && (
             <div className="enquiry-interest" role="status">
               <p>Asking about <strong>{selectedDemo.name ?? selectedDemo.title}</strong> · {selectedDemo.category}</p>
               <button id="enquiry-clear-example" type="button" onClick={clearExampleInterest}>Clear example</button>
@@ -487,19 +506,21 @@ export default function App() {
           )}
           <div className="form-pair">
             <label htmlFor="enquiry-name">Your name<input id="enquiry-name" name="fullName" autoComplete="name" maxLength={100} required /></label>
-            <label htmlFor="enquiry-business">Business name<input id="enquiry-business" name="businessName" autoComplete="organization" maxLength={160} required /></label>
+            <label htmlFor="enquiry-business">Business name{privacyEnquiry && <small>(optional)</small>}<input id="enquiry-business" name="businessName" autoComplete="organization" maxLength={160} required={!privacyEnquiry} /></label>
           </div>
           <label htmlFor="enquiry-email">Your email<input id="enquiry-email" name="email" type="email" autoComplete="email" maxLength={200} required /></label>
-          <label htmlFor="enquiry-problem">What would you like help with?<textarea id="enquiry-problem" name="headache" rows={4} maxLength={1200} placeholder="Tell us what you need or what is getting in the way." required /></label>
+          <label htmlFor="enquiry-problem">{privacyEnquiry ? "Your privacy question" : "What would you like help with?"}<textarea id="enquiry-problem" name="headache" rows={4} maxLength={1200} placeholder={privacyEnquiry ? "Briefly describe your question or request. Leave out sensitive details." : "Tell us what you need or what is getting in the way."} required /></label>
           <label htmlFor="enquiry-outcome">What is this about? <small>(optional)</small>
             <select id="enquiry-outcome" name="outcome" value={enquiryOutcome} onChange={(event) => setSelectedOutcome(event.target.value)}>
               <option value="">Not sure yet</option>
-              {solutions.map(([, title]) => <option key={title}>{title}</option>)}
-              {packages.map(([name]) => <option key={name}>{name}</option>)}
-              <option>Something different</option>
+              {privacyEnquiry ? <option>Privacy question</option> : <>
+                {solutions.map(([, title]) => <option key={title}>{title}</option>)}
+                {packages.map(([name]) => <option key={name}>{name}</option>)}
+                <option>Something different</option>
+              </>}
             </select>
           </label>
-          <details className="enquiry-details">
+          {!privacyEnquiry && <details className="enquiry-details">
             <summary id="enquiry-more-details">Add more details <span>(optional)</span></summary>
             <div className="enquiry-details-fields">
               <label htmlFor="enquiry-investment">Do you have a budget in mind?
@@ -510,7 +531,7 @@ export default function App() {
               <label htmlFor="enquiry-existing">What do you use now?<input id="enquiry-existing" name="existing" maxLength={300} placeholder="A website, booking app, spreadsheet or something else" /></label>
               <label htmlFor="enquiry-url">Your website<input id="enquiry-url" name="websiteUrl" type="url" maxLength={500} placeholder="https://" /></label>
             </div>
-          </details>
+          </details>}
           <label className="honeypot" aria-hidden="true" htmlFor="enquiry-website">Leave this field empty<input id="enquiry-website" name="website" tabIndex={-1} autoComplete="off" /></label>
           <p>This is an enquiry, with no commitment to buy. Please leave out passwords, private business information and personal details about your customers. <Link id="enquiry-privacy-link" href="/privacy">Read the privacy notice.</Link></p>
           <button id="enquiry-submit-button" type="submit" disabled={formStatus === "sending"}>{formStatus === "sending" ? "Sending…" : "Send enquiry"} <b aria-hidden="true">→</b></button>
@@ -518,7 +539,7 @@ export default function App() {
         </form>
       </section>
 
-      <footer className="site-footer"><a id="footer-home-link" className="logo" href="#top"><span aria-hidden="true">✦</span> Motus</a><p>Custom websites and business tools. Based in London.</p><nav aria-label="Footer navigation"><a id="footer-solutions-link" href="#solutions">What we build</a><Link id="footer-examples-link" href="/demos">Examples</Link><a id="footer-pricing-link" href="#pricing">Website pricing</a><Link id="footer-privacy-link" href="/privacy">Privacy</Link></nav><small>© 2026 Oluwaseun Ayomide Oyepitan trading as Motus.</small></footer>
+      <footer className="site-footer"><a id="footer-home-link" className="logo" href="#top"><span aria-hidden="true">✦</span> Motus</a><p>Custom websites and business tools for UK small businesses.</p><nav aria-label="Footer navigation"><a id="footer-solutions-link" href="#solutions">What we build</a><Link id="footer-examples-link" href="/demos">Examples</Link><a id="footer-pricing-link" href="#pricing">Website pricing</a><Link id="footer-privacy-link" href="/privacy">Privacy</Link></nav><small>© 2026 Motus.</small></footer>
     </main>
   );
 }
