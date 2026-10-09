@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { demoCatalog, getDemoEnquiryHref } from "@/lib/demo-catalog";
+import { MotionPanel } from "@/components/SiteMotion";
 import styles from "@/app/demos/page.module.css";
 
 export default function DemoShowroom() {
@@ -28,7 +29,7 @@ export default function DemoShowroom() {
       <p className={styles.resultSummary}>{readyExamples.length} examples · Try one that fits your business.</p>
       <div className={styles.exampleList}>
         {readyExamples.map((example) => (
-          <article className={styles.example} id={`example-${example.slug}`} key={example.slug}>
+          <MotionPanel className={styles.example} id={`example-${example.slug}`} key={example.slug}>
             <div className={styles.exampleBody}>
               <div className={styles.exampleMeta}>
                 <span>{example.name ?? example.title}</span><span>Demo you can try</span>
@@ -60,7 +61,7 @@ export default function DemoShowroom() {
               {example.scopeLabel && <p className={styles.scopeLabel}>{example.scopeLabel}</p>}
               {example.boundary && <p className={styles.exampleBoundary}>{example.boundary}</p>}
             </details>
-          </article>
+          </MotionPanel>
         ))}
       </div>
     </>

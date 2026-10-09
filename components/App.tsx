@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { demoCatalog } from "@/lib/demo-catalog";
+import { motion, useReducedMotion } from "framer-motion";
+import { MotionPanel, SignalRoute, useSiteMotion } from "@/components/SiteMotion";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 type QueueFilter = "all" | "moving" | "attention" | "complete";
@@ -123,6 +125,9 @@ function clearPrivacyInterest() {
 
 export default function App() {
   const rootRef = useRef<HTMLElement>(null);
+  useSiteMotion(rootRef);
+  const reducedMotion = useReducedMotion();
+  const [queueMotion, setQueueMotion] = useState(false);
   const [theme, setTheme] = useState<Theme>("dark");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuMotion, setMobileMenuMotion] = useState(false);
@@ -205,27 +210,6 @@ export default function App() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [dashboardOptionsOpen]);
 
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const targets = Array.from(root.querySelectorAll<HTMLElement>(".reveal"));
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion || !("IntersectionObserver" in window)) {
-      targets.forEach((target) => target.classList.add("is-visible"));
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }),
-      { threshold: 0.12 },
-    );
-    targets.forEach((target) => observer.observe(target));
-    return () => observer.disconnect();
-  }, []);
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formStatus === "sending") return;
@@ -301,6 +285,7 @@ export default function App() {
 
   return (
     <main ref={rootRef} id="top" className="landing-page">
+      <div className="reading-progress" aria-hidden="true"><span /></div>
       <a id="home-skip-link" className="skip-link" href="#main-content">Skip to content</a>
       <video
         className="background-video"
@@ -378,6 +363,7 @@ export default function App() {
           <p className="tour-status" aria-live="polite">{dashboardHighlighted ? "Demo workspace highlighted. Fictional records only; nothing is sent." : ""}</p>
         </div>
 
+        <SignalRoute variant="hero" />
         <section className={`dashboard-preview${dashboardHighlighted ? " is-highlighted" : ""}`} id="dashboard-preview" aria-label="Illustrative Motus tailored system preview">
           <div className="dashboard-window">
             <header className="dashboard-topbar">
@@ -446,12 +432,12 @@ export default function App() {
         </div>
         <div className="showroom-demo-list">
           {showroomDemos.map((demo) => (
-            <article className="ledger-card reveal" key={demo.slug}>
+            <MotionPanel className="ledger-card reveal" key={demo.slug}>
               <div><span>{demo.name ?? demo.title}</span><small>Demo you can try</small></div>
               <h3>{demo.category ?? demo.title}</h3>
               <p>{demo.demoSummary ?? demo.interfaceSummary}</p>
               <a id={demo.slug === "ledger-desk" ? "ledger-demo-link" : `showroom-demo-${demo.slug}-link`} href={demo.url ?? "/demos"}>{demo.ctaLabel ?? "Try this example"} <b aria-hidden="true">→</b></a>
-            </article>
+            </MotionPanel>
           ))}
         </div>
         <a id="view-showroom-link" className="text-route reveal" href="/demos">See all examples <b aria-hidden="true">→</b></a>
@@ -460,14 +446,14 @@ export default function App() {
       <section className="site-section solutions-section" id="solutions" aria-labelledby="solutions-title">
         <div className="section-intro reveal"><span>What we can build</span><h2 id="solutions-title">What would you like to make easier?</h2><p>A better website, easier bookings or somewhere to keep track of your work. Start with what your business needs.</p></div>
         <div className="solution-grid">
-          {solutions.map(([service, title, text], index) => <article className="solution-item reveal" key={title}><small>{String(index + 1).padStart(2, "0")}</small><span>{service}</span><h3>{title}</h3><p>{text}</p><a id={`solution-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(title)}>Ask about this <b aria-hidden="true">→</b></a></article>)}
+          {solutions.map(([service, title, text], index) => <MotionPanel className="solution-item reveal" key={title}><small>{String(index + 1).padStart(2, "0")}</small><span>{service}</span><h3>{title}</h3><p>{text}</p><a id={`solution-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(title)}>Ask about this <b aria-hidden="true">→</b></a></MotionPanel>)}
         </div>
         <a id="custom-solution-link" className="text-route reveal" href="#contact" onClick={() => setSelectedOutcome("Something different")}>Need something different? Tell us about it <b aria-hidden="true">→</b></a>
       </section>
 
       <section className="site-section automation-section" id="automation" aria-labelledby="automation-title">
         <div className="section-intro reveal"><span>How it works</span><h2 id="automation-title">Keep your work together.</h2><p>A customer books, sends a message or asks for a quote. The useful details go where your team needs them, so you can see what has happened and what needs doing.</p><p className="muted-note">Your workspace is a place to keep track of customers, jobs and bookings. Try the demo below to see how that could look.</p></div>
-        <div className="light-control-desk reveal" aria-label="Illustrative business control desk"><header><div><span>Demo workspace · Fictional records</span><strong>Today’s work</strong></div><p>See what is moving and what needs you.</p></header><div className="desk-filters" role="group" aria-label="Filter illustrative work queue">{(["all", "moving", "attention", "complete"] as QueueFilter[]).map((filter) => <button id={`queue-filter-${filter}`} type="button" key={filter} aria-pressed={queueFilter === filter} onClick={() => setQueueFilter(filter)}>{filter === "all" ? "All work" : filter === "attention" ? "Needs you" : filter[0].toUpperCase() + filter.slice(1)} <b>{filter === "all" ? 5 : filter === "moving" || filter === "attention" ? 2 : 1}</b></button>)}</div><div className="desk-labels" aria-hidden="true"><span>Work received</span><span>Already handled</span><span>Next action</span><span>Status</span></div><div className="desk-rows" aria-live="polite">{visibleQueue.map(([status, type, title, handled, next, label]) => <article key={title} data-queue-status={status}><div><small>{type}</small><strong>{title}</strong></div><p>{handled}</p><p>{next}</p><em>{label}</em></article>)}</div></div>
+        <div className="light-control-desk reveal" aria-label="Illustrative business control desk"><header><div><span>Demo workspace · Fictional records</span><strong>Today’s work</strong></div><p>See what is moving and what needs you.</p></header><SignalRoute /><div className="desk-filters" role="group" aria-label="Filter illustrative work queue">{(["all", "moving", "attention", "complete"] as QueueFilter[]).map((filter) => <button id={`queue-filter-${filter}`} type="button" key={filter} aria-pressed={queueFilter === filter} onClick={(event) => { setQueueMotion(event.detail > 0); setQueueFilter(filter); }}>{filter === "all" ? "All work" : filter === "attention" ? "Needs you" : filter[0].toUpperCase() + filter.slice(1)} <b>{filter === "all" ? 5 : filter === "moving" || filter === "attention" ? 2 : 1}</b>{queueFilter === filter && <motion.span className="filter-indicator" layoutId="queue-filter-indicator" transition={{ duration: queueMotion && !reducedMotion ? .22 : 0, ease: [.22, 1, .36, 1] }} aria-hidden="true" />}</button>)}</div><div className="desk-labels" aria-hidden="true"><span>Work received</span><span>Already handled</span><span>Next action</span><span>Status</span></div><div className="desk-rows" aria-live="polite">{visibleQueue.map(([status, type, title, handled, next, label]) => <motion.article key={title} data-queue-status={status} initial={queueMotion && !reducedMotion ? { opacity: .35, transform: "translateY(4px)" } : false} animate={{ opacity: 1, transform: "translateY(0)" }} layout={queueMotion && !reducedMotion ? "position" : false} transition={{ duration: queueMotion && !reducedMotion ? .22 : 0, ease: [.22, 1, .36, 1] }}><div><small>{type}</small><strong>{title}</strong></div><p>{handled}</p><p>{next}</p><em>{label}</em></motion.article>)}</div></div>
         <div className="principles reveal"><span>Useful tools for customers and your team</span><span>You check anything unclear</span><span>Work and price agreed before building</span></div>
       </section>
 
@@ -476,7 +462,7 @@ export default function App() {
         <div className="light-calculator reveal"><label htmlFor="calculator-team-size"><span>Team size</span><strong>{teamSize} {teamSize === 1 ? "person" : "people"}</strong></label><input id="calculator-team-size" type="range" min="1" max="50" value={teamSize} onChange={(event) => setTeamSize(Number(event.target.value))} /><label htmlFor="calculator-admin-time"><span>Working time spent on repeated admin</span><strong>{adminTime}%</strong></label><input id="calculator-admin-time" type="range" min="5" max="60" step="5" value={adminTime} onChange={(event) => setAdminTime(Number(event.target.value))} /><label htmlFor="calculator-hourly-cost"><span>Estimated hourly cost</span><strong>£{hourlyCost}</strong></label><input id="calculator-hourly-cost" type="range" min="12" max="60" value={hourlyCost} onChange={(event) => setHourlyCost(Number(event.target.value))} /><dl><div><dt>Repeated-admin hours</dt><dd>{estimate.weeklyHours}<small>/week</small></dd></div><div><dt>Estimated yearly cost</dt><dd>£{estimate.annualCost.toLocaleString("en-GB")}</dd></div></dl><a id="calculator-enquiry-link" href="#contact" onClick={() => setSelectedOutcome("Cut repeated admin")}>Tell us what keeps repeating <b aria-hidden="true">→</b></a></div>
       </section>
 
-      <section className="site-section pricing-section" id="pricing" aria-labelledby="pricing-title"><div className="section-intro reveal"><span>Website prices</span><h2 id="pricing-title">A clear place to start.</h2><p>We talk through what you need and choose a suitable website package. Workspaces and other business tools are priced separately once we agree the work.</p></div><div className="package-grid">{packages.map(([name, price, care, text, features], index) => <article className={`package${index === 1 ? " featured" : ""} reveal`} key={name}>{index === 1 && <em>Most useful for established businesses</em>}<span>{name}</span><strong>{price}</strong><small>{care} website care</small><p>{text}</p><ul>{features.map((feature) => <li key={feature}>{feature}</li>)}</ul><a id={`package-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(name)}>Tell us what you need <b aria-hidden="true">→</b></a></article>)}</div><p className="vat-note reveal">Motus is not currently VAT registered. VAT is not added to the prices shown.</p></section>
+      <section className="site-section pricing-section" id="pricing" aria-labelledby="pricing-title"><div className="section-intro reveal"><span>Website prices</span><h2 id="pricing-title">A clear place to start.</h2><p>We talk through what you need and choose a suitable website package. Workspaces and other business tools are priced separately once we agree the work.</p></div><div className="package-grid">{packages.map(([name, price, care, text, features], index) => <MotionPanel className={`package${index === 1 ? " featured" : ""} reveal`} key={name}>{index === 1 && <em>Most useful for established businesses</em>}<span>{name}</span><strong>{price}</strong><small>{care} website care</small><p>{text}</p><ul>{features.map((feature) => <li key={feature}>{feature}</li>)}</ul><a id={`package-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(name)}>Tell us what you need <b aria-hidden="true">→</b></a></MotionPanel>)}</div><p className="vat-note reveal">Motus is not currently VAT registered. VAT is not added to the prices shown.</p></section>
 
       <section className="site-section process-section" id="about" aria-labelledby="process-title"><div className="section-intro reveal"><span>Working with Motus</span><h2 id="process-title">Clear steps. Agreed from the start.</h2><p>Custom websites and workspaces, built around what your business needs.</p><p className="muted-note">We talk it through, agree the work and check it together. You know what is being built and what support is included.</p></div><ol className="process-list">{process.map(([title, text], index) => <li className="reveal" key={title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{title}</strong><p>{text}</p></div></li>)}</ol></section>
 

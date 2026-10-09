@@ -371,3 +371,77 @@ html[data-theme="light"] .light-form output[data-status="success"] { color: #267
   .landing-page .ledger-card .demo-start-hint { font-size: 13px; }
   .landing-page .enquiry-details summary { font-size: 14px; }
 }
+
+/* Motus motion pass: the existing content and layout, with a shared surface system. */
+.landing-page { --panel-edge: rgba(196, 205, 225, .22); --panel-sheen: rgba(237, 241, 243, .06); }
+.landing-page .reveal { opacity: 1; transform: none; transition: none; }
+.landing-page [data-enter], .landing-page .navbar, .landing-page .dashboard-preview { animation: none; opacity: 1; transform: none; }
+.reading-progress { position: fixed; z-index: 25; inset: 0 0 auto; height: 2px; pointer-events: none; }
+.reading-progress span { display: block; height: 100%; background: #b1b8ff; transform: scaleX(0); transform-origin: left; }
+.landing-page .navbar { border-bottom: 1px solid var(--border); }
+.landing-page .navbar nav a { position: relative; }
+.landing-page .navbar nav a::after { position: absolute; right: 0; bottom: -7px; left: 0; height: 1px; content: ""; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 180ms var(--ease-out); }
+.landing-page .navbar nav a:focus-visible::after { transform: scaleX(1); }
+.landing-page .badge { border-color: rgba(177, 184, 255, .3); box-shadow: inset 0 1px 0 var(--panel-sheen); }
+.landing-page .secondary-button { border-color: var(--panel-edge); transition: border-color 180ms ease, background-color 180ms ease, transform 140ms var(--ease-out); }
+.landing-page .secondary-button:active { transform: scale(.98); }
+.landing-page .dashboard-preview { border-color: rgba(177, 184, 255, .32); border-radius: 20px 20px 0 0; box-shadow: 0 35px 90px -24px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(215, 220, 255, .16); }
+.landing-page .dashboard-window { box-shadow: 0 0 0 1px rgba(255, 255, 255, .12); }
+.landing-page .hero .dashboard-preview { margin-top: 0; }
+.signal-route { display: block; pointer-events: none; overflow: visible; }
+.signal-route--hero { position: relative; z-index: 2; width: min(100% - 40px, 1030px); height: 56px; margin: 5px auto 0; color: #aeb5ff; }
+.signal-route--workspace { width: calc(100% - 60px); height: 48px; margin: 10px 30px 0; color: #aeb5ff; }
+.signal-track { stroke: currentColor; stroke-opacity: .13; stroke-width: 1; }
+.signal-trace { stroke: currentColor; stroke-opacity: .5; stroke-width: 1; }
+.signal-pulse { stroke: #edf1ff; stroke-opacity: .85; stroke-width: 2; }
+.signal-node-halo { fill: currentColor; fill-opacity: .08; stroke: currentColor; stroke-opacity: .2; }
+.signal-node-core { fill: currentColor; }
+.landing-page .section-intro > span { display: flex; align-items: center; gap: 10px; }
+.landing-page .section-intro > span::before { width: 23px; height: 1px; content: ""; background: currentColor; opacity: .6; }
+.landing-page .site-section { border-top: 1px solid rgba(177, 184, 255, .1); }
+.landing-page .ledger-card, .landing-page .solution-item, .landing-page .package,
+.landing-page .light-control-desk, .landing-page .light-calculator, .landing-page .light-form {
+  position: relative; border: 1px solid var(--panel-edge); border-radius: 16px;
+  box-shadow: inset 0 1px 0 var(--panel-sheen), 0 24px 60px -42px rgba(0, 0, 0, .75);
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+.landing-page .ledger-card { background: linear-gradient(125deg, #252b31, #1c2329); }
+.landing-page .ledger-card::after { position: absolute; top: 20px; right: 20px; width: 15px; height: 15px; border-top: 1px solid #aeb5ff; border-right: 1px solid #aeb5ff; border-radius: 0 5px 0 0; content: ""; opacity: .4; transition: opacity 180ms ease; pointer-events: none; }
+.landing-page .ledger-card:focus-within, .landing-page .solution-item:focus-within,
+.landing-page .package:focus-within, .landing-page .light-form:focus-within,
+.landing-page .light-calculator:focus-within { border-color: rgba(177, 184, 255, .6); }
+.landing-page .package.featured { border-color: rgba(177, 184, 255, .45); box-shadow: inset 0 1px 0 rgba(177, 184, 255, .16), 0 24px 60px -42px rgba(96, 108, 225, .4); }
+.landing-page .solution-item:hover { transform: none; }
+.landing-page .light-control-desk { overflow: hidden; }
+.landing-page .desk-filters button { position: relative; isolation: isolate; border-color: transparent; background: transparent; transition: color 160ms ease; }
+.landing-page .desk-filters button[aria-pressed="true"] { background: transparent; border-color: transparent; }
+.filter-indicator { position: absolute; z-index: -1; inset: 0; border: 1px solid rgba(155, 163, 255, .5); border-radius: inherit; background: rgba(155, 163, 255, .12); pointer-events: none; }
+.landing-page .desk-rows article { animation: none; }
+.landing-page .light-form input, .landing-page .light-form select, .landing-page .light-form textarea { transition: border-color 180ms ease, box-shadow 180ms ease; }
+.landing-page .light-form input:focus, .landing-page .light-form select:focus, .landing-page .light-form textarea:focus { border-color: rgba(177, 184, 255, .5); box-shadow: 0 0 0 3px rgba(155, 163, 255, .07); }
+.landing-page .light-form input:focus-visible, .landing-page .light-form select:focus-visible, .landing-page .light-form textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.landing-page .light-form button:active { transform: scale(.98); }
+html[data-theme="light"] .landing-page { --panel-edge: rgba(69, 83, 103, .18); --panel-sheen: rgba(255, 255, 255, .9); }
+html[data-theme="light"] .signal-route--hero, html[data-theme="light"] .signal-route--workspace { color: #5964c2; }
+html[data-theme="light"] .signal-pulse { stroke: #5964c2; }
+html[data-theme="light"] .filter-indicator { background: #eef0ff; border-color: #969edc; }
+html[data-theme="light"] .landing-page .light-form label { color: #343d45; }
+@media (hover: hover) and (pointer: fine) {
+  .landing-page .navbar nav a:hover::after { transform: scaleX(1); }
+  .landing-page .ledger-card:hover, .landing-page .solution-item:hover, .landing-page .package:hover {
+    border-color: rgba(177, 184, 255, .55);
+    box-shadow: inset 0 1px 0 rgba(215, 220, 255, .12), 0 30px 65px -38px rgba(0, 0, 0, .75);
+  }
+  .landing-page .ledger-card:hover::after { opacity: 1; }
+  .landing-page .secondary-button:hover { border-color: rgba(177, 184, 255, .6); background: rgba(155, 163, 255, .07); }
+}
+@media (max-width: 760px) {
+  .signal-route--hero { height: 39px; margin-top: 0; }
+  .signal-route--workspace { width: calc(100% - 36px); margin: 8px 18px 0; height: 38px; }
+  .landing-page .ledger-card { border-radius: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress { display: none; }
+  .signal-pulse { display: none; }
+  .landing-page [data-motion-panel], .landing-page .desk-rows article { transform: none !important; }
+}

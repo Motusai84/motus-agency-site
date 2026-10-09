@@ -31,6 +31,12 @@
 .exampleMeta span:first-child { color: #4e58a8; font-weight: 700; }
 .example h3 { margin: 12px 0 0; font-size: clamp(36px, 3.5vw, 52px); }
 .exampleBody > p { max-width: 700px; margin: 14px 0 0; color: #46525b; font-size: 16px; line-height: 1.6; }
+.example { border-radius: 12px; transition: background-color 220ms ease, border-color 220ms ease; }
+.example:focus-within { border-color: #6b75bf; }
+.exampleState a { transition: background-color 180ms ease, border-color 180ms ease, transform 140ms ease; }
+.exampleState a:active { transform: scale(.98); }
+@media (hover: hover) and (pointer: fine) { .example:hover { background: rgba(255, 255, 255, .4); border-color: #969fc3; } }
+@media (prefers-reduced-motion: reduce) { .example { transform: none !important; transition: none; } .exampleState a { transition: none; } }
 .exampleBody .startHint { color: #343d45; font-size: 14px; }
 .exampleState { align-self: center; display: grid; justify-items: start; gap: 12px; }
 .exampleState a { display: inline-flex; min-height: 44px; align-items: center; gap: 10px; padding: 10px 16px; border: 1px solid #252b31; border-radius: 999px; background: #252b31; color: #fff; font-size: 14px; font-weight: 600; line-height: 1.4; }

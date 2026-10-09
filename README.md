@@ -103,7 +103,36 @@ desktop `1440x900` browser checks, keyboard focus, navigation, the calculator,
 all three example enquiry links, and a mocked lead-route check for validation,
 rate limiting and upstream failures. No real enquiry was submitted during QA.
 Client testimonials remain unpublished pending approval of their exact wording.
-Production publication and any later animation changes require separate review.
+Production publication requires separate approval.
+
+### Motion preview
+
+The existing sections, visible copy, prices, calculator and demo routes are
+preserved. The preview adds a shared panel-border treatment, clearer form focus
+states and coordinated motion through `components/SiteMotion.tsx`:
+
+- Framer Motion uses the existing installed package for panel hover responses
+  and workspace filter transitions. Hover motion is limited to fine pointers;
+  keyboard filter changes are immediate.
+- GSAP 3.15.0 handles the hero sequence, section reveals and reading progress.
+  It only controls opacity on Motion panels, so the engines do not compete for
+  their transforms. Keyboard focus makes a revealed region immediately visible.
+- Anime.js 4.5.0 draws the decorative signal routes in the hero and workspace.
+  It loads when a route is visible, plays a finite sequence and reverts on unmount.
+
+Both new engines load dynamically. Content is visible without their JavaScript.
+Reduced-motion preferences disable spatial motion and signal drawing, and
+changing the preference cleans up active effects. Module-load cancellation and
+component cleanup are covered by a mocked lifecycle check. Browser QA covers
+390x844 and 1440x900, both colour themes, navigation, filters, calculator inputs,
+form validation/focus, all demo routes and example enquiry context. The browser
+controller cannot emulate the OS reduced-motion preference; that path was
+checked through the lifecycle harness and CSS review, not a physical phone.
+
+The dependency audit reports no advisories for GSAP or Anime.js. It reports 13
+advisories (11 high, 2 critical) in existing dependencies, including Next.js and
+the Cloudflare tooling. Resolving those requires a separate dependency review;
+this preview does not update the existing framework or deployment toolchain.
 
 Public preview pages use the Motus name only, with no founder introduction,
 personal initials, personal location or displayed email address. Privacy links
