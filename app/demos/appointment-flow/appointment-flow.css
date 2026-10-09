@@ -32,6 +32,11 @@
   background: #f7f4ef;
 }
 
+.appointment-flow-route__enquiry { padding: 28px 20px 40px; border-top: 1px solid #e5e0d8; background: #f7f4ef; color: #1c1a18; text-align: center; font: 400 15px/1.6 "Instrument Sans", sans-serif; }
+.appointment-flow-route__enquiry p { margin: 0 0 12px; }
+.appointment-flow-route__enquiry a { display: inline-flex; min-height: 44px; align-items: center; padding: 10px 18px; border-radius: 999px; background: #1c1a18; color: #fff; font-size: 14px; }
+.appointment-flow-route__enquiry a:focus-visible { outline: 3px solid #294b8e; outline-offset: 3px; }
+
 .appointment-flow-route__loading {
   display: flex;
   min-height: 100vh;

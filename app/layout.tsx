@@ -17,9 +17,9 @@ const body = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://motusautomation.co.uk"),
-  title: "Motus | Tailored digital systems for UK businesses",
+  title: "Motus | Websites and tools made for your business",
   description:
-    "Motus shapes tailored digital systems around how UK businesses work, from websites and customer journeys to practical owner and team tools.",
+    "Custom websites and business tools for UK small businesses. Make bookings, customer enquiries and everyday work easier. Based in London.",
   alternates: {
     canonical: "/",
   },
@@ -28,15 +28,15 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: "/",
     siteName: "Motus",
-    title: "Motus | Tailored digital systems for UK businesses",
+    title: "Motus | Websites and tools made for your business",
     description:
-      "Generic software asks your company to adapt to it. Motus adapts the system to your company.",
+      "Custom websites and workspaces for small businesses. Make it easier for customers to book, get in touch and work with you.",
   },
   twitter: {
     card: "summary",
-    title: "Motus | Tailored digital systems for UK businesses",
+    title: "Motus | Websites and tools made for your business",
     description:
-      "Tailored digital systems shaped around how your UK business works.",
+      "Websites and tools made for your business. Based in London, working with UK small businesses.",
   },
   formatDetection: {
     email: false,

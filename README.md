@@ -50,7 +50,7 @@ not appear as public examples.
 
 ## Lead Capture
 
-The audit form posts to the same-origin `/api/leads` route. Configure the
+The enquiry form posts to the same-origin `/api/leads` route. Configure the
 production n8n webhook and its matching Header Auth token as server-only
 Cloudflare Worker secrets:
 
@@ -84,6 +84,26 @@ header credential.
 - The approved non-home service address must be added to the legal disclosure
   before public release.
 - Do not commit the webhook URL or any provider credential.
+
+### Plain-language preview
+
+The preview branch `codex/motus-plain-language-preview` presents custom websites
+and business tools in plain English. The homepage brings the three ready
+examples forward: Appointment Flow (bookings), Ledger Desk (invoices), and
+Lead Hub (customer enquiries). Planned catalogue records remain hidden.
+
+Each example links to `/?example=<catalogue-slug>#contact`. Only a ready
+catalogue record can preselect the enquiry topic and set `system_interest`.
+The form needs a name, business name, email and description; budget, existing
+tools, website and topic are optional. Missing optional details use explicit
+fallbacks to preserve the existing webhook contract.
+
+Validation covers lint, the Next.js production build, mobile `390x844` and
+desktop `1440x900` browser checks, keyboard focus, navigation, the calculator,
+all three example enquiry links, and a mocked lead-route check for validation,
+rate limiting and upstream failures. No real enquiry was submitted during QA.
+Client testimonials remain unpublished pending approval of their exact wording.
+Production publication and any later animation changes require separate review.
 
 ## Validation
 

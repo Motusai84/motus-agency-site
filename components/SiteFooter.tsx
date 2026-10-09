@@ -6,10 +6,10 @@ export default function SiteFooter() {
     <footer className={styles.footer}>
       <div>
         <Link id="footer-home-link" className={styles.footerWordmark} href="/">Motus</Link>
-        <p>Websites, automation and practical digital solutions for UK businesses.</p>
+        <p>Custom websites and business tools. Based in London.</p>
       </div>
       <nav aria-label="Footer navigation">
-        <Link id="footer-solutions-link" href="/#solutions">Solutions</Link>
+        <Link id="footer-solutions-link" href="/#solutions">What we build</Link>
         <Link id="footer-examples-link" href="/demos">Examples</Link>
         <Link id="footer-pricing-link" href="/#pricing">Website pricing</Link>
         <Link id="footer-privacy-link" href="/privacy">Privacy</Link>

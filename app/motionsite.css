@@ -45,6 +45,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .hero h1 em { font-style: italic; }
 .subheading { max-width: 650px; margin: 0; color: var(--muted); font-size: clamp(14px, 1.5vw, 17px); line-height: 1.62; }
 .hero-actions { display: flex; align-items: center; gap: 12px; margin-top: 21px; }
+.hero-actions { flex-wrap: wrap; justify-content: center; }
+.secondary-button { display: inline-flex; min-height: 44px; align-items: center; padding: 10px 14px; border: 1px solid var(--border); border-radius: 999px; color: var(--foreground); font-size: 13px; }
+.secondary-button:hover { border-color: var(--accent); }
 .primary-button { padding: 13px 20px; }
 .tour-button { display: grid; width: 44px; height: 44px; place-items: center; border: 0; border-radius: 50%; background: #1a2024; box-shadow: 0 9px 26px rgba(0, 0, 0, .28); color: var(--foreground); transition: transform 160ms var(--ease-out), background 180ms ease, box-shadow 240ms var(--ease-out); }
 .tour-button:hover { background: #252e34; transform: scale(1.06); }
@@ -340,4 +343,31 @@ html[data-theme="light"] .background-video { opacity: .17; filter: saturate(.6) 
 @media (prefers-reduced-motion: reduce) {
   .landing-page .mobile-navigation,
   .landing-page .dashboard-options-menu { transform: none; }
+}
+
+/* Plain-English examples and a short first enquiry, within the existing design. */
+.landing-page .demo-start-hint { padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .14); }
+.enquiry-details { padding: 8px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.enquiry-details summary { width: fit-content; min-height: 44px; padding: 12px 0; color: var(--foreground); font-size: 13px; cursor: pointer; }
+.enquiry-details summary span { color: var(--muted); }
+.enquiry-details summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.enquiry-details-fields { display: grid; gap: 14px; padding: 12px 0; }
+.enquiry-interest { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.enquiry-interest p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.enquiry-interest strong { color: var(--foreground); }
+.enquiry-interest button { min-height: 44px; padding: 8px 0; border-radius: 0; background: transparent; color: var(--accent); font-size: 13px; text-decoration: underline; text-underline-offset: 4px; }
+.enquiry-interest button:hover { background: transparent; color: var(--foreground); }
+.light-form output[data-status="error"] { color: #ffb6b6; }
+html[data-theme="light"] .enquiry-interest button { color: #4e58c5; }
+html[data-theme="light"] .enquiry-interest button:hover { background: transparent; color: var(--foreground); }
+html[data-theme="light"] .light-form output[data-status="error"] { color: #a12323; }
+html[data-theme="light"] .light-form output[data-status="success"] { color: #267844; }
+@media (max-width: 600px) {
+  .landing-page .hero-actions { gap: 8px; }
+  .landing-page .primary-button, .landing-page .secondary-button { min-height: 44px; font-size: 12px; }
+  .landing-page .secondary-button { padding: 10px 12px; }
+  .landing-page .ledger-card { gap: 14px; }
+  .landing-page .ledger-card h3 { font-size: 36px; }
+  .landing-page .ledger-card .demo-start-hint { font-size: 13px; }
+  .landing-page .enquiry-details summary { font-size: 14px; }
 }

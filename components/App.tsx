@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { demoCatalog } from "@/lib/demo-catalog";
 
@@ -61,18 +61,18 @@ const dashboardActionContent: Record<DashboardAction, { message: string; activit
 };
 
 const solutions = [
-  ["Website · From GBP 495", "Get online professionally", "A website shaped around your offer, customer journey and the next step you need people to take."],
-  ["Tailored system · Scoped and quoted", "Never miss an enquiry", "Receive new interest, acknowledge it and make the useful next action visible to the right person."],
-  ["Tailored system · Scoped and quoted", "Fill more bookings", "Make booking easier, keep the handover clear and surface requests that need a person."],
-  ["Tailored system · Scoped and quoted", "Cut repeated admin", "Reduce copying, chasing and retyping around the process your team already uses."],
-  ["Tailored system · Scoped and quoted", "Stay on top of invoices", "Bring overdue or unclear work forward with the evidence an owner needs to review it."],
-  ["Tailored system · Scoped and quoted", "See what needs attention", "Give customers, staff and owners the useful view each person needs to act and decide."],
+  ["Website · From £495", "Get online professionally", "Show what you offer and make it easy for customers to get in touch."],
+  ["Price agreed before work starts", "Keep track of enquiries", "Keep customer messages together and know who needs a reply."],
+  ["Price agreed before work starts", "Make booking easier", "Help customers choose a time and keep your team up to date."],
+  ["Price agreed before work starts", "Cut repeated admin", "Spend less time copying details, chasing updates and typing the same things again."],
+  ["Price agreed before work starts", "Stay on top of invoices", "Bring finished work and billing details together, ready for you to check."],
+  ["Price agreed before work starts", "See what needs attention", "A workspace to keep track of customers, jobs and the next thing to do."],
 ] as const;
 
 const packages = [
-  ["Motus Launch", "GBP 495", "GBP 49/month", "A focused professional presence for a business getting online properly.", ["One clear customer journey", "Mobile-first build", "Contact route", "Technical care"]],
-  ["Motus Business", "GBP 895", "GBP 69/month", "A fuller service website for a business with more to explain or organise.", ["Expanded page structure", "Service-led content", "Stronger enquiry journey", "Technical care"]],
-  ["Motus Growth", "GBP 1,395", "GBP 89/month", "A richer foundation for a business ready to demonstrate how it works.", ["Advanced page structure", "Interactive demonstration", "Conversion-focused journey", "Technical care"]],
+  ["Motus Launch", "£495", "£49/month", "A clear website for a business getting online.", ["Show what you offer", "Works on phones", "A way to contact you", "Website care"]],
+  ["Motus Business", "£895", "£69/month", "More room to explain your services and help customers choose.", ["More pages for your business", "Clear service information", "An easy enquiry form", "Website care"]],
+  ["Motus Growth", "£1,395", "£89/month", "A website that lets customers explore more of what you do.", ["A fuller website", "An interactive example", "Clear next steps for customers", "Website care"]],
 ] as const;
 
 const queueItems = [
@@ -84,11 +84,31 @@ const queueItems = [
 ] as const;
 
 const process = [
-  ["Understand", "Identify the outcome, current process and person who owns the decision."],
-  ["Build", "Create only the agreed website, automation or practical solution."],
-  ["Approve", "Review the real scope, behaviour and evidence before release."],
-  ["Operate", "Maintain the agreed service without turning support into unlimited development."],
+  ["Talk it through", "Tell me what you want to make easier and how your business works today."],
+  ["Agree the work", "We agree what I will build, the price and what is included before work starts."],
+  ["Build and check", "I build it, we try it together, and you approve it before it goes live."],
+  ["Keep it looked after", "I explain how to use it and provide the support we have agreed."],
 ] as const;
+
+function subscribeToExample(onChange: () => void) {
+  window.addEventListener("popstate", onChange);
+  window.addEventListener("hashchange", onChange);
+  return () => {
+    window.removeEventListener("popstate", onChange);
+    window.removeEventListener("hashchange", onChange);
+  };
+}
+
+function getExampleSnapshot() {
+  return new URLSearchParams(window.location.search).get("example") ?? "";
+}
+
+function clearExampleInterest() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("example");
+  window.history.replaceState(window.history.state, "", url);
+  window.dispatchEvent(new Event("popstate"));
+}
 
 export default function App() {
   const rootRef = useRef<HTMLElement>(null);
@@ -108,11 +128,14 @@ export default function App() {
   const [teamSize, setTeamSize] = useState(5);
   const [adminTime, setAdminTime] = useState(20);
   const [hourlyCost, setHourlyCost] = useState(18);
-  const [selectedOutcome, setSelectedOutcome] = useState("");
+  const [selectedOutcome, setSelectedOutcome] = useState<string | null>(null);
   const [formStatus, setFormStatus] = useState<FormStatus>("idle");
   const [formMessage, setFormMessage] = useState("");
 
   const showroomDemos = demoCatalog.filter((demo) => demo.status === "ready");
+  const exampleSlug = useSyncExternalStore(subscribeToExample, getExampleSnapshot, () => "");
+  const selectedDemo = showroomDemos.find((demo) => demo.slug === exampleSlug && demo.url);
+  const enquiryOutcome = selectedOutcome ?? selectedDemo?.enquiryOutcome ?? "";
   const estimate = useMemo(() => {
     const weeklyHours = Math.round(teamSize * 40 * (adminTime / 100));
     return { weeklyHours, annualCost: weeklyHours * hourlyCost * 52 };
@@ -200,13 +223,13 @@ export default function App() {
       fullName: String(data.get("fullName") ?? "").trim(),
       businessName: String(data.get("businessName") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
-      outcome: String(data.get("outcome") ?? "").trim(),
+      outcome: String(data.get("outcome") ?? "").trim() || "Something different",
       headache: String(data.get("headache") ?? "").trim(),
-      investment: String(data.get("investment") ?? "").trim(),
-      existing: String(data.get("existing") ?? "").trim(),
+      investment: String(data.get("investment") ?? "").trim() || "Not sure yet",
+      existing: String(data.get("existing") ?? "").trim() || "Not provided yet",
       websiteUrl: String(data.get("websiteUrl") ?? "").trim(),
       website: String(data.get("website") ?? "").trim(),
-      system: "",
+      system: selectedDemo?.title ?? "",
     };
     setFormStatus("sending");
     setFormMessage("Sending your enquiry…");
@@ -219,9 +242,10 @@ export default function App() {
       const result = (await response.json().catch(() => ({}))) as { message?: string };
       if (!response.ok) throw new Error(result.message || "Your enquiry could not be sent.");
       form.reset();
-      setSelectedOutcome("");
+      setSelectedOutcome(null);
+      clearExampleInterest();
       setFormStatus("success");
-      setFormMessage("Received. Motus will review the requirement and reply by email.");
+      setFormMessage("Thanks. Your enquiry has been received. I’ll reply by email within two business days.");
     } catch (error) {
       setFormStatus("error");
       setFormMessage(error instanceof Error ? error.message : "Your enquiry could not be sent.");
@@ -264,7 +288,7 @@ export default function App() {
 
   return (
     <main ref={rootRef} id="top" className="landing-page">
-      <a className="skip-link" href="#main-content">Skip to content</a>
+      <a id="home-skip-link" className="skip-link" href="#main-content">Skip to content</a>
       <video
         className="background-video"
         muted
@@ -282,7 +306,8 @@ export default function App() {
         <nav aria-label="Primary navigation">
           <a id="nav-home-link" href="#top">Home</a>
           <a id="nav-pricing-link" href="#pricing">Pricing</a>
-          <a id="nav-automation-link" href="#automation">Automation</a>
+          <a id="nav-examples-link" href="#examples">Examples</a>
+          <a id="nav-automation-link" href="#automation">How it works</a>
           <a id="nav-contact-link" href="#contact">Contact</a>
         </nav>
         <div className="header-actions">
@@ -314,28 +339,30 @@ export default function App() {
         <nav id="mobile-navigation" className="mobile-navigation" data-open={mobileMenuOpen} data-motion={mobileMenuMotion ? "on" : "off"} aria-label="Mobile navigation" aria-hidden={!mobileMenuOpen} inert={!mobileMenuOpen}>
           <a id="mobile-nav-home-link" href="#top" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Home</a>
           <a id="mobile-nav-pricing-link" href="#pricing" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Pricing</a>
-          <a id="mobile-nav-automation-link" href="#automation" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Automation</a>
+          <a id="mobile-nav-examples-link" href="#examples" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Examples</a>
+          <a id="mobile-nav-automation-link" href="#automation" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>How it works</a>
           <a id="mobile-nav-contact-link" href="#contact" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Contact</a>
         </nav>
       </header>
 
       <section className="hero" id="main-content" tabIndex={-1} aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="badge" data-enter="60">Tailored digital systems for UK businesses</p>
-          <h1 id="hero-title" data-enter="150">Built around your business. <em>Not the other way round.</em></h1>
-          <p className="subheading" data-enter="240">Generic software asks your company to adapt to it. Motus adapts the system to your company.</p>
+          <p className="badge" data-enter="60">For small businesses · Based in London</p>
+          <h1 id="hero-title" data-enter="150">Websites and tools <em>made for your business.</em></h1>
+          <p className="subheading" data-enter="240">Make it easier for customers to book, get in touch and work with you. Keep your customers, jobs and everyday tasks organised.</p>
           <div className="hero-actions" data-enter="330">
-            <a id="hero-enquiry-link" className="primary-button" href="#contact">Tell us what you need</a>
+            <a id="hero-examples-link" className="primary-button" href="#examples">See examples</a>
+            <a id="hero-enquiry-link" className="secondary-button" href="#contact">Tell us what you need</a>
             <button
               id="dashboard-tour"
               className="tour-button"
               type="button"
               aria-pressed={dashboardHighlighted}
-            aria-label="Highlight the illustrative tailored system preview"
+              aria-label="Highlight the demo workspace"
               onClick={() => setDashboardHighlighted((current) => !current)}
             ><span aria-hidden="true">▶</span></button>
           </div>
-          <p className="tour-status" aria-live="polite">{dashboardHighlighted ? "Illustrative tailored system highlighted. Human decisions remain visible." : ""}</p>
+          <p className="tour-status" aria-live="polite">{dashboardHighlighted ? "Demo workspace highlighted. Fictional records only; nothing is sent." : ""}</p>
         </div>
 
         <section className={`dashboard-preview${dashboardHighlighted ? " is-highlighted" : ""}`} id="dashboard-preview" aria-label="Illustrative Motus tailored system preview">
@@ -397,48 +424,101 @@ export default function App() {
         </section>
       </section>
 
-      <section className="site-section solutions-section" id="solutions" aria-labelledby="solutions-title">
-        <div className="section-intro reveal"><span>01 / Start with the outcome</span><h2 id="solutions-title">What should work better?</h2><p>You do not need to choose the technology. Choose the outcome you recognise and Motus will shape the sensible route around how your business works.</p></div>
-        <div className="solution-grid">
-          {solutions.map(([service, title, text], index) => <article className="solution-item reveal" key={title}><small>{String(index + 1).padStart(2, "0")}</small><span>{service}</span><h3>{title}</h3><p>{text}</p><a id={`solution-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(title)}>Discuss this outcome <b aria-hidden="true">→</b></a></article>)}
-        </div>
-        <a id="custom-solution-link" className="text-route reveal" href="#contact" onClick={() => setSelectedOutcome("Something different")}>Need something different? Tell Motus how it works <b aria-hidden="true">→</b></a>
-      </section>
-
-      <section className="site-section automation-section" id="automation" aria-labelledby="automation-title">
-        <div className="section-intro reveal"><span>02 / See the work, not the workflow</span><h2 id="automation-title">One place to see what moved, what is waiting and what needs you.</h2><p>The starting point could be a website, booking screen, staff form, client portal, internal tool or owner view. Motus shapes the useful solution around the job: people take action, repeatable work moves and the business sees the result.</p><p className="muted-note">The visible experience follows how your business works. The foundations stay practical and maintainable.</p></div>
-        <div className="light-control-desk reveal" aria-label="Illustrative business control desk"><header><div><span>Illustrative business control desk</span><strong>Today’s work</strong></div><p>Different solutions. One clear view of the next action.</p></header><div className="desk-filters" role="group" aria-label="Filter illustrative work queue">{(["all", "moving", "attention", "complete"] as QueueFilter[]).map((filter) => <button id={`queue-filter-${filter}`} type="button" key={filter} aria-pressed={queueFilter === filter} onClick={() => setQueueFilter(filter)}>{filter === "all" ? "All work" : filter === "attention" ? "Needs you" : filter[0].toUpperCase() + filter.slice(1)} <b>{filter === "all" ? 5 : filter === "moving" || filter === "attention" ? 2 : 1}</b></button>)}</div><div className="desk-labels" aria-hidden="true"><span>Work received</span><span>Already handled</span><span>Next action</span><span>Status</span></div><div className="desk-rows" aria-live="polite">{visibleQueue.map(([status, type, title, handled, next, label]) => <article key={title} data-queue-status={status}><div><small>{type}</small><strong>{title}</strong></div><p>{handled}</p><p>{next}</p><em>{label}</em></article>)}</div></div>
-        <div className="principles reveal"><span>Customer, staff and owner interfaces</span><span>Human review for unclear cases</span><span>Custom solutions scoped after review</span></div>
-      </section>
-
-      <section className="site-section calculator-section" id="calculator" aria-labelledby="calculator-title">
-        <div className="section-intro reveal"><span>03 / Illustrative calculator</span><h2 id="calculator-title">What might repeated admin be costing?</h2><p>Adjust three simple inputs to create a starting estimate for discussion. This is not a guaranteed saving, audit or quotation.</p><aside><strong>Not every task can or should be automated.</strong> Motus reviews the process, exceptions, data and ownership first.</aside></div>
-        <div className="light-calculator reveal"><label htmlFor="calculator-team-size"><span>Team size</span><strong>{teamSize} {teamSize === 1 ? "person" : "people"}</strong></label><input id="calculator-team-size" type="range" min="1" max="50" value={teamSize} onChange={(event) => setTeamSize(Number(event.target.value))} /><label htmlFor="calculator-admin-time"><span>Working time spent on repeated admin</span><strong>{adminTime}%</strong></label><input id="calculator-admin-time" type="range" min="5" max="60" step="5" value={adminTime} onChange={(event) => setAdminTime(Number(event.target.value))} /><label htmlFor="calculator-hourly-cost"><span>Indicative hourly employment cost</span><strong>GBP {hourlyCost}</strong></label><input id="calculator-hourly-cost" type="range" min="12" max="60" value={hourlyCost} onChange={(event) => setHourlyCost(Number(event.target.value))} /><dl><div><dt>Repeated-admin hours</dt><dd>{estimate.weeklyHours}<small>/week</small></dd></div><div><dt>Indicative annual cost</dt><dd>GBP {estimate.annualCost.toLocaleString("en-GB")}</dd></div></dl><a id="calculator-enquiry-link" href="#contact" onClick={() => setSelectedOutcome("Cut repeated admin")}>Tell us what keeps repeating <b aria-hidden="true">→</b></a></div>
-      </section>
-
       <section className="site-section examples-section" id="examples" aria-labelledby="examples-title">
-        <div className="section-intro reveal"><span>04 / Working showroom</span><h2 id="examples-title">Working examples, not fixed products.</h2><p>Each example is a fictional tailored solution. It appears here only after Motus has built, reviewed and approved it for public exploration.</p></div>
+        <div className="section-intro reveal">
+          <span>Examples to try</span>
+          <h2 id="examples-title">See what could work for you.</h2>
+          <p>Bookings, customer messages or invoices. Try an example and see what it could make easier in your business.</p>
+          <p className="muted-note">Demos use fictional information. Nothing is booked or sent.</p>
+        </div>
         <div className="showroom-demo-list">
           {showroomDemos.map((demo) => (
             <article className="ledger-card reveal" key={demo.slug}>
-              <div><span>{demo.sector}</span><small>Working fictional example</small></div>
-              <h3>{demo.title}</h3>
-              <p>{demo.interfaceSummary}</p>
-              <p className="ledger-boundary">{demo.boundary ?? "Illustrative data only. This is a tailored example, not a fixed product."}</p>
-              <a id={demo.slug === "ledger-desk" ? "ledger-demo-link" : `showroom-demo-${demo.slug}-link`} href={demo.url ?? "/demos"}>{demo.ctaLabel ?? "Explore this example"} <b aria-hidden="true">→</b></a>
+              <div><span>{demo.name ?? demo.title}</span><small>Fictional demo</small></div>
+              <h3>{demo.category ?? demo.title}</h3>
+              <p>{demo.problem}</p>
+              <p className="demo-start-hint">{demo.startHint ?? demo.interfaceSummary}</p>
+              <a id={demo.slug === "ledger-desk" ? "ledger-demo-link" : `showroom-demo-${demo.slug}-link`} href={demo.url ?? "/demos"}>{demo.ctaLabel ?? "Try this example"} <b aria-hidden="true">→</b></a>
             </article>
           ))}
         </div>
-        <Link id="view-showroom-link" className="text-route reveal" href="/demos">View working examples <b aria-hidden="true">→</b></Link>
+        <a id="view-showroom-link" className="text-route reveal" href="/demos">See all examples <b aria-hidden="true">→</b></a>
       </section>
 
-      <section className="site-section pricing-section" id="pricing" aria-labelledby="pricing-title"><div className="section-intro reveal"><span>05 / Website packages</span><h2 id="pricing-title">Clear website starting points.</h2><p>Motus recommends the suitable package after reviewing the requirement. Tailored systems are discovered, scoped and quoted separately.</p></div><div className="package-grid">{packages.map(([name, price, care, text, features], index) => <article className={`package${index === 1 ? " featured" : ""} reveal`} key={name}>{index === 1 && <em>Most useful for established businesses</em>}<span>{name}</span><strong>{price}</strong><small>{care} technical care</small><p>{text}</p><ul>{features.map((feature) => <li key={feature}>{feature}</li>)}</ul><a id={`package-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(name)}>Tell us what you need <b aria-hidden="true">→</b></a></article>)}</div><p className="vat-note reveal">Motus is not currently VAT registered. VAT is not added to the prices shown.</p></section>
+      <section className="site-section solutions-section" id="solutions" aria-labelledby="solutions-title">
+        <div className="section-intro reveal"><span>What we can build</span><h2 id="solutions-title">What would you like to make easier?</h2><p>A better website, easier bookings or somewhere to keep track of your work. Start with what your business needs.</p></div>
+        <div className="solution-grid">
+          {solutions.map(([service, title, text], index) => <article className="solution-item reveal" key={title}><small>{String(index + 1).padStart(2, "0")}</small><span>{service}</span><h3>{title}</h3><p>{text}</p><a id={`solution-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(title)}>Ask about this <b aria-hidden="true">→</b></a></article>)}
+        </div>
+        <a id="custom-solution-link" className="text-route reveal" href="#contact" onClick={() => setSelectedOutcome("Something different")}>Need something different? Tell us about it <b aria-hidden="true">→</b></a>
+      </section>
 
-      <section className="site-section process-section" aria-labelledby="process-title"><div className="section-intro reveal"><span>06 / How Motus works</span><h2 id="process-title">A controlled route from need to tailored solution.</h2></div><ol className="process-list">{process.map(([title, text], index) => <li className="reveal" key={title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{title}</strong><p>{text}</p></div></li>)}</ol></section>
+      <section className="site-section automation-section" id="automation" aria-labelledby="automation-title">
+        <div className="section-intro reveal"><span>How it works</span><h2 id="automation-title">Keep your work together.</h2><p>A customer books, sends a message or asks for a quote. The useful details go where your team needs them, so you can see what has happened and what needs doing.</p><p className="muted-note">Your workspace is a place to keep track of customers, jobs and bookings. Try the demo below to see how that could look.</p></div>
+        <div className="light-control-desk reveal" aria-label="Illustrative business control desk"><header><div><span>Demo workspace · Fictional records</span><strong>Today’s work</strong></div><p>See what is moving and what needs you.</p></header><div className="desk-filters" role="group" aria-label="Filter illustrative work queue">{(["all", "moving", "attention", "complete"] as QueueFilter[]).map((filter) => <button id={`queue-filter-${filter}`} type="button" key={filter} aria-pressed={queueFilter === filter} onClick={() => setQueueFilter(filter)}>{filter === "all" ? "All work" : filter === "attention" ? "Needs you" : filter[0].toUpperCase() + filter.slice(1)} <b>{filter === "all" ? 5 : filter === "moving" || filter === "attention" ? 2 : 1}</b></button>)}</div><div className="desk-labels" aria-hidden="true"><span>Work received</span><span>Already handled</span><span>Next action</span><span>Status</span></div><div className="desk-rows" aria-live="polite">{visibleQueue.map(([status, type, title, handled, next, label]) => <article key={title} data-queue-status={status}><div><small>{type}</small><strong>{title}</strong></div><p>{handled}</p><p>{next}</p><em>{label}</em></article>)}</div></div>
+        <div className="principles reveal"><span>Useful tools for customers and your team</span><span>You check anything unclear</span><span>Work and price agreed before building</span></div>
+      </section>
 
-      <section className="site-section contact-section" id="contact" aria-labelledby="contact-title"><div className="section-intro reveal"><span>07 / A useful first step</span><h2 id="contact-title" tabIndex={-1}>Tell us what you need.</h2><p>Send a short description of the outcome you want and how work happens now. Motus normally replies by email within two business days with a website package, short fit check, paid discovery exercise or scoped quotation.</p><div className="contact-trust"><p><strong>Human decisions stay visible.</strong> Important or unclear cases stop for a person.</p><p><strong>Examples stay honest.</strong> Illustrative data is labelled and results are not guaranteed.</p></div></div><form className="light-form reveal" id="enquiry-form" onSubmit={handleSubmit}><div className="form-pair"><label htmlFor="enquiry-name">Your name<input id="enquiry-name" name="fullName" autoComplete="name" maxLength={100} required /></label><label htmlFor="enquiry-business">Business name<input id="enquiry-business" name="businessName" autoComplete="organization" maxLength={160} required /></label></div><label htmlFor="enquiry-email">Business email<input id="enquiry-email" name="email" type="email" autoComplete="email" maxLength={200} required /></label><label htmlFor="enquiry-outcome">What outcome do you need?<select id="enquiry-outcome" name="outcome" value={selectedOutcome} onChange={(event) => setSelectedOutcome(event.target.value)} required><option value="">Choose the closest outcome</option>{solutions.map(([, title]) => <option key={title}>{title}</option>)}{packages.map(([name]) => <option key={name}>{name}</option>)}<option>Something different</option></select></label><label htmlFor="enquiry-problem">What is happening now?<textarea id="enquiry-problem" name="headache" rows={4} maxLength={1200} required /></label><div className="form-pair"><label htmlFor="enquiry-investment">Estimated investment<select id="enquiry-investment" name="investment" required><option value="">Choose a range</option><option>Under GBP 500</option><option>GBP 500-999</option><option>GBP 1,000-2,499</option><option>GBP 2,500-4,999</option><option>GBP 5,000 or more</option><option>Not sure yet</option></select></label><label htmlFor="enquiry-existing">What already exists?<input id="enquiry-existing" name="existing" maxLength={300} placeholder="Website, booking system, CRM…" required /></label></div><label htmlFor="enquiry-url">Public website URL <small>(optional)</small><input id="enquiry-url" name="websiteUrl" type="url" maxLength={500} placeholder="https://example.co.uk" /></label><label className="honeypot" aria-hidden="true" htmlFor="enquiry-website">Leave this field empty<input id="enquiry-website" name="website" tabIndex={-1} autoComplete="off" /></label><p>Sending this form is an enquiry only. It does not create a contract or require Motus to accept the work. Please do not include passwords, confidential information or personal data about your customers. <Link id="enquiry-privacy-link" href="/privacy">Read the privacy notice.</Link></p><button id="enquiry-submit-button" type="submit" disabled={formStatus === "sending"}>{formStatus === "sending" ? "Sending…" : "Send enquiry"} <b aria-hidden="true">→</b></button><output className={formMessage ? "is-visible" : undefined} aria-live="polite">{formMessage}</output></form></section>
+      <section className="site-section calculator-section" id="calculator" aria-labelledby="calculator-title">
+        <div className="section-intro reveal"><span>A quick estimate</span><h2 id="calculator-title">What might repeated admin be costing?</h2><p>Move the sliders to estimate the time and cost of repeated admin. This is a starting point for a conversation, not a promised saving or a price for the work.</p><aside><strong>Some tasks still need a person.</strong> We talk through what makes sense to change before building anything.</aside></div>
+        <div className="light-calculator reveal"><label htmlFor="calculator-team-size"><span>Team size</span><strong>{teamSize} {teamSize === 1 ? "person" : "people"}</strong></label><input id="calculator-team-size" type="range" min="1" max="50" value={teamSize} onChange={(event) => setTeamSize(Number(event.target.value))} /><label htmlFor="calculator-admin-time"><span>Working time spent on repeated admin</span><strong>{adminTime}%</strong></label><input id="calculator-admin-time" type="range" min="5" max="60" step="5" value={adminTime} onChange={(event) => setAdminTime(Number(event.target.value))} /><label htmlFor="calculator-hourly-cost"><span>Estimated hourly cost</span><strong>£{hourlyCost}</strong></label><input id="calculator-hourly-cost" type="range" min="12" max="60" value={hourlyCost} onChange={(event) => setHourlyCost(Number(event.target.value))} /><dl><div><dt>Repeated-admin hours</dt><dd>{estimate.weeklyHours}<small>/week</small></dd></div><div><dt>Estimated yearly cost</dt><dd>£{estimate.annualCost.toLocaleString("en-GB")}</dd></div></dl><a id="calculator-enquiry-link" href="#contact" onClick={() => setSelectedOutcome("Cut repeated admin")}>Tell us what keeps repeating <b aria-hidden="true">→</b></a></div>
+      </section>
 
-      <footer className="site-footer"><a id="footer-home-link" className="logo" href="#top"><span aria-hidden="true">✦</span> Motus</a><p>Tailored digital systems for UK businesses.</p><nav aria-label="Footer navigation"><a id="footer-solutions-link" href="#solutions">Solutions</a><Link id="footer-examples-link" href="/demos">Examples</Link><a id="footer-pricing-link" href="#pricing">Website pricing</a><Link id="footer-privacy-link" href="/privacy">Privacy</Link></nav><small>© 2026 Oluwaseun Ayomide Oyepitan trading as Motus.</small></footer>
+      <section className="site-section pricing-section" id="pricing" aria-labelledby="pricing-title"><div className="section-intro reveal"><span>Website prices</span><h2 id="pricing-title">A clear place to start.</h2><p>We talk through what you need and choose a suitable website package. Workspaces and other business tools are priced separately once we agree the work.</p></div><div className="package-grid">{packages.map(([name, price, care, text, features], index) => <article className={`package${index === 1 ? " featured" : ""} reveal`} key={name}>{index === 1 && <em>Most useful for established businesses</em>}<span>{name}</span><strong>{price}</strong><small>{care} website care</small><p>{text}</p><ul>{features.map((feature) => <li key={feature}>{feature}</li>)}</ul><a id={`package-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(name)}>Tell us what you need <b aria-hidden="true">→</b></a></article>)}</div><p className="vat-note reveal">Motus is not currently VAT registered. VAT is not added to the prices shown.</p></section>
+
+      <section className="site-section process-section" id="about" aria-labelledby="process-title"><div className="section-intro reveal"><span>The person behind Motus</span><h2 id="process-title">Hi, I’m Seun.</h2><p>I’m based in London. I build custom websites and workspaces for small businesses, starting with what you want to make easier.</p><p className="muted-note">We talk it through, agree the work and check it together. You know who is building it and what support is included.</p></div><ol className="process-list">{process.map(([title, text], index) => <li className="reveal" key={title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{title}</strong><p>{text}</p></div></li>)}</ol></section>
+
+      <section className="site-section contact-section" id="contact" aria-labelledby="contact-title">
+        <div className="section-intro reveal">
+          <span>A useful first step</span>
+          <h2 id="contact-title" tabIndex={-1}>Tell us what you’d like to make easier.</h2>
+          <p>A few lines about your business and what you need are enough to start. I’ll normally reply by email within two business days with a next step.</p>
+          <div className="contact-trust">
+            <p><strong>We agree the work first.</strong> You know the price and what is included before building starts.</p>
+            <p><strong>You stay in control.</strong> Anything important or unclear comes back to you to check.</p>
+          </div>
+        </div>
+        <form className="light-form reveal" id="enquiry-form" onSubmit={handleSubmit}>
+          {selectedDemo && (
+            <div className="enquiry-interest" role="status">
+              <p>Asking about <strong>{selectedDemo.name ?? selectedDemo.title}</strong> · {selectedDemo.category}</p>
+              <button id="enquiry-clear-example" type="button" onClick={clearExampleInterest}>Clear example</button>
+            </div>
+          )}
+          <div className="form-pair">
+            <label htmlFor="enquiry-name">Your name<input id="enquiry-name" name="fullName" autoComplete="name" maxLength={100} required /></label>
+            <label htmlFor="enquiry-business">Business name<input id="enquiry-business" name="businessName" autoComplete="organization" maxLength={160} required /></label>
+          </div>
+          <label htmlFor="enquiry-email">Your email<input id="enquiry-email" name="email" type="email" autoComplete="email" maxLength={200} required /></label>
+          <label htmlFor="enquiry-problem">What would you like help with?<textarea id="enquiry-problem" name="headache" rows={4} maxLength={1200} placeholder="Tell us what you need or what is getting in the way." required /></label>
+          <label htmlFor="enquiry-outcome">What is this about? <small>(optional)</small>
+            <select id="enquiry-outcome" name="outcome" value={enquiryOutcome} onChange={(event) => setSelectedOutcome(event.target.value)}>
+              <option value="">Not sure yet</option>
+              {solutions.map(([, title]) => <option key={title}>{title}</option>)}
+              {packages.map(([name]) => <option key={name}>{name}</option>)}
+              <option>Something different</option>
+            </select>
+          </label>
+          <details className="enquiry-details">
+            <summary id="enquiry-more-details">Add more details <span>(optional)</span></summary>
+            <div className="enquiry-details-fields">
+              <label htmlFor="enquiry-investment">Do you have a budget in mind?
+                <select id="enquiry-investment" name="investment" defaultValue="Not sure yet">
+                  <option>Not sure yet</option><option value="Under GBP 500">Under £500</option><option value="GBP 500-999">£500–999</option><option value="GBP 1,000-2,499">£1,000–2,499</option><option value="GBP 2,500-4,999">£2,500–4,999</option><option value="GBP 5,000 or more">£5,000 or more</option>
+                </select>
+              </label>
+              <label htmlFor="enquiry-existing">What do you use now?<input id="enquiry-existing" name="existing" maxLength={300} placeholder="A website, booking app, spreadsheet or something else" /></label>
+              <label htmlFor="enquiry-url">Your website<input id="enquiry-url" name="websiteUrl" type="url" maxLength={500} placeholder="https://" /></label>
+            </div>
+          </details>
+          <label className="honeypot" aria-hidden="true" htmlFor="enquiry-website">Leave this field empty<input id="enquiry-website" name="website" tabIndex={-1} autoComplete="off" /></label>
+          <p>This is an enquiry, with no commitment to buy. Please leave out passwords, private business information and personal details about your customers. <Link id="enquiry-privacy-link" href="/privacy">Read the privacy notice.</Link></p>
+          <button id="enquiry-submit-button" type="submit" disabled={formStatus === "sending"}>{formStatus === "sending" ? "Sending…" : "Send enquiry"} <b aria-hidden="true">→</b></button>
+          <output className={formMessage ? "is-visible" : undefined} data-status={formStatus} aria-live="polite">{formMessage}</output>
+        </form>
+      </section>
+
+      <footer className="site-footer"><a id="footer-home-link" className="logo" href="#top"><span aria-hidden="true">✦</span> Motus</a><p>Custom websites and business tools. Based in London.</p><nav aria-label="Footer navigation"><a id="footer-solutions-link" href="#solutions">What we build</a><Link id="footer-examples-link" href="/demos">Examples</Link><a id="footer-pricing-link" href="#pricing">Website pricing</a><Link id="footer-privacy-link" href="/privacy">Privacy</Link></nav><small>© 2026 Oluwaseun Ayomide Oyepitan trading as Motus.</small></footer>
     </main>
   );
 }

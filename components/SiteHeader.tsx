@@ -7,12 +7,16 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import styles from "./SiteChrome.module.css";
 
 const navigation = [
-  ["Solutions", "/#solutions"],
-  ["Automation", "/#automation"],
+  ["What we build", "/#solutions"],
+  ["How it works", "/#automation"],
   ["Calculator", "/#calculator"],
   ["Examples", "/demos"],
   ["Website pricing", "/#pricing"],
 ] as const;
+
+function navigationId(label: string) {
+  return label === "What we build" ? "solutions" : label === "How it works" ? "automation" : label.toLowerCase().replaceAll(" ", "-");
+}
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -22,7 +26,7 @@ export default function SiteHeader() {
 
   return (
     <header className={styles.header}>
-      <a className={styles.skipLink} href="#main-content">Skip to content</a>
+      <a id="site-skip-link" className={styles.skipLink} href="#main-content">Skip to content</a>
       <div className={styles.headerInner}>
         <Link id="motus-home-link" className={styles.wordmark} href="/" onClick={() => setOpen(false)}>
           Motus
@@ -30,7 +34,7 @@ export default function SiteHeader() {
         <nav className={styles.desktopNav} aria-label="Primary navigation">
           {navigation.map(([label, href]) => (
             <Link
-              id={`nav-${label.toLowerCase().replaceAll(" ", "-")}-link`}
+              id={`nav-${navigationId(label)}-link`}
               key={label}
               href={href}
               aria-current={isCurrentPage(href) ? "page" : undefined}
@@ -58,7 +62,7 @@ export default function SiteHeader() {
         <nav id="mobile-navigation" className={styles.mobileNav} aria-label="Mobile navigation">
           {navigation.map(([label, href]) => (
             <Link
-              id={`mobile-nav-${label.toLowerCase().replaceAll(" ", "-")}-link`}
+              id={`mobile-nav-${navigationId(label)}-link`}
               key={label}
               href={href}
               aria-current={isCurrentPage(href) ? "page" : undefined}

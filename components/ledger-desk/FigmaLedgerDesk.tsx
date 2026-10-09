@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useSyncExternalStore, type ReactNode } from 'react'
 import Link from 'next/link'
+import { getDemoEnquiryHref } from '@/lib/demo-catalog'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -211,7 +212,7 @@ function Nav() {
           className="text-[13px] font-semibold tracking-[0.13em] uppercase"
           style={{ color: '#EDF1F3', textDecoration: 'none' }}
         >
-          Motus Automation
+          Motus
         </Link>
         <a
           id="ledger-desk-back-to-portfolio"
@@ -1565,30 +1566,29 @@ function ClosingSection() {
             maxWidth: '520px',
           }}
         >
-          This is one example. Your system would be tailored.
+          This is one example. Yours would fit your business.
         </h2>
         <p
           className="text-[15px] leading-relaxed mb-4 max-w-lg"
           style={{ color: '#9B9189' }}
         >
-          Motus can adapt the trigger, records, review steps and handoff around the way your business
-          already completes and bills for work.
+          Bring finished work and billing details together in a way that fits your business,
+          with a chance to check the invoice before it is sent.
         </p>
         <p
           className="text-sm leading-relaxed mb-10 max-w-lg"
           style={{ color: '#514E4A' }}
         >
-          The same approach can support recurring services, project milestones, completed jobs and other
-          client workflows.
+          This could suit regular services, project stages or individual jobs.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 items-start">
           <Link
             id="ledger-desk-discuss-workflow"
-            href="/#contact"
+            href={getDemoEnquiryHref("ledger-desk")}
             className="inline-flex items-center justify-center gap-2 text-sm font-medium tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C7A76C] focus-visible:ring-offset-2 px-5 py-[11px] rounded-[9px]"
             style={{ backgroundColor: '#C7A76C', color: '#1C1A18', textDecoration: 'none' }}
           >
-            Discuss a workflow like this
+            Ask about this for your business
           </Link>
           <a
             id="ledger-desk-return-to-portfolio"
