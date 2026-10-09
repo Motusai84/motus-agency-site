@@ -30,7 +30,7 @@
 .exampleMeta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: #57626b; font-size: 12px; }
 .exampleMeta span:first-child { color: #4e58a8; font-weight: 700; }
 .example h3 { margin: 12px 0 0; font-size: clamp(36px, 3.5vw, 52px); }
-.exampleBody > p { max-width: 700px; margin: 14px 0 0; color: #46525b; font-size: 15px; line-height: 1.6; }
+.exampleBody > p { max-width: 700px; margin: 14px 0 0; color: #46525b; font-size: 16px; line-height: 1.6; }
 .exampleBody .startHint { color: #343d45; font-size: 14px; }
 .exampleState { align-self: center; display: grid; justify-items: start; gap: 12px; }
 .exampleState a { display: inline-flex; min-height: 44px; align-items: center; gap: 10px; padding: 10px 16px; border: 1px solid #252b31; border-radius: 999px; background: #252b31; color: #fff; font-size: 14px; font-weight: 600; line-height: 1.4; }
@@ -83,7 +83,6 @@
   .resultSummary { margin: 18px 0 14px; font-size: 12px; }
   .example { padding: 24px 0; gap: 14px; }
   .exampleState { align-items: start; flex-direction: column; gap: 2px; }
-  .exampleBody > p { font-size: 14px; }
   .exampleDetails summary { font-size: 13px; }
   .model { padding: 48px 0; }
   .modelSteps { grid-template-columns: 1fr; gap: 12px; }
