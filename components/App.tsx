@@ -447,10 +447,9 @@ export default function App() {
         <div className="showroom-demo-list">
           {showroomDemos.map((demo) => (
             <article className="ledger-card reveal" key={demo.slug}>
-              <div><span>{demo.name ?? demo.title}</span><small>Fictional demo</small></div>
+              <div><span>{demo.name ?? demo.title}</span><small>Demo you can try</small></div>
               <h3>{demo.category ?? demo.title}</h3>
-              <p>{demo.problem}</p>
-              <p className="demo-start-hint">{demo.startHint ?? demo.interfaceSummary}</p>
+              <p>{demo.demoSummary ?? demo.interfaceSummary}</p>
               <a id={demo.slug === "ledger-desk" ? "ledger-demo-link" : `showroom-demo-${demo.slug}-link`} href={demo.url ?? "/demos"}>{demo.ctaLabel ?? "Try this example"} <b aria-hidden="true">→</b></a>
             </article>
           ))}

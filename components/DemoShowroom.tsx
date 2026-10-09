@@ -31,11 +31,10 @@ export default function DemoShowroom() {
           <article className={styles.example} id={`example-${example.slug}`} key={example.slug}>
             <div className={styles.exampleBody}>
               <div className={styles.exampleMeta}>
-                <span>{example.name ?? example.title}</span><span>Fictional demo</span>
+                <span>{example.name ?? example.title}</span><span>Demo you can try</span>
               </div>
               <h3>{example.category ?? example.title}</h3>
-              <p>{example.problem}</p>
-              <p className={styles.startHint}>{example.startHint ?? example.interfaceSummary}</p>
+              <p>{example.demoSummary ?? example.interfaceSummary}</p>
             </div>
             <div className={styles.exampleState}>
               <Link id={`launch-demo-${example.slug}`} href={example.url!}>

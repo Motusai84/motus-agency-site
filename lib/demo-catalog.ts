@@ -21,6 +21,7 @@ export type DemoRecord = {
   title: string;
   category?: string;
   name?: string;
+  demoSummary?: string;
   startHint?: string;
   enquiryOutcome?: string;
   problem: string;
@@ -64,6 +65,7 @@ export const demoCatalog: DemoRecord[] = [
     title: "Appointment Flow — what happens after a customer books?",
     category: "Bookings",
     name: "Appointment Flow",
+    demoSummary: "See how a customer books a time and your team keeps track of the booking.",
     startHint: "Choose a time. Follow the confirmation and see what happens when a booking needs attention.",
     enquiryOutcome: "Make booking easier",
     problem:
@@ -74,7 +76,7 @@ export const demoCatalog: DemoRecord[] = [
     outcomes: ["Bookings in one place", "Clear updates for the team", "The owner handles changes that need a decision"],
     workflowFamily: "Booking pages, confirmations and a clear view for your team",
     solutions: ["Websites and landing pages", "Bookings and enquiries", "Dashboards and reporting", "Managed automation"],
-    ctaLabel: "Try the booking example",
+    ctaLabel: "Try the booking demo",
     scopeLabel: "Built around your booking process, with a price agreed before work starts.",
     boundary:
       "Demo with fictional people and bookings. Nothing is booked or sent, and no real calendar is changed.",
@@ -115,6 +117,7 @@ export const demoCatalog: DemoRecord[] = [
     title: "Ledger Desk — from finished work to invoice review",
     category: "Invoices",
     name: "Ledger Desk",
+    demoSummary: "See how a finished job becomes an invoice draft you can check before sending.",
     startHint: "Choose how you bill. Follow a finished job into an invoice draft and check the details.",
     enquiryOutcome: "Stay on top of invoices",
     problem:
@@ -125,7 +128,7 @@ export const demoCatalog: DemoRecord[] = [
     outcomes: ["See work that is ready to bill", "Find the details in one place", "Check unclear amounts before invoicing"],
     workflowFamily: "Finished-job records and invoice preparation",
     solutions: ["Dashboards and reporting", "Managed automation"],
-    ctaLabel: "Try the invoice example",
+    ctaLabel: "Try the invoice demo",
     scopeLabel: "Built around how you bill, with a price agreed before work starts.",
     boundary:
       "Demo with fictional jobs and invoices. Nothing is sent and no accounting record is changed.",
@@ -138,6 +141,7 @@ export const demoCatalog: DemoRecord[] = [
     title: "Lead Hub — from first enquiry to a clear next step",
     category: "Customer enquiries",
     name: "Lead Hub",
+    demoSummary: "See how customer messages come together so your team knows who needs a reply.",
     startHint: "Choose where a message arrives. See the details together and decide how to follow up.",
     enquiryOutcome: "Keep track of enquiries",
     problem:
@@ -148,7 +152,7 @@ export const demoCatalog: DemoRecord[] = [
     outcomes: ["Keep the original message", "Know who needs to reply", "Check the follow-up before sending"],
     workflowFamily: "Customer messages, shared records and follow-up",
     solutions: ["Bookings and enquiries", "Portals and workspaces", "Managed automation"],
-    ctaLabel: "Try the enquiry example",
+    ctaLabel: "Try the enquiry demo",
     scopeLabel: "Built around how customers contact you, with a price agreed before work starts.",
     boundary:
       "Demo with fictional people and messages. Nothing is sent or booked, and no real customer records are changed.",
