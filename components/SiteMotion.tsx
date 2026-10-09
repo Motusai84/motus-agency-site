@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore, type ComponentProps, type RefObject } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useSyncExternalStore, type ComponentProps, type CSSProperties, type RefObject } from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
 function subscribeToPointer(callback: () => void) {
@@ -10,11 +10,134 @@ function subscribeToPointer(callback: () => void) {
   return () => query.removeEventListener("change", callback);
 }
 
+/** Decorative light only: keeps the native cursor and never intercepts input. */
+export function CursorGlow({ rootRef, paused }: { rootRef: RefObject<HTMLElement | null>; paused: boolean }) {
+  const reduced = useReducedMotion();
+  const finePointer = useSyncExternalStore(subscribeToPointer, () => window.matchMedia(finePointerQuery).matches, () => false);
+  const x = useSpring(-400, { stiffness: 220, damping: 32, mass: .4 });
+  const y = useSpring(-400, { stiffness: 220, damping: 32, mass: .4 });
+  const opacity = useMotionValue(0);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || reduced || !finePointer || paused) return;
+    let frame = 0;
+    let positioned = false;
+    let panel: HTMLElement | null = null;
+    const clearPanel = () => { panel?.removeAttribute("data-glow-active"); panel = null; };
+    const hide = () => { opacity.set(0); clearPanel(); if (frame) cancelAnimationFrame(frame); frame = 0; };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      if (!positioned) { x.jump(event.clientX); y.jump(event.clientY); positioned = true; }
+      else { x.set(event.clientX); y.set(event.clientY); }
+      opacity.set(1);
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const next = (event.target as HTMLElement).closest<HTMLElement>("[data-motion-panel]");
+        if (next !== panel) clearPanel();
+        panel = next;
+        if (!panel) return;
+        const bounds = panel.getBoundingClientRect();
+        panel.style.setProperty("--glow-x", `${event.clientX - bounds.left}px`);
+        panel.style.setProperty("--glow-y", `${event.clientY - bounds.top}px`);
+        panel.setAttribute("data-glow-active", "true");
+      });
+    };
+    root.addEventListener("pointermove", move, { passive: true });
+    root.addEventListener("pointerleave", hide);
+    window.addEventListener("blur", hide);
+    window.addEventListener("scroll", clearPanel, { passive: true });
+    document.addEventListener("keydown", hide);
+    document.addEventListener("visibilitychange", hide);
+    return () => {
+      hide();
+      root.removeEventListener("pointermove", move);
+      root.removeEventListener("pointerleave", hide);
+      window.removeEventListener("blur", hide);
+      window.removeEventListener("scroll", clearPanel);
+      document.removeEventListener("keydown", hide);
+      document.removeEventListener("visibilitychange", hide);
+    };
+  }, [rootRef, reduced, finePointer, paused, x, y, opacity]);
+
+  return <motion.div className="cursor-glow" style={{ x, y, opacity }} aria-hidden="true"><span /></motion.div>;
+}
+
+/** Pause decorative loops off screen, in background tabs, or on request. */
+export function useAmbientEffects(rootRef: RefObject<HTMLElement | null>, paused: boolean) {
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const field = root.querySelector<HTMLElement>(".signal-field");
+    const video = root.querySelector<HTMLVideoElement>(".background-video");
+    let heroVisible = true;
+    const sync = () => {
+      const inactive = paused || preference.matches || document.hidden;
+      root.setAttribute("data-effects-inactive", String(inactive));
+      field?.setAttribute("data-visible", String(heroVisible));
+      if (video) {
+        if (inactive || !heroVisible) video.pause();
+        else void video.play().catch(() => { /* Decorative video is optional. */ });
+      }
+    };
+    const ambient = root.querySelectorAll<HTMLElement>(".signal-field, .border-light");
+    const observer = typeof IntersectionObserver === "undefined" ? undefined : new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.setAttribute("data-visible", String(entry.isIntersecting));
+        if (entry.target === field) heroVisible = entry.isIntersecting;
+      });
+      sync();
+    });
+    ambient.forEach((element) => { element.setAttribute("data-visible", "true"); observer?.observe(element); });
+    preference.addEventListener("change", sync);
+    document.addEventListener("visibilitychange", sync);
+    sync();
+    return () => {
+      observer?.disconnect();
+      preference.removeEventListener("change", sync);
+      document.removeEventListener("visibilitychange", sync);
+      video?.pause();
+    };
+  }, [rootRef, paused]);
+}
+
+/** A live routing field, behind the existing hero rather than a new section. */
+export function SignalField() {
+  const routes = [
+    "M-80 570 H130 Q180 570 215 530 L365 365 Q400 330 455 330 H590",
+    "M1480 590 H1290 Q1240 590 1205 550 L1045 385 Q1010 350 955 350 H810",
+    "M-40 160 H145 Q180 160 210 190 L310 290 Q340 320 385 320",
+    "M1440 120 H1260 Q1220 120 1190 150 L1100 240 Q1070 270 1025 270",
+    "M180 800 V665 Q180 625 220 625 H395",
+    "M1220 800 V685 Q1220 645 1180 645 H1005",
+  ];
+  return <div className="signal-field" aria-hidden="true">
+    <div className="signal-atmosphere signal-atmosphere--left" /><div className="signal-atmosphere signal-atmosphere--right" />
+    <div className="signal-grid" />
+    <svg viewBox="0 0 1400 800" preserveAspectRatio="none" fill="none" focusable="false">
+      {routes.map((route, index) => <g key={route} style={{ "--route-delay": `${index * -1.7}s` } as CSSProperties}>
+        <path d={route} className="field-track" pathLength="100" />
+        <path d={route} className="field-beam" pathLength="100" />
+      </g>)}
+      {[[145, 160], [210, 190], [365, 365], [180, 665], [1260, 120], [1190, 150], [1045, 385], [1220, 685]].map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r="3" className="field-node" style={{ animationDelay: `${index * -.6}s` }} />)}
+    </svg>
+  </div>;
+}
+
+export function BorderLight() {
+  return <span className="border-light" aria-hidden="true" />;
+}
+
 /** Motion owns panel transforms; GSAP only reveals their opacity. */
 export function MotionPanel(props: Omit<ComponentProps<"article">, "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart">) {
   const reduced = useReducedMotion();
   const finePointer = useSyncExternalStore(subscribeToPointer, () => window.matchMedia(finePointerQuery).matches, () => false);
-  return <motion.article {...props} data-motion-panel="true" whileHover={!reduced && finePointer ? { transform: "translateY(-4px)" } : undefined} transition={{ duration: .22, ease: [.22, 1, .36, 1] }} />;
+  return <motion.article {...props} data-motion-panel="true" whileHover={!reduced && finePointer ? { transform: "translateY(-4px)" } : undefined} transition={{ duration: .22, ease: [.22, 1, .36, 1] }}>
+    {props.className?.split(" ").includes("featured") && <BorderLight />}
+    {props.children}
+  </motion.article>;
 }
 
 /** Progressive enhancement: text remains visible if animation modules cannot load. */

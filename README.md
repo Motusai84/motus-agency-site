@@ -120,6 +120,23 @@ states and coordinated motion through `components/SiteMotion.tsx`:
 - Anime.js 4.5.0 draws the decorative signal routes in the hero and workspace.
   It loads when a route is visible, plays a finite sequence and reverts on unmount.
 
+The stronger effects pass adds a spring-following cursor halo, pointer-responsive
+card spotlights, a hero routing field with travelling light and breathing nodes,
+a finite heading sheen, and a travelling border light on the hero dashboard and
+featured package. Existing content and interactive IDs remain intact; the only
+new control is `effects-toggle` for pausing decorative effects. The native cursor
+is retained, overlays cannot intercept input, touch input has no cursor effect,
+and keyboard input hides the cursor halo immediately.
+
+The implementations are local React/CSS/SVG code using the installed Motion
+package, with no additional dependencies or copied library components. Reference
+research: React Bits (`DavidHDev/react-bits`, SpotlightCard and BlobCursor),
+Magic UI (`magicuidesign/magicui`, Border Beam), and Aceternity's Glowing Effect.
+Continuous effects and the existing background video pause when requested or
+when the tab is hidden. The hero field/video and border lights also pause when
+off screen. Reduced motion keeps a static decorative field. CSS motion paths
+are progressive enhancement; unsupported browsers retain the normal panel edge.
+
 Both new engines load dynamically. Content is visible without their JavaScript.
 Reduced-motion preferences disable spatial motion and signal drawing, and
 changing the preference cleans up active effects. Module-load cancellation and

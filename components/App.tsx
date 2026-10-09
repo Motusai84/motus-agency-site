@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore }
 import Link from "next/link";
 import { demoCatalog } from "@/lib/demo-catalog";
 import { motion, useReducedMotion } from "framer-motion";
-import { MotionPanel, SignalRoute, useSiteMotion } from "@/components/SiteMotion";
+import { BorderLight, CursorGlow, MotionPanel, SignalField, SignalRoute, useAmbientEffects, useSiteMotion } from "@/components/SiteMotion";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 type QueueFilter = "all" | "moving" | "attention" | "complete";
@@ -125,6 +125,8 @@ function clearPrivacyInterest() {
 
 export default function App() {
   const rootRef = useRef<HTMLElement>(null);
+  const [effectsPaused, setEffectsPaused] = useState(false);
+  useAmbientEffects(rootRef, effectsPaused);
   useSiteMotion(rootRef);
   const reducedMotion = useReducedMotion();
   const [queueMotion, setQueueMotion] = useState(false);
@@ -284,7 +286,8 @@ export default function App() {
   };
 
   return (
-    <main ref={rootRef} id="top" className="landing-page">
+    <main ref={rootRef} id="top" className="landing-page" data-effects-paused={effectsPaused}>
+      <CursorGlow rootRef={rootRef} paused={effectsPaused} />
       <div className="reading-progress" aria-hidden="true"><span /></div>
       <a id="home-skip-link" className="skip-link" href="#main-content">Skip to content</a>
       <video
@@ -309,6 +312,10 @@ export default function App() {
           <a id="nav-contact-link" href="#contact">Contact</a>
         </nav>
         <div className="header-actions">
+          <button id="effects-toggle" className="effects-toggle" type="button" aria-pressed={effectsPaused} aria-label={effectsPaused ? "Resume decorative effects" : "Pause decorative effects"} onClick={() => setEffectsPaused((current) => !current)}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">{effectsPaused ? <path d="M3 1.5 10 6 3 10.5Z" /> : <path d="M2 2h3v8H2zm5 0h3v8H7z" />}</svg>
+            <span>{effectsPaused ? "Resume effects" : "Pause effects"}</span>
+          </button>
           <button
             id="theme-toggle"
             className="theme-toggle"
@@ -344,6 +351,7 @@ export default function App() {
       </header>
 
       <section className="hero" id="main-content" tabIndex={-1} aria-labelledby="hero-title">
+        <SignalField />
         <div className="hero-copy">
           <p className="badge" data-enter="60">For UK small businesses</p>
           <h1 id="hero-title" data-enter="150">Websites and tools <em>made for your business.</em></h1>
@@ -365,6 +373,7 @@ export default function App() {
 
         <SignalRoute variant="hero" />
         <section className={`dashboard-preview${dashboardHighlighted ? " is-highlighted" : ""}`} id="dashboard-preview" aria-label="Illustrative Motus tailored system preview">
+          <BorderLight />
           <div className="dashboard-window">
             <header className="dashboard-topbar">
               <div className="dashboard-brand"><span>M</span><strong>Motus</strong><i aria-hidden="true">⌄</i></div>
