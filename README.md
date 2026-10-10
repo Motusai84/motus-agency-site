@@ -105,6 +105,14 @@ rate limiting and upstream failures. No real enquiry was submitted during QA.
 Client testimonials remain unpublished pending approval of their exact wording.
 Production publication requires separate approval.
 
+### Salon website demonstration
+
+`/demos/salon-website` is a complete fictional salon website under the name Crown & Coil. Its composition extends the existing salon presentation, with entirely new stock photography and neutral content. No original client name, founder, address, contact information, reviews, branded treatment claims or photographs are carried into this demo.
+
+Content lives in `src/clients/salon-demo.ts`, checked against `ClientConfig`. The route includes services, product filters and length selection, a bag with quantities and removal, booking and enquiry previews, and a photo gallery. Every interaction stays in React memory: no personal details, local-storage records, requests to client APIs, bookings, orders, payment or messages. Refreshing resets the demonstration.
+
+The catalog links this fourth example from the homepage and `/demos`. The demo has a persistent identity notice, photo credits, a return to Motus, native dialogs, keyboard focus, responsive layouts and reduced-motion support. Asset provenance is recorded beside the new local images in `public/images/salon-demo/SOURCES.md`.
+
 ### Motion preview
 
 The existing sections, visible copy, prices, calculator and demo routes are
@@ -146,10 +154,13 @@ form validation/focus, all demo routes and example enquiry context. The browser
 controller cannot emulate the OS reduced-motion preference; that path was
 checked through the lifecycle harness and CSS review, not a physical phone.
 
-The dependency audit reports no advisories for GSAP or Anime.js. It reports 13
-advisories (11 high, 2 critical) in existing dependencies, including Next.js and
-the Cloudflare tooling. Resolving those requires a separate dependency review;
-this preview does not update the existing framework or deployment toolchain.
+The 10 October 2026 release preparation patches Next.js and eslint-config-next
+to 16.3.8 and Wrangler to 4.149.0, with compatible transitive security updates.
+`npm audit --omit=dev` reports zero vulnerabilities. The complete audit still
+reports five high entries tracing to one unpublished fix for `braces` through
+the lint-only dependency chain. No framework downgrade or forced audit fix was
+applied. Both the Next.js and OpenNext Cloudflare builds pass, as does the
+Wrangler deployment dry run. The lockfile records the exact resolved versions.
 
 Public preview pages use the Motus name only, with no founder introduction,
 personal initials, personal location or displayed email address. Privacy links

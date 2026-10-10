@@ -60,6 +60,27 @@ export const demoSolutions: Array<"All solutions" | DemoSolution> = [
 
 export const demoCatalog: DemoRecord[] = [
   {
+    slug: "salon-website",
+    sector: "Appointment-led services",
+    title: "Crown & Coil — a complete salon website",
+    category: "Websites",
+    name: "Salon website",
+    demoSummary: "Explore a complete salon website with services, a product collection and booking previews.",
+    startHint: "Choose a service, try an appointment request and explore the example collection.",
+    enquiryOutcome: "Get online professionally",
+    problem: "Customers need an easy way to explore your services, choose a product and ask about an appointment.",
+    interfaceSummary: "A fictional hair studio website with a service menu, filterable collection, demo bag, appointment preview and photo gallery.",
+    views: ["Salon website", "Appointment request preview", "Product collection and enquiry preview"],
+    outcomes: ["Show your services clearly", "Help customers find their next step", "Give your business its own visual identity"],
+    workflowFamily: "A website, services and product enquiries shaped around your business",
+    solutions: ["Websites and landing pages", "Bookings and enquiries"],
+    ctaLabel: "Explore the salon website",
+    scopeLabel: "Your own brand, content and booking process, with a price agreed before work starts.",
+    boundary: "Fictional salon, example prices and stock photography. No appointment, order, payment or message is created.",
+    status: "ready",
+    url: "/demos/salon-website",
+  },
+  {
     slug: "appointment-enquiry-recovery",
     sector: "Appointment-led services",
     title: "Appointment Flow — what happens after a customer books?",
