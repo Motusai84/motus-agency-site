@@ -33,6 +33,7 @@ export type DemoRecord = {
   ctaLabel?: string;
   scopeLabel?: string;
   boundary?: string;
+  caseStudy?: { brief: string; decisions: Array<{ title: string; detail: string }>; tryIt: string };
   status: "planned" | "ready";
   url?: string;
 };
@@ -77,6 +78,15 @@ export const demoCatalog: DemoRecord[] = [
     ctaLabel: "Explore the salon website",
     scopeLabel: "Your own brand, content and booking process, with a price agreed before work starts.",
     boundary: "Fictional salon, example prices and stock photography. No appointment, order, payment or message is created.",
+    caseStudy: {
+      brief: "Give a fictional hair studio a distinct identity while making services, products and the next appointment easy to explore.",
+      decisions: [
+        { title: "Character through photography", detail: "Portraits celebrate Black women and natural texture. Separate photographs of wigs and extensions make the collection easier to understand." },
+        { title: "A calm appointment menu", detail: "One featured treatment introduces the services. A clear price and duration menu helps visitors compare the remaining appointments." },
+        { title: "Space for the hair to speak", detail: "Warm neutrals, expressive serif headings and an asymmetric photo edit give the studio character. Quiet transitions keep attention on the content." },
+      ],
+      tryIt: "Choose a service, move through both booking steps, then try a product length, add it to your bag and change the quantity. The experience works on a phone and with a keyboard.",
+    },
     status: "ready",
     url: "/demos/salon-website",
   },

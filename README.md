@@ -109,9 +109,9 @@ Production publication requires separate approval.
 
 `/demos/salon-website` is a complete fictional salon website under the name Crown & Coil. Its composition extends the existing salon presentation, with entirely new stock photography and neutral content. No original client name, founder, address, contact information, reviews, branded treatment claims or photographs are carried into this demo.
 
-Content lives in `src/clients/salon-demo.ts`, checked against `ClientConfig`. The route includes services, product filters and length selection, a bag with quantities and removal, booking and enquiry previews, and a photo gallery. Every interaction stays in React memory: no personal details, local-storage records, requests to client APIs, bookings, orders, payment or messages. Refreshing resets the demonstration.
+Content lives in `src/clients/salon-demo.ts`, checked against `ClientConfig`. The refined composition has a featured protective styling appointment, a price and duration menu with dotted leaders, four collection pieces illustrated with photographs of actual wigs and extensions, and an asymmetric three-photo editorial gallery. Booking has separate service and time steps with a review before confirmation. Product choices have immediate feedback, quantity limits, totals and removal; dialogs preserve keyboard focus. Every interaction stays in React memory: no personal details, local-storage records, requests to client APIs, bookings, orders, payment or messages. Refreshing resets the demonstration.
 
-The catalog links this fourth example from the homepage and `/demos`. The demo has a persistent identity notice, photo credits, a return to Motus, native dialogs, keyboard focus, responsive layouts and reduced-motion support. Asset provenance is recorded beside the new local images in `public/images/salon-demo/SOURCES.md`.
+The catalog links this fourth example from the homepage and `/demos`. The showroom includes a short fictional-concept design story: the brief, three design decisions and interactions visitors can try. The demo has a persistent identity notice, photo credits, a return to Motus, native dialogs, keyboard focus, responsive layouts and reduced-motion support. Asset provenance is recorded beside the local images in `public/images/salon-demo/SOURCES.md`. Its CSS now contains only the styles used by this demo rather than the former client's unused presentation rules.
 
 Release checks on 10 October 2026: lint, Next.js production build, OpenNext
 Cloudflare build and Wrangler deployment dry run pass. Browser checks at
@@ -122,6 +122,15 @@ selection. The existing Motus calculator, navigation, themes and effects
 pause control were also checked. No live enquiry was sent. Reduced-motion
 handling was reviewed in CSS and the effect cleanup; OS preference emulation
 and a physical phone were unavailable.
+
+The subsequent refinement pass also passes lint and the Next.js production
+build. Desktop and mobile browser checks verify both booking steps and back
+navigation, service-specific prices, selected day/time, product lengths,
+quantity totals (£225 × 3 = £675), the 10-piece variant limit, removal and
+empty state, gallery navigation, enquiry confirmation and the showroom story.
+No horizontal overflow or duplicate IDs were found in the salon checks.
+The main Motus calculator, mobile menu, empty-form validation and salon enquiry
+context were checked again. This pass adds no dependencies or live integrations.
 
 Production remains on version `e4be2364-35ed-466e-9af7-3e9451211ef5`.
 The active version was confirmed before and after a read-only source backup

@@ -45,6 +45,16 @@ export default function DemoShowroom() {
                 Ask about this for your business
               </Link>
             </div>
+            {example.caseStudy && (
+              <div className={styles.caseStudy}>
+                <p className={styles.caseStudyLabel}>The design story · Fictional concept</p>
+                <p className={styles.caseStudyBrief}>{example.caseStudy.brief}</p>
+                <dl className={styles.caseStudyDecisions}>{example.caseStudy.decisions.map((decision) => (
+                  <div key={decision.title}><dt>{decision.title}</dt><dd>{decision.detail}</dd></div>
+                ))}</dl>
+                <p className={styles.caseStudyTry}><strong>Try the details.</strong> {example.caseStudy.tryIt}</p>
+              </div>
+            )}
             <details className={styles.exampleDetails}>
               <summary id={`demo-details-${example.slug}`}>What this example shows</summary>
               <div className={styles.exampleDetailGrid}>
