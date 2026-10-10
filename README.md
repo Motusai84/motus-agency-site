@@ -11,9 +11,11 @@ Canonical Agency OS source for the Motus public website.
 - Rollback URL: `https://motus-agency-site.vercel.app`
 - Deployment policy: Wrangler with explicit production approval
 
-The repository is still connected to Vercel. Its `main` branch contains an older
-Vite build until the reviewed Next.js source migration is merged. Do not treat a
-Vercel deployment as the current Cloudflare production site.
+The repository is still connected to Vercel. The reviewed Next.js source
+migration was merged to `main` in pull request #1 on 3 October 2026
+(`244af4c`). Remote references were refreshed and checked on 10 October 2026.
+Do not treat a GitHub branch or Vercel deployment as the current Cloudflare
+production site; verify the active Worker before publication.
 
 ## Search visibility
 
@@ -152,6 +154,16 @@ effects controls and empty-form validation. No real enquiry was submitted.
 The final OpenNext build and Wrangler dry run pass, and the live-site source
 backup still matches the SHA-256 above. The canonical Cloudflare domain has
 not been changed by this preview deployment.
+
+Continuation checks on 10 October 2026 confirm both production secret names,
+`N8N_LEAD_WEBHOOK_URL` and `N8N_LEAD_WEBHOOK_TOKEN`, are present; their values
+were not read. The active Worker remains on the rollback version above.
+The source migration is already merged. The remaining source reviews are
+pull request #2 (search visibility) followed by pull request #3 (the complete
+plain-language mock, motion and salon demo). Neither has been merged by this
+release preparation. Add the approved business service address before public
+release, then merge the reviewed changes, recheck the live version and backup,
+publish, and verify the public routes and enquiry delivery.
 
 ### Motion preview
 

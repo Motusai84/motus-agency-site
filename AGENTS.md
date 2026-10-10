@@ -15,7 +15,7 @@ These instructions apply inside `06_BUILDS/websites/motus-agency-site/`. They ar
 `https://motusautomation.co.uk` is the only canonical, public Motus website.
 
 - It is currently served by the Cloudflare Worker named `motus-site`.
-- This Next.js source was reconciled against the active Cloudflare Worker on 1 October 2026. Its GitHub `main` branch is still an older Vite version until the reviewed source migration is merged. Recheck the live Worker version before every production change; a previous reconciliation is not permission to overwrite later work.
+- This Next.js source was reconciled against the active Cloudflare Worker on 1 October 2026. The reviewed source migration was merged to GitHub `main` in pull request #1 on 3 October 2026 (`244af4c`), confirmed after refreshing remote references on 10 October 2026. Recheck the live Worker version before every production change; a previous reconciliation is not permission to overwrite later work.
 - Never roll back, replace, redirect, or otherwise alter `motusautomation.co.uk` unless Seun explicitly authorises that exact live change.
 - Before any future live-site work, first reconcile the active Cloudflare Worker source and create a recoverable backup/version. Do not infer that GitHub `main`, a Vercel deployment, or this directory matches production.
 - Old Vercel deployments may be reviewed and removed only after Seun explicitly confirms the exact deployments to delete. They are not a substitute for the live site.
@@ -88,11 +88,12 @@ Do not remove these unless Seun explicitly asks:
 - mobile navigation;
 - descriptive `id` attributes on buttons, links, inputs, and important interactive controls.
 
-The review form currently posts to:
-
-`https://seunayomide.app.n8n.cloud/webhook/lead-capture`
-
-Do not change this webhook without explicit approval.
+The enquiry form posts to the same-origin `/api/leads` route. The Cloudflare
+Worker forwards validated enquiries to the always-on production n8n instance
+using the server-only `N8N_LEAD_WEBHOOK_URL` and `N8N_LEAD_WEBHOOK_TOKEN`
+secrets. The retired n8n Cloud workspace is not a production target. Do not
+change the approved delivery destination or contract without explicit approval,
+and never put either secret value in source files or browser code.
 
 ## Build and test rules
 
@@ -117,7 +118,7 @@ If browser testing cannot be completed, say exactly what could not be verified b
 
 ## Implementation standards
 
-- Use React/Vite conventions already present in this repo.
+- Use the React/Next.js and OpenNext conventions already present in this repo.
 - Keep animation purposeful and tied to the Motus signal concept.
 - Prefer updating existing components over creating parallel versions.
 - Avoid broad dependency or build-system changes unless the benefit, risk, and rollback path are clear.
