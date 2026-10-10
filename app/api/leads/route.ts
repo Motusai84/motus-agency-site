@@ -1,4 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { demoCatalog } from "@/lib/demo-catalog";
 
 type LeadPayload = {
   fullName?: unknown;
@@ -25,6 +26,7 @@ const MAX_BODY_BYTES = 16_384;
 const allowedSystemInterests = new Set([
   "Sector-specific demonstration",
   "Ledger Desk — Accountancy and bookkeeping — Unpaid Invoice Control",
+  ...demoCatalog.filter((demo) => demo.status === "ready" && demo.url).map((demo) => demo.title),
 ]);
 
 const isText = (value: unknown, maxLength: number) =>

@@ -1,142 +1,77 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import type { DemoSector, DemoSolution } from "@/lib/demo-catalog";
-import { demoCatalog } from "@/lib/demo-catalog";
+import { demoCatalog, getDemoEnquiryHref } from "@/lib/demo-catalog";
+import { MotionPanel } from "@/components/SiteMotion";
 import styles from "@/app/demos/page.module.css";
 
-type SectorFilter = "All sectors" | DemoSector;
-type SolutionFilter = "All solutions" | DemoSolution;
-
 export default function DemoShowroom() {
-  const [sector, setSector] = useState<SectorFilter>("All sectors");
-  const [solution, setSolution] = useState<SolutionFilter>("All solutions");
-  const readyExamples = useMemo(
-    () => demoCatalog.filter((example) => example.status === "ready" && example.url),
-    [],
-  );
-  const availableSectors = useMemo(
-    () => ["All sectors", ...new Set(readyExamples.map((example) => example.sector))] as SectorFilter[],
-    [readyExamples],
-  );
-  const availableSolutions = useMemo(
-    () =>
-      ["All solutions", ...new Set(readyExamples.flatMap((example) => example.solutions))] as SolutionFilter[],
-    [readyExamples],
-  );
+  const readyExamples = demoCatalog.filter((example) => example.status === "ready" && example.url);
 
-  const visibleExamples = useMemo(
-    () =>
-      readyExamples.filter((example) => {
-        const matchesSector = sector === "All sectors" || example.sector === sector;
-        const matchesSolution = solution === "All solutions" || example.solutions.includes(solution);
-        return matchesSector && matchesSolution;
-      }),
-    [readyExamples, sector, solution],
-  );
-
-  if (readyExamples.length === 0) {
+  if (!readyExamples.length) {
     return (
       <div className={styles.emptyState}>
-        <span>Demonstrations are built separately</span>
-        <h3>The showroom opens one useful interface at a time.</h3>
-        <p>
-          Each sector demonstration is its own fictional project, designed around what a customer, employee or owner
-          would actually use. Motus will link it here only after the experience has been built and reviewed.
-        </p>
-        <Link id="empty-showroom-enquiry-link" href="/#contact">
-          Tell us what your business needs <ArrowRight size={15} aria-hidden="true" />
-        </Link>
+        <h3>More examples are on the way.</h3>
+        <p>Tell us what you need and we can talk through what would help your business.</p>
+        <Link id="empty-showroom-enquiry-link" href="/#contact">Tell us what you need</Link>
       </div>
     );
   }
 
   return (
     <>
-      <div className={styles.filters} aria-label="Filter demonstrations">
-        <fieldset>
-          <legend>Browse by sector</legend>
-          <div className={styles.filterOptions}>
-            {availableSectors.map((item) => (
-              <button
-                id={`demo-sector-${item.toLowerCase().replaceAll(" ", "-")}`}
-                key={item}
-                type="button"
-                aria-pressed={sector === item}
-                onClick={() => setSector(item)}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Browse by solution</legend>
-          <div className={styles.filterOptions}>
-            {availableSolutions.map((item) => (
-              <button
-                id={`demo-solution-${item.toLowerCase().replaceAll(" ", "-")}`}
-                key={item}
-                type="button"
-                aria-pressed={solution === item}
-                onClick={() => setSolution(item)}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </fieldset>
-      </div>
-
-      <div className={styles.resultSummary} aria-live="polite">
-        <span>{visibleExamples.length} sector {visibleExamples.length === 1 ? "example" : "examples"}</span>
-        <span>Only built and reviewed demonstrations appear</span>
-      </div>
-
+      <nav className={styles.quickLinks} aria-label="Jump to an example">
+        {readyExamples.map((example) => (
+          <a id={`demo-jump-${example.slug}`} key={example.slug} href={`#example-${example.slug}`}>
+            {example.category === "Customer enquiries" ? "Enquiries" : example.category ?? example.title}
+          </a>
+        ))}
+      </nav>
+      <p className={styles.resultSummary}>{readyExamples.length} examples · Try one that fits your business.</p>
       <div className={styles.exampleList}>
-        {visibleExamples.map((example) => (
-          <article className={styles.example} key={example.slug}>
+        {readyExamples.map((example) => (
+          <MotionPanel className={styles.example} id={`example-${example.slug}`} key={example.slug}>
             <div className={styles.exampleBody}>
               <div className={styles.exampleMeta}>
-                <span>{example.sector}</span>
-                <span>{example.solutions.join(" · ")}</span>
+                <span>{example.name ?? example.title}</span><span>Demo you can try</span>
               </div>
-              <h3>{example.title}</h3>
-              <p>{example.problem}</p>
-
+              <h3>{example.category ?? example.title}</h3>
+              <p>{example.demoSummary ?? example.interfaceSummary}</p>
+            </div>
+            <div className={styles.exampleState}>
+              <Link id={`launch-demo-${example.slug}`} href={example.url!}>
+                {example.ctaLabel ?? "Try this example"} <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+              <Link id={`ask-about-demo-${example.slug}`} className={styles.askLink} href={getDemoEnquiryHref(example.slug)}>
+                Ask about this for your business
+              </Link>
+            </div>
+            {example.caseStudy && (
+              <div className={styles.caseStudy}>
+                <p className={styles.caseStudyLabel}>The design story · Fictional concept</p>
+                <p className={styles.caseStudyBrief}>{example.caseStudy.brief}</p>
+                <dl className={styles.caseStudyDecisions}>{example.caseStudy.decisions.map((decision) => (
+                  <div key={decision.title}><dt>{decision.title}</dt><dd>{decision.detail}</dd></div>
+                ))}</dl>
+                <p className={styles.caseStudyTry}><strong>Try the details.</strong> {example.caseStudy.tryIt}</p>
+              </div>
+            )}
+            <details className={styles.exampleDetails}>
+              <summary id={`demo-details-${example.slug}`}>What this example shows</summary>
               <div className={styles.exampleDetailGrid}>
                 <div>
-                  <span>What the visitor would use</span>
+                  <h4>Try it yourself</h4>
                   <p>{example.interfaceSummary}</p>
-                  <ul aria-label={`${example.title} interface views`}>
-                    {example.views.map((view) => <li key={view}>{view}</li>)}
-                  </ul>
+                  <ul>{example.views.map((view) => <li key={view}>{view}</li>)}</ul>
                 </div>
                 <div>
-                  <span>What the business would see</span>
-                  <ul aria-label={`${example.title} owner outcomes`}>
-                    {example.outcomes.map((outcome) => <li key={outcome}>{outcome}</li>)}
-                  </ul>
+                  <h4>What it could help you do</h4>
+                  <ul>{example.outcomes.map((outcome) => <li key={outcome}>{outcome}</li>)}</ul>
                 </div>
               </div>
-
-              <p className={styles.workflowFamily}>
-                <span>Related Motus solution</span>
-                {example.workflowFamily}
-              </p>
               {example.scopeLabel && <p className={styles.scopeLabel}>{example.scopeLabel}</p>}
               {example.boundary && <p className={styles.exampleBoundary}>{example.boundary}</p>}
-            </div>
-
-            <div className={styles.exampleState}>
-              <a id={`launch-demo-${example.slug}`} href={example.url!}>
-                {example.ctaLabel ?? "Explore demonstration"} <ArrowRight size={15} aria-hidden="true" />
-              </a>
-            </div>
-          </article>
+            </details>
+          </MotionPanel>
         ))}
       </div>
     </>

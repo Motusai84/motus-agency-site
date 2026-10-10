@@ -11,9 +11,11 @@ Canonical Agency OS source for the Motus public website.
 - Rollback URL: `https://motus-agency-site.vercel.app`
 - Deployment policy: Wrangler with explicit production approval
 
-The repository is still connected to Vercel. Its `main` branch contains an older
-Vite build until the reviewed Next.js source migration is merged. Do not treat a
-Vercel deployment as the current Cloudflare production site.
+The repository is still connected to Vercel. The reviewed Next.js source
+migration was merged to `main` in pull request #1 on 3 October 2026
+(`244af4c`). Remote references were refreshed and checked on 10 October 2026.
+Do not treat a GitHub branch or Vercel deployment as the current Cloudflare
+production site; verify the active Worker before publication.
 
 ## Search visibility
 
@@ -43,14 +45,14 @@ routes and are intentionally excluded from this source migration.
 
 ### Separate sector demonstrations
 
-Sector demonstrations are separate projects. The Motus website only catalogues
-and links a demonstration after that project has been built, reviewed and
-marked `ready` with a verified URL in `lib/demo-catalog.ts`. Planned records do
-not appear as public examples.
+The Motus website only catalogues and links a demonstration after it has been
+built, reviewed and marked `ready` with a verified URL in `lib/demo-catalog.ts`.
+The four current examples are integrated routes under `app/demos/` and are
+published with the main website. Planned records do not appear as public examples.
 
 ## Lead Capture
 
-The audit form posts to the same-origin `/api/leads` route. Configure the
+The enquiry form posts to the same-origin `/api/leads` route. Configure the
 production n8n webhook and its matching Header Auth token as server-only
 Cloudflare Worker secrets:
 
@@ -82,8 +84,151 @@ header credential.
   `03_TECHNICAL/DEPLOYMENT_TARGETS.json` with guarded deployment manifests
   under `01_CLIENTS/motus/`.
 - The approved non-home service address must be added to the legal disclosure
-  before public release.
+  before public release unless the owner explicitly defers that step. On
+  10 October 2026 the owner instructed: "We will do the address after, just
+  deploy it now." The address remains an outstanding follow-up for this release.
 - Do not commit the webhook URL or any provider credential.
+
+### Plain-language preview
+
+The preview branch `codex/motus-plain-language-preview` presents custom websites
+and business tools in plain English. The homepage brings four ready
+examples forward: Salon website, Appointment Flow (bookings), Ledger Desk
+(invoices), and Lead Hub (customer enquiries). Planned catalogue records remain hidden.
+
+Each example links to `/?example=<catalogue-slug>#contact`. Only a ready
+catalogue record can preselect the enquiry topic and set `system_interest`.
+The form needs a name, business name, email and description; budget, existing
+tools, website and topic are optional. Missing optional details use explicit
+fallbacks to preserve the existing webhook contract.
+
+Validation covers lint, the Next.js production build, mobile `390x844` and
+desktop `1440x900` browser checks, keyboard focus, navigation, the calculator,
+all four example enquiry links, and a mocked lead-route check for validation,
+rate limiting and upstream failures. No real enquiry was submitted during QA.
+Client testimonials remain unpublished pending approval of their exact wording.
+Production publication requires separate approval.
+
+### Salon website demonstration
+
+`/demos/salon-website` is a complete fictional salon website under the name Crown & Coil. Its composition extends the existing salon presentation, with entirely new stock photography and neutral content. No original client name, founder, address, contact information, reviews, branded treatment claims or photographs are carried into this demo.
+
+Content lives in `src/clients/salon-demo.ts`, checked against `ClientConfig`. The refined composition has a featured protective styling appointment, a price and duration menu with dotted leaders, four collection pieces illustrated with photographs of actual wigs and extensions, and an asymmetric three-photo editorial gallery. Booking has separate service and time steps with a review before confirmation. Product choices have immediate feedback, quantity limits, totals and removal; dialogs preserve keyboard focus. Every interaction stays in React memory: no personal details, local-storage records, requests to client APIs, bookings, orders, payment or messages. Refreshing resets the demonstration.
+
+The catalog links this fourth example from the homepage and `/demos`. The showroom includes a short fictional-concept design story: the brief, three design decisions and interactions visitors can try. The demo has a persistent identity notice, photo credits, a return to Motus, native dialogs, keyboard focus, responsive layouts and reduced-motion support. Asset provenance is recorded beside the local images in `public/images/salon-demo/SOURCES.md`. Its CSS now contains only the styles used by this demo rather than the former client's unused presentation rules.
+
+Release checks on 10 October 2026: lint, Next.js production build, OpenNext
+Cloudflare build and Wrangler deployment dry run pass. Browser checks at
+390x844 and 1440x900 cover the salon layout, mobile navigation, booking
+preview, collection filters and length selection, bag quantities and totals,
+gallery, enquiry preview, Escape/focus return and the salon-to-Motus enquiry
+selection. The existing Motus calculator, navigation, themes and effects
+pause control were also checked. No live enquiry was sent. Reduced-motion
+handling was reviewed in CSS and the effect cleanup; OS preference emulation
+and a physical phone were unavailable.
+
+The subsequent refinement pass also passes lint and the Next.js production
+build. Desktop and mobile browser checks verify both booking steps and back
+navigation, service-specific prices, selected day/time, product lengths,
+quantity totals (£225 × 3 = £675), the 10-piece variant limit, removal and
+empty state, gallery navigation, enquiry confirmation and the showroom story.
+No horizontal overflow or duplicate IDs were found in the salon checks.
+The main Motus calculator, mobile menu, empty-form validation and salon enquiry
+context were checked again. This pass adds no dependencies or live integrations.
+
+Production remains on version `e4be2364-35ed-466e-9af7-3e9451211ef5`.
+The active version was confirmed before and after a read-only source backup
+(SHA-256 `c9b84f18f7c9607c08640a445b40b5552435734483eb5f86ddc45fb20908e469`).
+The retained Cloudflare version, including its assets, is the rollback target.
+Publication is authorised by the owner, but the approved non-home service
+address required above has not been supplied.
+
+The final website preview was deployed on 10 October 2026 to the existing
+Vercel review project and reached Ready status:
+https://motus-agency-mobile-review-h2kr5kste-motusai84s-projects.vercel.app
+It includes the complete Motus mock and all four integrated examples, including
+the refined salon demo. Existing Vercel authentication protection remains enabled.
+The uploaded application source matches commit `47476f8`; deployment inputs
+exclude local environment files, Git metadata and historical prototypes.
+Desktop and mobile online checks cover the homepage, salon booking and bag,
+gallery, design story, example enquiry context, calculator, navigation, theme,
+effects controls and empty-form validation. No real enquiry was submitted.
+The final OpenNext build and Wrangler dry run pass, and the live-site source
+backup still matches the SHA-256 above. The canonical Cloudflare domain has
+not been changed by this preview deployment.
+
+Continuation checks on 10 October 2026 confirm both production secret names,
+`N8N_LEAD_WEBHOOK_URL` and `N8N_LEAD_WEBHOOK_TOKEN`, are present; their values
+were not read. The active Worker remains on the rollback version above.
+The source migration is already merged. The remaining source reviews are
+pull request #2 (search visibility) followed by pull request #3 (the complete
+plain-language mock, motion and salon demo). Neither has been merged by this
+release preparation. Add the approved business service address before public
+release, then merge the reviewed changes, recheck the live version and backup,
+publish, and verify the public routes and enquiry delivery.
+
+The owner subsequently explicitly authorised publishing the reviewed mock to
+`motusautomation.co.uk` now and adding the business service address afterwards.
+This overrides the address gate for this release only. No address has been
+invented or published. The existing webhook secrets and retained Cloudflare
+rollback version are preserved.
+
+### Motion preview
+
+The existing sections, visible copy, prices, calculator and demo routes are
+preserved. The preview adds a shared panel-border treatment, clearer form focus
+states and coordinated motion through `components/SiteMotion.tsx`:
+
+- Framer Motion uses the existing installed package for panel hover responses
+  and workspace filter transitions. Hover motion is limited to fine pointers;
+  keyboard filter changes are immediate.
+- GSAP 3.15.0 handles the hero sequence, section reveals and reading progress.
+  It only controls opacity on Motion panels, so the engines do not compete for
+  their transforms. Keyboard focus makes a revealed region immediately visible.
+- Anime.js 4.5.0 draws the decorative signal routes in the hero and workspace.
+  It loads when a route is visible, plays a finite sequence and reverts on unmount.
+
+The stronger effects pass adds a spring-following cursor halo, pointer-responsive
+card spotlights, a hero routing field with travelling light and breathing nodes,
+a finite heading sheen, and a travelling border light on the hero dashboard and
+featured package. Existing content and interactive IDs remain intact; the only
+new control is `effects-toggle` for pausing decorative effects. The native cursor
+is retained, overlays cannot intercept input, touch input has no cursor effect,
+and keyboard input hides the cursor halo immediately.
+
+The implementations are local React/CSS/SVG code using the installed Motion
+package, with no additional dependencies or copied library components. Reference
+research: React Bits (`DavidHDev/react-bits`, SpotlightCard and BlobCursor),
+Magic UI (`magicuidesign/magicui`, Border Beam), and Aceternity's Glowing Effect.
+Continuous effects and the existing background video pause when requested or
+when the tab is hidden. The hero field/video and border lights also pause when
+off screen. Reduced motion keeps a static decorative field. CSS motion paths
+are progressive enhancement; unsupported browsers retain the normal panel edge.
+
+Both new engines load dynamically. Content is visible without their JavaScript.
+Reduced-motion preferences disable spatial motion and signal drawing, and
+changing the preference cleans up active effects. Module-load cancellation and
+component cleanup are covered by a mocked lifecycle check. Browser QA covers
+390x844 and 1440x900, both colour themes, navigation, filters, calculator inputs,
+form validation/focus, all demo routes and example enquiry context. The browser
+controller cannot emulate the OS reduced-motion preference; that path was
+checked through the lifecycle harness and CSS review, not a physical phone.
+
+The 10 October 2026 release preparation patches Next.js and eslint-config-next
+to 16.3.8 and Wrangler to 4.149.0, with compatible transitive security updates.
+`npm audit --omit=dev` reports zero vulnerabilities. The complete audit still
+reports five high entries tracing to one unpublished fix for `braces` through
+the lint-only dependency chain. No framework downgrade or forced audit fix was
+applied. Both the Next.js and OpenNext Cloudflare builds pass, as does the
+Wrangler deployment dry run. The lockfile records the exact resolved versions.
+
+Public preview pages use the Motus name only, with no founder introduction,
+personal initials, personal location or displayed email address. Privacy links
+open `/?privacy=1#contact`, which does not require a business name and preserves
+the existing lead delivery format with a privacy-question label. Review the
+final business identity and contact disclosure before production publication;
+this preview does not establish legal compliance. Private delivery settings are
+unchanged.
 
 ## Validation
 
