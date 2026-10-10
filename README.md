@@ -88,9 +88,9 @@ header credential.
 ### Plain-language preview
 
 The preview branch `codex/motus-plain-language-preview` presents custom websites
-and business tools in plain English. The homepage brings the three ready
-examples forward: Appointment Flow (bookings), Ledger Desk (invoices), and
-Lead Hub (customer enquiries). Planned catalogue records remain hidden.
+and business tools in plain English. The homepage brings four ready
+examples forward: Salon website, Appointment Flow (bookings), Ledger Desk
+(invoices), and Lead Hub (customer enquiries). Planned catalogue records remain hidden.
 
 Each example links to `/?example=<catalogue-slug>#contact`. Only a ready
 catalogue record can preselect the enquiry topic and set `system_interest`.
@@ -112,6 +112,24 @@ Production publication requires separate approval.
 Content lives in `src/clients/salon-demo.ts`, checked against `ClientConfig`. The route includes services, product filters and length selection, a bag with quantities and removal, booking and enquiry previews, and a photo gallery. Every interaction stays in React memory: no personal details, local-storage records, requests to client APIs, bookings, orders, payment or messages. Refreshing resets the demonstration.
 
 The catalog links this fourth example from the homepage and `/demos`. The demo has a persistent identity notice, photo credits, a return to Motus, native dialogs, keyboard focus, responsive layouts and reduced-motion support. Asset provenance is recorded beside the new local images in `public/images/salon-demo/SOURCES.md`.
+
+Release checks on 10 October 2026: lint, Next.js production build, OpenNext
+Cloudflare build and Wrangler deployment dry run pass. Browser checks at
+390x844 and 1440x900 cover the salon layout, mobile navigation, booking
+preview, collection filters and length selection, bag quantities and totals,
+gallery, enquiry preview, Escape/focus return and the salon-to-Motus enquiry
+selection. The existing Motus calculator, navigation, themes and effects
+pause control were also checked. No live enquiry was sent. Reduced-motion
+handling was reviewed in CSS and the effect cleanup; OS preference emulation
+and a physical phone were unavailable.
+
+Production remains on version `e4be2364-35ed-466e-9af7-3e9451211ef5`.
+The active version was confirmed before and after a read-only source backup
+(SHA-256 `c9b84f18f7c9607c08640a445b40b5552435734483eb5f86ddc45fb20908e469`).
+The retained Cloudflare version, including its assets, is the rollback target.
+Publication is authorised by the owner, but the approved non-home service
+address required above has not been supplied. The Vercel review upload also
+requires renewed authentication; a failed upload did not change production.
 
 ### Motion preview
 
