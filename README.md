@@ -84,7 +84,9 @@ header credential.
   `03_TECHNICAL/DEPLOYMENT_TARGETS.json` with guarded deployment manifests
   under `01_CLIENTS/motus/`.
 - The approved non-home service address must be added to the legal disclosure
-  before public release.
+  before public release unless the owner explicitly defers that step. On
+  10 October 2026 the owner instructed: "We will do the address after, just
+  deploy it now." The address remains an outstanding follow-up for this release.
 - Do not commit the webhook URL or any provider credential.
 
 ### Plain-language preview
@@ -164,6 +166,12 @@ plain-language mock, motion and salon demo). Neither has been merged by this
 release preparation. Add the approved business service address before public
 release, then merge the reviewed changes, recheck the live version and backup,
 publish, and verify the public routes and enquiry delivery.
+
+The owner subsequently explicitly authorised publishing the reviewed mock to
+`motusautomation.co.uk` now and adding the business service address afterwards.
+This overrides the address gate for this release only. No address has been
+invented or published. The existing webhook secrets and retained Cloudflare
+rollback version are preserved.
 
 ### Motion preview
 
