@@ -11,6 +11,25 @@ Canonical Agency OS source for the Motus public website.
 - Rollback URL: `https://motus-agency-site.vercel.app`
 - Deployment policy: Wrangler with explicit production approval
 
+The reviewed full Motus mock and all four integrated demos are live as of
+10 October 2026, 20:41 UTC. Cloudflare version
+`26201c17-5a16-4af0-bb26-052bddb6a3b8` serves 100% of traffic. It was published
+from the verified OpenNext build after pull requests #2 and #3 were merged;
+the merged application source is `fbd3481` and matches the tested preview.
+Only release documentation changed after application commit `47476f8`.
+The prior version `e4be2364-35ed-466e-9af7-3e9451211ef5`, including its assets,
+is retained for rollback. The owner explicitly deferred the business service
+address until after this deployment; it remains an outstanding follow-up.
+
+Post-deployment checks returned HTTP 200 for `/`, `/demos`, all four demo
+routes, `/privacy`, `/sitemap.xml` and `/robots.txt`. An empty JSON enquiry
+returned HTTP 400 without reaching n8n. Live desktop and mobile browser checks
+confirmed the main calculator, mobile navigation, salon booking preview,
+Escape/focus return, product selection and bag, and the salon enquiry context.
+No horizontal overflow or browser console warnings/errors were found in those
+checks. Both webhook secret names remain present; their values were not read.
+No real enquiry was sent, so end-to-end message delivery was not retested.
+
 The repository is still connected to Vercel. The reviewed Next.js source
 migration was merged to `main` in pull request #1 on 3 October 2026
 (`244af4c`). Remote references were refreshed and checked on 10 October 2026.
