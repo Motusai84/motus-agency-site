@@ -2553,4 +2553,3 @@
   .demoBag li > button { grid-column: 2; justify-self: start; }
 }
 @media (prefers-reduced-motion:reduce) { .demoDialog[open] { animation: none; } .galleryButton img { transition: none; } .galleryButton:hover img { transform: none; } }
-
