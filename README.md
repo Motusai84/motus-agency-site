@@ -43,10 +43,10 @@ routes and are intentionally excluded from this source migration.
 
 ### Separate sector demonstrations
 
-Sector demonstrations are separate projects. The Motus website only catalogues
-and links a demonstration after that project has been built, reviewed and
-marked `ready` with a verified URL in `lib/demo-catalog.ts`. Planned records do
-not appear as public examples.
+The Motus website only catalogues and links a demonstration after it has been
+built, reviewed and marked `ready` with a verified URL in `lib/demo-catalog.ts`.
+The four current examples are integrated routes under `app/demos/` and are
+published with the main website. Planned records do not appear as public examples.
 
 ## Lead Capture
 
@@ -100,7 +100,7 @@ fallbacks to preserve the existing webhook contract.
 
 Validation covers lint, the Next.js production build, mobile `390x844` and
 desktop `1440x900` browser checks, keyboard focus, navigation, the calculator,
-all three example enquiry links, and a mocked lead-route check for validation,
+all four example enquiry links, and a mocked lead-route check for validation,
 rate limiting and upstream failures. No real enquiry was submitted during QA.
 Client testimonials remain unpublished pending approval of their exact wording.
 Production publication requires separate approval.
@@ -137,8 +137,21 @@ The active version was confirmed before and after a read-only source backup
 (SHA-256 `c9b84f18f7c9607c08640a445b40b5552435734483eb5f86ddc45fb20908e469`).
 The retained Cloudflare version, including its assets, is the rollback target.
 Publication is authorised by the owner, but the approved non-home service
-address required above has not been supplied. The Vercel review upload also
-requires renewed authentication; a failed upload did not change production.
+address required above has not been supplied.
+
+The final website preview was deployed on 10 October 2026 to the existing
+Vercel review project and reached Ready status:
+https://motus-agency-mobile-review-h2kr5kste-motusai84s-projects.vercel.app
+It includes the complete Motus mock and all four integrated examples, including
+the refined salon demo. Existing Vercel authentication protection remains enabled.
+The uploaded application source matches commit `47476f8`; deployment inputs
+exclude local environment files, Git metadata and historical prototypes.
+Desktop and mobile online checks cover the homepage, salon booking and bag,
+gallery, design story, example enquiry context, calculator, navigation, theme,
+effects controls and empty-form validation. No real enquiry was submitted.
+The final OpenNext build and Wrangler dry run pass, and the live-site source
+backup still matches the SHA-256 above. The canonical Cloudflare domain has
+not been changed by this preview deployment.
 
 ### Motion preview
 
