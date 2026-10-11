@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { demoCatalog } from "@/lib/demo-catalog";
 import { motion, useReducedMotion } from "framer-motion";
 import { CursorGlow, HeroShowcase, MotionPanel, SignalField, SignalRoute, useAmbientEffects, useSiteMotion } from "@/components/SiteMotion";
@@ -10,18 +11,12 @@ type FormStatus = "idle" | "sending" | "success" | "error";
 type QueueFilter = "all" | "moving" | "attention" | "complete";
 type Theme = "dark" | "light";
 const solutions = [
-  ["Website · From £495", "Get online professionally", "Show what you offer and make it easy for customers to get in touch."],
+  ["Built around your business", "Get online professionally", "Show what you offer and make it easy for customers to get in touch."],
   ["Price agreed before work starts", "Keep track of enquiries", "Keep customer messages together and know who needs a reply."],
   ["Price agreed before work starts", "Make booking easier", "Help customers choose a time and keep your team up to date."],
   ["Price agreed before work starts", "Cut repeated admin", "Spend less time copying details, chasing updates and typing the same things again."],
   ["Price agreed before work starts", "Stay on top of invoices", "Bring finished work and billing details together, ready for you to check."],
   ["Price agreed before work starts", "See what needs attention", "A workspace to keep track of customers, jobs and the next thing to do."],
-] as const;
-
-const packages = [
-  ["Motus Launch", "£495", "£49/month", "A clear website for a business getting online.", ["Show what you offer", "Works on phones", "A way to contact you", "Website care"]],
-  ["Motus Business", "£895", "£69/month", "More room to explain your services and help customers choose.", ["More pages for your business", "Clear service information", "An easy enquiry form", "Website care"]],
-  ["Motus Growth", "£1,395", "£89/month", "A website that lets customers explore more of what you do.", ["A fuller website", "An interactive example", "Clear next steps for customers", "Website care"]],
 ] as const;
 
 const queueItems = [
@@ -169,7 +164,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
         <a id="motus-home-link" className="logo" href="#top" aria-label="Motus home"><span aria-hidden="true">✦</span> Motus</a>
         <nav aria-label="Primary navigation">
           <a id="nav-home-link" href="#top">Home</a>
-          <a id="nav-pricing-link" href="#pricing">Pricing</a>
+          <a id="nav-pricing-link" href="#pricing">Your project</a>
           <a id="nav-examples-link" href="#examples">Examples</a>
           <a id="nav-automation-link" href="#automation">How it works</a>
           <a id="nav-contact-link" href="#contact">Contact</a>
@@ -202,7 +197,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
         </div>
         <nav id="mobile-navigation" className="mobile-navigation" data-open={mobileMenuOpen} data-motion={mobileMenuMotion ? "on" : "off"} aria-label="Mobile navigation" aria-hidden={!mobileMenuOpen} inert={!mobileMenuOpen}>
           <a id="mobile-nav-home-link" href="#top" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Home</a>
-          <a id="mobile-nav-pricing-link" href="#pricing" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Pricing</a>
+          <a id="mobile-nav-pricing-link" href="#pricing" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Your project</a>
           <a id="mobile-nav-examples-link" href="#examples" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Examples</a>
           <a id="mobile-nav-automation-link" href="#automation" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>How it works</a>
           <a id="mobile-nav-contact-link" href="#contact" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Contact</a>
@@ -263,7 +258,27 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
         <div className="light-calculator reveal"><label htmlFor="calculator-team-size"><span>Team size</span><strong>{teamSize} {teamSize === 1 ? "person" : "people"}</strong></label><input id="calculator-team-size" type="range" min="1" max="50" value={teamSize} onChange={(event) => setTeamSize(Number(event.target.value))} /><label htmlFor="calculator-admin-time"><span>Working time spent on repeated admin</span><strong>{adminTime}%</strong></label><input id="calculator-admin-time" type="range" min="5" max="60" step="5" value={adminTime} onChange={(event) => setAdminTime(Number(event.target.value))} /><label htmlFor="calculator-hourly-cost"><span>Estimated hourly cost</span><strong>£{hourlyCost}</strong></label><input id="calculator-hourly-cost" type="range" min="12" max="60" value={hourlyCost} onChange={(event) => setHourlyCost(Number(event.target.value))} /><dl><div><dt>Repeated-admin hours</dt><dd>{estimate.weeklyHours}<small>/week</small></dd></div><div><dt>Estimated yearly cost</dt><dd>£{estimate.annualCost.toLocaleString("en-GB")}</dd></div></dl><a id="calculator-enquiry-link" href="#contact" onClick={() => setSelectedOutcome("Cut repeated admin")}>Tell us what keeps repeating <b aria-hidden="true">→</b></a></div>
       </section>
 
-      <section className="site-section pricing-section" id="pricing" aria-labelledby="pricing-title"><div className="section-intro reveal"><span>Website prices</span><h2 id="pricing-title">A clear place to start.</h2><p>We talk through what you need and choose a suitable website package. Workspaces and other business tools are priced separately once we agree the work.</p></div><div className="package-grid">{packages.map(([name, price, care, text, features], index) => <MotionPanel className={`package${index === 1 ? " featured" : ""} reveal`} key={name}>{index === 1 && <em>Most useful for established businesses</em>}<span>{name}</span><strong>{price}</strong><small>{care} website care</small><p>{text}</p><ul>{features.map((feature) => <li key={feature}>{feature}</li>)}</ul><a id={`package-${index + 1}-link`} href="#contact" onClick={() => setSelectedOutcome(name)}>Tell us what you need <b aria-hidden="true">→</b></a></MotionPanel>)}</div><p className="vat-note reveal">Motus is not currently VAT registered. VAT is not added to the prices shown.</p></section>
+      <section className="site-section project-section" id="pricing" aria-labelledby="pricing-title">
+        <div className="section-intro reveal"><span>Your project</span><h2 id="pricing-title">A price agreed together.</h2><p>Tell us what you want to make easier. We talk through the work, agree a price and decide what support you need before building starts.</p></div>
+        <div className="project-agreement reveal">
+          <span className="project-eyebrow">Built around your business</span>
+          <h3>Let’s talk it through.</h3>
+          <dl><div><dt>The work</dt><dd>A website or workspace shaped around what you need.</dd></div><div><dt>The price</dt><dd>A clear quote for the work we agree together.</dd></div><div><dt>The support</dt><dd>Care and support discussed before we start.</dd></div></dl>
+          <a id="project-enquiry-link" className="primary-button" href="#contact">Tell us what you need <b aria-hidden="true">→</b></a>
+        </div>
+      </section>
+
+      <section className="site-section client-feedback-section" id="client-feedback" aria-labelledby="client-feedback-title">
+        <div className="section-intro reveal"><span>Client feedback</span><h2 id="client-feedback-title">Clear communication.<br /><em>Personal support.</em></h2><p>Good work starts with a conversation. You speak directly with the person building your website or workspace.</p></div>
+        <figure className="client-feedback reveal">
+          <div className="client-feedback-photo"><Image src="/images/client-feedback/london-barber.webp" alt="Illustrative photograph of a barber working, viewed from behind" width={800} height={1000} unoptimized loading="lazy" /><span>Illustrative image · not the client</span></div>
+          <figcaption>
+            <div className="feedback-stars" role="img" aria-label="Craig’s five-star rating">{[0, 1, 2, 3, 4].map((star) => <svg key={star} viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z" /></svg>)}</div>
+            <blockquote>“One of the best tools I’ve used for my business. It’s been tailored to the way I work, so it feels simple to use and makes sense for me. The service has been excellent too, with personal attention, clear explanations and someone who takes the time to understand what I need.”</blockquote>
+            <div className="feedback-client"><strong>Craig</strong><span>Men’s grooming specialist</span><span>London · 45</span></div>
+          </figcaption>
+        </figure>
+      </section>
 
       <section className="site-section process-section" id="about" aria-labelledby="process-title"><div className="section-intro reveal"><span>Working with Motus</span><h2 id="process-title">Clear steps. Agreed from the start.</h2><p>Custom websites and workspaces, built around what your business needs.</p><p className="muted-note">We talk it through, agree the work and check it together. You know what is being built and what support is included.</p></div><ol className="process-list">{process.map(([title, text], index) => <li className="reveal" key={title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{title}</strong><p>{text}</p></div></li>)}</ol></section>
 
@@ -301,7 +316,6 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
               <option value="">Not sure yet</option>
               {privacyEnquiry ? <option>Privacy question</option> : <>
                 {solutions.map(([, title]) => <option key={title}>{title}</option>)}
-                {packages.map(([name]) => <option key={name}>{name}</option>)}
                 <option>Something different</option>
               </>}
             </select>
@@ -325,7 +339,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
         </form>
       </section>
 
-      <footer className="site-footer"><a id="footer-home-link" className="logo" href="#top"><span aria-hidden="true">✦</span> Motus</a><p>Custom websites and business tools for UK small businesses.</p><nav aria-label="Footer navigation"><a id="footer-solutions-link" href="#solutions">What we build</a><Link id="footer-examples-link" href="/demos">Examples</Link><a id="footer-pricing-link" href="#pricing">Website pricing</a><Link id="footer-privacy-link" href="/privacy">Privacy</Link></nav><small>© 2026 Motus.</small></footer>
+      <footer className="site-footer"><a id="footer-home-link" className="logo" href="#top"><span aria-hidden="true">✦</span> Motus</a><p>Custom websites and business tools for UK small businesses.</p><nav aria-label="Footer navigation"><a id="footer-solutions-link" href="#solutions">What we build</a><Link id="footer-examples-link" href="/demos">Examples</Link><a id="footer-pricing-link" href="#pricing">Your project</a><Link id="footer-privacy-link" href="/privacy">Privacy</Link></nav><small>© 2026 Motus.</small></footer>
     </main>
   );
 }
