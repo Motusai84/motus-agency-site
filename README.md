@@ -58,6 +58,14 @@ Open `http://localhost:3000`.
 
 ### Dimensional opening prototype
 
+Review URL: https://motus-agency-mobile-review-ata07tjzw-motusai84s-projects.vercel.app
+
+Vercel deployment `dpl_F4VLE8uSYX9KgvGSFVhPmGTUiDsa` is READY in the
+`preview` environment, built from application commit `b00c2a3`. Vercel
+authentication protection remains enabled. Authenticated HTTP checks on
+11 October 2026 return 200 for the homepage and all four demos. No Cloudflare
+production deployment was performed.
+
 Branch `codex/motus-dimensional-hero` adds a preview-only opening composition:
 the existing interactive dashboard sits in front of floating salon, booking
 and invoice visuals. The salon visual reuses the fictional demo configuration
