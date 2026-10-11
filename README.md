@@ -56,42 +56,53 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-### Flowing opening prototype
+### Motion comparison previews
 
 Branch `codex/motus-dimensional-hero` is a preview-only design iteration.
-The duplicate interactive hero dashboard and its floating booking/invoice
-panels have been removed. One larger fictional salon website now sits within
-two curved Motus signal trails, with restrained pointer depth, a coordinated
-entrance and softer framing. The full interactive work queue remains in
-How it works. The new `hero-salon-demo-link` opens the existing salon demo.
+Three static routes share the same page, with different animated openings:
 
-The salon image and content reuse `src/clients/salon-demo.ts` and its credited
-local photograph. The wording, prices, form delivery, calculator and all four
-demo routes remain unchanged outside the approved hero simplification.
-Framer Motion, GSAP and CSS use existing dependencies. Decorative content is
-hidden from assistive technology. Loops pause off screen, in background tabs
-and through the existing effects control. Reduced motion uses a static scene.
+- `/preview/signal`: a faceted Motus symbol with curved travelling light.
+- `/preview/flow`: messages, bookings and invoices converge on Motus, then
+  move towards a checked result. A separate mobile arrangement keeps labels legible.
+- `/preview/type`: rotating words and moving light, without a central object.
+
+The top salon website preview, decorative background video and Pause effects
+button are removed. The salon demonstration stays in Examples. The full work
+queue remains in How it works. Existing business copy, prices, calculator,
+form delivery and all four demo routes are preserved.
+
+The openings use local CSS/SVG and installed Framer Motion/GSAP dependencies.
+No packages were added. Pointer depth affects only the small symbol layer.
+Entrance timings are shorter: the artwork settles in 0.75 seconds, the headline
+in 0.65 seconds and section reveals in 0.45 seconds. Removing the hero image
+and background video removes their download/decoding work; no numerical speed
+or frame-rate improvement has been measured.
+
+Both themes use the same motion, with stronger blue/lavender contrast in light
+view. Decorative content is hidden from assistive technology. Continuous effects
+pause off screen and in hidden tabs; automatic reduced-motion support remains.
+The comparison routes carry noindex metadata and are absent from the sitemap.
 
 Validation on 11 October 2026: build, TypeScript and lint pass. Local browser
-checks at 390x844 and 1440x900 cover the hero, phone navigation and Escape focus
-return, keyboard focus, pause/resume, workspace filters, calculator updates,
-empty-form validation and the new salon-demo link. Both themes are checked.
-OS reduced-motion switching and physical-phone performance are not tested;
-reduced-motion guards are reviewed in source. The prototype is not approved
-for production. No Cloudflare deployment was performed.
+checks cover all three openings at 390x844 and 1440x900 in both themes, with no
+horizontal overflow. Shared-page checks cover mobile navigation and Escape focus
+return, visible keyboard focus, example links, work-queue filters, calculator
+updates, empty-form validation and offscreen animation pausing. No browser
+warnings/errors were reported. OS reduced-motion switching and physical-phone
+performance are not tested; reduced-motion guards are reviewed in source.
+No real enquiry was sent and no Cloudflare deployment was performed.
 
-Review URL: https://motus-agency-mobile-review-d7jvqf92c-motusai84s-projects.vercel.app
+Comparison deployment: pending preview upload.
 
-Vercel deployment `dpl_59gfYju5hp5r68rmetoLEw21FbL9` is READY in the
-`preview` environment, built from application commit `867a118`. Vercel
-reports authentication protection enabled. The uploaded file selection contains
-69 application/public-asset files (2.84 MB), excluding private/generated paths.
-The previous layered-panel preview remains available for comparison.
+The preceding salon-opening preview remains available at
+https://motus-agency-mobile-review-d7jvqf92c-motusai84s-projects.vercel.app
+(deployment `dpl_59gfYju5hp5r68rmetoLEw21FbL9`, application commit `867a118`).
+It is superseded for this design comparison, not deleted.
 
 The explicit `.vercelignore` excludes local backups, private notes, historical
 prototypes, generated builds, logs and environment files from CLI previews.
 A deployment dry run checks only application source and public assets are
-selected. This branch does not change the canonical Cloudflare deployment.
+selected. These experiments are not approved for production.
 
 ### Historical website prototypes
 

@@ -70,10 +70,9 @@ function clearPrivacyInterest() {
   window.dispatchEvent(new Event("popstate"));
 }
 
-export default function App() {
+export default function App({ heroDirection = "signal" }: { heroDirection?: "signal" | "flow" | "type" }) {
   const rootRef = useRef<HTMLElement>(null);
-  const [effectsPaused, setEffectsPaused] = useState(false);
-  useAmbientEffects(rootRef, effectsPaused);
+  useAmbientEffects(rootRef);
   useSiteMotion(rootRef);
   const reducedMotion = useReducedMotion();
   const [queueMotion, setQueueMotion] = useState(false);
@@ -160,20 +159,10 @@ export default function App() {
   };
 
   return (
-    <main ref={rootRef} id="top" className="landing-page" data-effects-paused={effectsPaused}>
-      <CursorGlow rootRef={rootRef} paused={effectsPaused} />
+    <main ref={rootRef} id="top" className="landing-page">
+      <CursorGlow rootRef={rootRef} />
       <div className="reading-progress" aria-hidden="true"><span /></div>
       <a id="home-skip-link" className="skip-link" href="#main-content">Skip to content</a>
-      <video
-        className="background-video"
-        muted
-        autoPlay
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden="true"
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260319_015952_e1deeb12-8fb7-4071-a42a-60779fc64ab6.mp4"
-      />
       <div className="backdrop" aria-hidden="true" />
 
       <header className="navbar">
@@ -186,10 +175,6 @@ export default function App() {
           <a id="nav-contact-link" href="#contact">Contact</a>
         </nav>
         <div className="header-actions">
-          <button id="effects-toggle" className="effects-toggle" type="button" aria-pressed={effectsPaused} aria-label={effectsPaused ? "Resume decorative effects" : "Pause decorative effects"} onClick={() => setEffectsPaused((current) => !current)}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">{effectsPaused ? <path d="M3 1.5 10 6 3 10.5Z" /> : <path d="M2 2h3v8H2zm5 0h3v8H7z" />}</svg>
-            <span>{effectsPaused ? "Resume effects" : "Pause effects"}</span>
-          </button>
           <button
             id="theme-toggle"
             className="theme-toggle"
@@ -236,7 +221,7 @@ export default function App() {
           </div>
         </div>
 
-        <HeroShowcase paused={effectsPaused} />
+        <HeroShowcase direction={heroDirection} />
       </section>
 
       <section className="site-section examples-section" id="examples" aria-labelledby="examples-title">
