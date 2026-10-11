@@ -28,6 +28,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .navbar nav { display: flex; gap: 32px; }
 .navbar nav a { color: var(--muted); font-size: 13px; transition: color 200ms ease; }
 .navbar nav a:hover { color: var(--foreground); }
+@media (min-width: 761px) and (max-width: 1000px) {
+  .navbar { padding-inline: 24px; }
+  .navbar > nav[aria-label="Primary navigation"] { gap: 18px; }
+  .navbar > nav[aria-label="Primary navigation"] a { white-space: nowrap; }
+  .navbar .header-cta { display: none; }
+}
 .header-actions { display: flex; align-items: center; gap: 9px; }
 .theme-toggle { min-height: 44px; border: 1px solid var(--border); border-radius: 999px; padding: 10px 13px; background: rgba(22, 28, 32, .72); color: var(--muted); font-size: 11px; font-weight: 500; transition: border-color 180ms ease, background 180ms ease, color 180ms ease, transform 160ms var(--ease-out); }
 .theme-toggle:hover { border-color: rgba(155, 163, 255, .45); background: #1a2024; color: var(--foreground); }
