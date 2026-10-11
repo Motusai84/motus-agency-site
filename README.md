@@ -8,33 +8,47 @@ Canonical Agency OS source for the Motus public website.
 - Production platform: Cloudflare Workers
 - Worker: `motus-site`
 - Production URL: `https://motusautomation.co.uk`
-- Rollback: retained Cloudflare version `992f14a3-e218-48e2-abea-b7cb2b521db8`
+- Rollback: retained Cloudflare version `27ef86f4-8a4a-4f33-b2f4-236fb387eb02`
 - Deployment policy: Wrangler with explicit production approval
 
-Individually quoted projects and Craig's approved testimonial are live as of
-11 October 2026, 21:22 UTC. Cloudflare version
-`27ef86f4-8a4a-4f33-b2f4-236fb387eb02` serves 100% of traffic. The owner
-explicitly approved publication and confirmed Craig gave five stars. Pull
-request #7 merged the tested source as `a2ce151`; its files match the tested
-release source `e77774f` exactly. Draft feedback labels are removed and the
+The client feedback navigation update is live as of 11 October 2026,
+21:36 UTC. Cloudflare version `218295c7-519e-47c7-a4ab-cfa84f4514ee` serves
+100% of traffic. Pull request #9 merged the tested source as `ed7faec`, whose
+files match tested source `21f681e` exactly. The homepage desktop navigation
+and phone menu now include `Client feedback`, linking to `#client-feedback`.
+The Examples page header links to `/#client-feedback`; selecting the phone
+menu item closes the menu. Narrow tablet navigation spacing keeps labels on
+one line. The owner requested this follow-up to the approved live release.
+
+Individually quoted projects and Craig's approved testimonial were published
+earlier on 11 October 2026, 21:22 UTC, through pull request #7 (`a2ce151`).
+The owner explicitly approved publication and confirmed Craig gave five stars.
+Draft feedback labels are removed and the
 generic barber photograph stays visibly labelled as illustrative. Advertised
 website/package fees are replaced with a conversation and individually agreed
 price. The approved typography opening, four demos, calculator and enquiry
 delivery contract are preserved.
 Lint, Next.js build, TypeScript, OpenNext packaging and Wrangler dry run pass.
-The prior version `992f14a3-e218-48e2-abea-b7cb2b521db8`, including its assets,
+The prior version `27ef86f4-8a4a-4f33-b2f4-236fb387eb02`, including its assets,
 is retained for rollback. A read-only Worker source export was checked before
 and after backup, and immediately before publication (SHA-256
-`0b30ee1356ee5709ba852d65929680966eac670c9efc3bdc77f417c41ca3ebaf`).
+`bf976fc25a5b6fde96bb6b4ddd4e2324ead5abb4aaa121c8c58252defbfbeeb2`).
 The local reference export is in the ignored
-`production-backups/2026-10-11-cloudflare-992f14a3/` directory. Rollback uses
-`npx wrangler versions deploy 992f14a3-e218-48e2-abea-b7cb2b521db8@100 --yes`.
+`production-backups/2026-10-11-cloudflare-27ef86f4/` directory. Rollback uses
+`npx wrangler versions deploy 27ef86f4-8a4a-4f33-b2f4-236fb387eb02@100 --yes`.
 The owner explicitly deferred the business service
 address until after this deployment; it remains an outstanding follow-up.
 
 Post-deployment checks returned HTTP 200 for `/`, `/demos`, all four demo
 routes, `/privacy`, `/sitemap.xml`, `/robots.txt` and the testimonial WebP. An empty JSON enquiry
 returned HTTP 400 without reaching n8n. The live root serves the typography
+opening and both new feedback navigation IDs, and `/demos` includes its
+feedback link. Local 1440px desktop, 390px phone and 820px/1024px tablet checks
+verify anchor navigation, phone menu closing, visible keyboard focus and no
+overflow or console warnings/errors. The live browser accessibility state
+shows the new desktop item. Its final live click/screenshot check could not run
+because automatic browser approval review reached its usage limit; the action
+was not executed. The earlier testimonial release's live checks confirmed the
 opening, approved Craig quote, five-star rating and individual-quote section;
 fixed website fees and draft testimonial wording are absent. Live 390px phone
 checks in both themes and a 1440px desktop check confirm the image loads and
