@@ -167,6 +167,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
           <a id="nav-pricing-link" href="#pricing">Your project</a>
           <a id="nav-examples-link" href="#examples">Examples</a>
           <a id="nav-automation-link" href="#automation">How it works</a>
+          <a id="nav-client-feedback-link" href="#client-feedback">Client feedback</a>
           <a id="nav-contact-link" href="#contact">Contact</a>
         </nav>
         <div className="header-actions">
@@ -200,6 +201,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
           <a id="mobile-nav-pricing-link" href="#pricing" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Your project</a>
           <a id="mobile-nav-examples-link" href="#examples" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Examples</a>
           <a id="mobile-nav-automation-link" href="#automation" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>How it works</a>
+          <a id="mobile-nav-client-feedback-link" href="#client-feedback" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Client feedback</a>
           <a id="mobile-nav-contact-link" href="#contact" onClick={() => { setMobileMenuMotion(false); setMobileMenuOpen(false); }}>Contact</a>
         </nav>
       </header>

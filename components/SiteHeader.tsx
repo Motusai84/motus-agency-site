@@ -11,6 +11,7 @@ const navigation = [
   ["How it works", "/#automation"],
   ["Calculator", "/#calculator"],
   ["Examples", "/demos"],
+  ["Client feedback", "/#client-feedback"],
   ["Website pricing", "/#pricing"],
 ] as const;
 
