@@ -109,7 +109,17 @@ warnings/errors were reported. OS reduced-motion switching and physical-phone
 performance are not tested; reduced-motion guards are reviewed in source.
 No real enquiry was sent and no Cloudflare deployment was performed.
 
-Refined selected preview: pending upload.
+Refined selected preview:
+https://motus-agency-mobile-review-hvu57x4k0-motusai84s-projects.vercel.app
+
+Vercel deployment `dpl_JBpFoB9dQ4Gnq2XFv7ZqjXhhnBF5` is READY in the
+`preview` environment, built from application commit `fa16393`. Authentication
+protection remains enabled. The dry-run selection contains 70 application and
+public-asset files (2,843,705 bytes), excluding private/generated paths.
+Both `/` and `/preview/type` return HTTP 200. Browser verification of the
+uploaded homepage confirms the chosen direction, 9.6-second word cycle,
+14px phone supporting copy, 74px word slot and 44px controls, with no overflow.
+Both themes retain active motion and report no browser warnings/errors.
 
 Preceding comparison review base:
 https://motus-agency-mobile-review-kzkr437lz-motusai84s-projects.vercel.app
