@@ -87,6 +87,16 @@ the calculator updates correctly and blank form validation focuses the name.
 No browser warnings/errors or real enquiry submissions occurred. The existing
 shared reveal/reduced-motion implementation is unchanged.
 
+Protected preview, Ready on 11 October 2026:
+https://motus-agency-mobile-review-mmtugqnoj-motusai84s-projects.vercel.app
+Deployment `dpl_CfPQRxG4nfTwt1AnjXnRQeWQwyja`, target `preview`, application
+source `eafa808`. Vercel authentication remains enabled. The upload selection
+contains 72 application/asset files (2,940,239 bytes), excluding environment
+files, Git data, backups and local generated material. Online desktop and 390px
+checks confirm the new quote section, loaded image, draft feedback and absence
+of fixed website fees, with no overflow or console warnings/errors. The live
+Cloudflare website remains on the previously approved release.
+
 ```bash
 npm ci
 npm run dev
