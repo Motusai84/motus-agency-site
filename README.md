@@ -11,24 +11,33 @@ Canonical Agency OS source for the Motus public website.
 - Rollback URL: `https://motus-agency-site.vercel.app`
 - Deployment policy: Wrangler with explicit production approval
 
-The reviewed full Motus mock and all four integrated demos are live as of
-10 October 2026, 20:41 UTC. Cloudflare version
-`26201c17-5a16-4af0-bb26-052bddb6a3b8` serves 100% of traffic. It was published
-from the verified OpenNext build after pull requests #2 and #3 were merged;
-the merged application source is `fbd3481` and matches the tested preview.
-Only release documentation changed after application commit `47476f8`.
-The prior version `e4be2364-35ed-466e-9af7-3e9451211ef5`, including its assets,
-is retained for rollback. The owner explicitly deferred the business service
+The owner-selected refined typography opening and all four integrated demos
+are live as of 11 October 2026, 18:42 UTC. Cloudflare version
+`992f14a3-e218-48e2-abea-b7cb2b521db8` serves 100% of traffic. Publication was
+explicitly approved by the owner. Pull request #5 merged the tested source as
+`e538bf7`; its files match the approved preview source `aae0e55` exactly.
+Lint, Next.js build, TypeScript, OpenNext packaging and Wrangler dry run pass.
+The prior version `26201c17-5a16-4af0-bb26-052bddb6a3b8`, including its assets,
+is retained for rollback. A read-only Worker source export was checked before
+and after backup, and immediately before publication (SHA-256
+`9a11f7508e3f94756c53b472a17132a0dc19d3fc5b81ffbd2783ff84415b8bc7`).
+Rollback uses `npx wrangler versions deploy 26201c17-5a16-4af0-bb26-052bddb6a3b8@100 --yes`.
+The owner explicitly deferred the business service
 address until after this deployment; it remains an outstanding follow-up.
 
 Post-deployment checks returned HTTP 200 for `/`, `/demos`, all four demo
 routes, `/privacy`, `/sitemap.xml` and `/robots.txt`. An empty JSON enquiry
-returned HTTP 400 without reaching n8n. Live desktop and mobile browser checks
-confirmed the main calculator, mobile navigation, salon booking preview,
-Escape/focus return, product selection and bag, and the salon enquiry context.
+returned HTTP 400 without reaching n8n. The live root serves the typography
+opening, with the duplicated hero dashboard and effects toggle removed.
+Live 390px phone and 1440px desktop checks cover both themes, the 9.6-second
+word cycle, 74px/100px word frames, 44px phone controls, mobile navigation and
+Escape/focus return. The calculator changes correctly to 48 hours/week and
+£44,928 for a six-person team; the attention filter shows two work items.
 No horizontal overflow or browser console warnings/errors were found in those
-checks. Both webhook secret names remain present; their values were not read.
-No real enquiry was sent, so end-to-end message delivery was not retested.
+checks. Comparison previews remain absent from the sitemap. Both webhook
+secret names remain present; their values were not read. No real enquiry was
+sent, so end-to-end message delivery was not retested. Physical-phone frame
+rate and an actual operating-system reduced-motion switch were not measured.
 
 The repository is still connected to Vercel. The reviewed Next.js source
 migration was merged to `main` in pull request #1 on 3 October 2026
@@ -58,7 +67,8 @@ Open `http://localhost:3000`.
 
 ### Selected opening and motion previews
 
-Branch `codex/motus-dimensional-hero` is a preview-only design iteration.
+Branch `codex/motus-dimensional-hero` was merged for the approved release in
+pull request #5. The selected direction is live on the canonical domain.
 The owner selected animated words and lighting (direction 3). This is now the
 default opening at `/`, as well as `/preview/type`. The two alternative routes
 remain available for comparison. Three static routes share the same page:
