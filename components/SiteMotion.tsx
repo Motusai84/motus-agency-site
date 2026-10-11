@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore, type ComponentProps, type CSSProperties, type RefObject } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
 function subscribeToPointer(callback: () => void) {
@@ -11,7 +11,7 @@ function subscribeToPointer(callback: () => void) {
 }
 
 /** Decorative light only: keeps the native cursor and never intercepts input. */
-export function CursorGlow({ rootRef, paused }: { rootRef: RefObject<HTMLElement | null>; paused: boolean }) {
+export function CursorGlow({ rootRef }: { rootRef: RefObject<HTMLElement | null> }) {
   const reduced = useReducedMotion();
   const finePointer = useSyncExternalStore(subscribeToPointer, () => window.matchMedia(finePointerQuery).matches, () => false);
   const x = useSpring(-400, { stiffness: 220, damping: 32, mass: .4 });
@@ -20,7 +20,7 @@ export function CursorGlow({ rootRef, paused }: { rootRef: RefObject<HTMLElement
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root || reduced || !finePointer || paused) return;
+    if (!root || reduced || !finePointer) return;
     let frame = 0;
     let positioned = false;
     let panel: HTMLElement | null = null;
@@ -59,36 +59,21 @@ export function CursorGlow({ rootRef, paused }: { rootRef: RefObject<HTMLElement
       document.removeEventListener("keydown", hide);
       document.removeEventListener("visibilitychange", hide);
     };
-  }, [rootRef, reduced, finePointer, paused, x, y, opacity]);
+  }, [rootRef, reduced, finePointer, x, y, opacity]);
 
   return <motion.div className="cursor-glow" style={{ x, y, opacity }} aria-hidden="true"><span /></motion.div>;
 }
 
-/** Pause decorative loops off screen, in background tabs, or on request. */
-export function useAmbientEffects(rootRef: RefObject<HTMLElement | null>, paused: boolean) {
+/** Stop decorative loops off screen, in background tabs, or for reduced motion. */
+export function useAmbientEffects(rootRef: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const field = root.querySelector<HTMLElement>(".signal-field");
-    const video = root.querySelector<HTMLVideoElement>(".background-video");
-    let heroVisible = true;
-    const sync = () => {
-      const inactive = paused || preference.matches || document.hidden;
-      root.setAttribute("data-effects-inactive", String(inactive));
-      field?.setAttribute("data-visible", String(heroVisible));
-      if (video) {
-        if (inactive || !heroVisible) video.pause();
-        else void video.play().catch(() => { /* Decorative video is optional. */ });
-      }
-    };
-    const ambient = root.querySelectorAll<HTMLElement>(".signal-field, .border-light");
+    const sync = () => root.setAttribute("data-effects-inactive", String(preference.matches || document.hidden));
+    const ambient = root.querySelectorAll<HTMLElement>(".signal-field, .border-light, .hero-showcase");
     const observer = typeof IntersectionObserver === "undefined" ? undefined : new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        entry.target.setAttribute("data-visible", String(entry.isIntersecting));
-        if (entry.target === field) heroVisible = entry.isIntersecting;
-      });
-      sync();
+      entries.forEach((entry) => entry.target.setAttribute("data-visible", String(entry.isIntersecting)));
     });
     ambient.forEach((element) => { element.setAttribute("data-visible", "true"); observer?.observe(element); });
     preference.addEventListener("change", sync);
@@ -98,9 +83,8 @@ export function useAmbientEffects(rootRef: RefObject<HTMLElement | null>, paused
       observer?.disconnect();
       preference.removeEventListener("change", sync);
       document.removeEventListener("visibilitychange", sync);
-      video?.pause();
     };
-  }, [rootRef, paused]);
+  }, [rootRef]);
 }
 
 /** A live routing field, behind the existing hero rather than a new section. */
@@ -130,6 +114,113 @@ export function BorderLight() {
   return <span className="border-light" aria-hidden="true" />;
 }
 
+function SignalMark() {
+  return <svg className="signal-mark" viewBox="0 0 240 240" fill="none" focusable="false">
+    <defs>
+      <linearGradient id="motus-metal" x1="25" y1="25" x2="215" y2="215" gradientUnits="userSpaceOnUse"><stop className="metal-stop--bright" /><stop offset=".46" className="metal-stop--mid" /><stop offset="1" className="metal-stop--dark" /></linearGradient>
+      <linearGradient id="motus-facet" x1="120" y1="0" x2="120" y2="240" gradientUnits="userSpaceOnUse"><stop className="facet-stop--bright" /><stop offset="1" className="facet-stop--dark" /></linearGradient>
+    </defs>
+    <path className="mark-body" d="M120 4C138 89 151 102 236 120C151 138 138 151 120 236C102 151 89 138 4 120C89 102 102 89 120 4Z" />
+    <path className="mark-facet" d="M120 4L120 120L236 120C151 102 138 89 120 4Z" />
+    <path className="mark-facet mark-facet--lower" d="M4 120L120 120L120 236C102 151 89 138 4 120Z" />
+    <path className="mark-seam" d="M120 4V236M4 120H236" />
+  </svg>;
+}
+
+/** The same landing page with three reviewable, lightweight art directions. */
+export function HeroShowcase({ direction = "type" }: { direction?: "signal" | "flow" | "type" }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const finePointer = useSyncExternalStore(subscribeToPointer, () => window.matchMedia(finePointerQuery).matches, () => false);
+  const x = useSpring(0, { stiffness: 150, damping: 26, mass: .5 });
+  const y = useSpring(0, { stiffness: 150, damping: 26, mass: .5 });
+  // Transform only the small art layer; avoid inheritable pointer variables.
+  const transform = useTransform([x, y], ([horizontal, vertical]) => `perspective(1000px) translate3d(${Number(horizontal) * 9}px, ${Number(vertical) * -5}px, 0) rotateY(${Number(horizontal) * 9}deg) rotateX(${Number(vertical) * -6}deg)`);
+
+  useEffect(() => {
+    const element = ref.current;
+    const reset = (immediate = false) => { const method = immediate ? "jump" : "set"; x[method](0); y[method](0); };
+    if (!element || direction === "type" || reduced || !finePointer) { reset(true); return; }
+    let frame = 0;
+    const cancel = () => { if (frame) cancelAnimationFrame(frame); frame = 0; };
+    const leave = () => { cancel(); reset(); };
+    const settle = () => { cancel(); reset(true); };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || document.hidden) return;
+      cancel();
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const bounds = element.getBoundingClientRect();
+        x.set(Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1)));
+        y.set(Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1)));
+      });
+    };
+    element.addEventListener("pointermove", move, { passive: true });
+    element.addEventListener("pointerleave", leave);
+    window.addEventListener("blur", settle);
+    document.addEventListener("keydown", settle);
+    document.addEventListener("visibilitychange", settle);
+    return () => {
+      cancel(); element.removeEventListener("pointermove", move); element.removeEventListener("pointerleave", leave);
+      window.removeEventListener("blur", settle); document.removeEventListener("keydown", settle);
+      document.removeEventListener("visibilitychange", settle); reset(true);
+    };
+  }, [direction, reduced, finePointer, x, y]);
+
+  const inputs = [
+    { name: "Messages", y: 64, icon: "M-12-8H12V7H-3L-10 13V7H-12Z M-6-2H6 M-6 3H2" },
+    { name: "Bookings", y: 150, icon: "M-11-8H11V11H-11Z M-11-2H11 M-6-12V-5 M6-12V-5 M-5 3H-1 M3 3H7 M-5 7H-1" },
+    { name: "Invoices", y: 236, icon: "M-9-12H5L11-6V12H-9Z M5-12V-6H11 M-4-2H6 M-4 3H6 M-4 8H2" },
+  ];
+
+  return <div ref={ref} className={`hero-showcase hero-showcase--${direction}`} data-visible="false" aria-hidden="true">
+    <div className="showcase-arrival">
+      <div className="showcase-aura" />
+      {direction === "type" ? <div className="showcase-words">
+        <div className="showcase-type-light" />
+        <div className="showcase-word-window"><div className="showcase-word-track">
+          <span>Your customers.</span><span>Your team.</span><span>Your business.</span><span>Your customers.</span>
+        </div></div>
+        <div className="showcase-word-rule"><span /></div>
+      </div> : direction === "signal" ? <>
+        <svg className="showcase-ribbons" viewBox="0 0 1200 300" fill="none" focusable="false">
+          {["M-60 240C160 270 310 70 506 145", "M694 145C870 220 995 20 1260 60", "M-60 260C245 330 370 195 508 159", "M692 159C880 105 1020 240 1260 180"].map((path, index) => <g key={path} style={{ "--signal-delay": `${index * -1.4}s` } as CSSProperties}><path className="ribbon-track" d={path} /><path className="ribbon-pulse" pathLength="100" d={path} /></g>)}
+        </svg>
+        <div className="showcase-mark-position"><motion.div className="showcase-pointer" style={{ transform }}><div className="showcase-mark-drift"><SignalMark /></div></motion.div></div>
+      </> : <>
+        <svg className="showcase-flow showcase-flow--desktop" viewBox="0 0 1100 300" fill="none" focusable="false">
+          {inputs.map(({ name, y: inputY, icon }, index) => <g key={name} style={{ "--signal-delay": `${index * .5}s` } as CSSProperties}>
+            <path className="flow-track" d={`M245 ${inputY}C345 ${inputY} 340 150 484 150`} />
+            <path className="flow-pulse flow-pulse--in" pathLength="100" d={`M245 ${inputY}C345 ${inputY} 340 150 484 150`} />
+            <g className="flow-input" transform={`translate(220 ${inputY})`}><circle r="24" /><path d={icon} /></g>
+            <text className="flow-label" x="181" y={inputY + 5} textAnchor="end">{name}</text>
+          </g>)}
+          <path className="flow-track" d="M616 150H856" />
+          <path className="flow-pulse flow-pulse--out" pathLength="100" d="M616 150H856" />
+          <g className="flow-result" transform="translate(881 150)"><circle r="25" /><path d="M-10 0L-3 7L11-8" /></g>
+          <text className="flow-label flow-label--result" x="881" y="203" textAnchor="middle">Ready for you</text>
+        </svg>
+        <svg className="showcase-flow showcase-flow--mobile" viewBox="0 0 360 310" fill="none" focusable="false">
+          {inputs.map(({ name, icon }, index) => {
+            const inputX = 60 + index * 120;
+            return <g key={name} style={{ "--signal-delay": `${index * .5}s` } as CSSProperties}>
+              <path className="flow-track" d={`M${inputX} 74C${inputX} 133 180 111 180 134`} />
+              <path className="flow-pulse flow-pulse--in" pathLength="100" d={`M${inputX} 74C${inputX} 133 180 111 180 134`} />
+              <g className="flow-input" transform={`translate(${inputX} 50)`}><circle r="24" /><path d={icon} /></g>
+              <text className="flow-label" x={inputX} y="13" textAnchor="middle">{name}</text>
+            </g>;
+          })}
+          <path className="flow-track" d="M180 206V249" />
+          <path className="flow-pulse flow-pulse--out" pathLength="100" d="M180 206V249" />
+          <g className="flow-result" transform="translate(180 270)"><circle r="21" /><path d="M-9 0L-3 6L10-7" /></g>
+          <text className="flow-label flow-label--result" x="180" y="307" textAnchor="middle">Ready for you</text>
+        </svg>
+        <div className="showcase-mark-position"><motion.div className="showcase-pointer" style={{ transform }}><div className="showcase-flow-mark"><SignalMark /></div></motion.div></div>
+      </>}
+    </div>
+  </div>;
+}
+
 /** Motion owns panel transforms; GSAP only reveals their opacity. */
 export function MotionPanel(props: Omit<ComponentProps<"article">, "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart">) {
   const reduced = useReducedMotion();
@@ -154,9 +245,18 @@ export function useSiteMotion(rootRef: RefObject<HTMLElement | null>) {
       const media = gsap.matchMedia();
       media.add("(prefers-reduced-motion: no-preference)", () => {
         const select = gsap.utils.selector(root);
-        const hero = gsap.timeline({ defaults: { ease: "power3.out", duration: .7 } });
-        hero.fromTo(select(".hero-copy > [data-enter]"), { opacity: .55, y: 12 }, { opacity: 1, y: 0, stagger: .075, clearProps: "opacity,transform" });
-        hero.fromTo(select(".dashboard-preview"), { opacity: .7, y: 24, scale: .985 }, { opacity: 1, y: 0, scale: 1, clearProps: "opacity,transform", duration: .85 }, .22);
+        const hero = gsap.timeline({ defaults: { ease: "power3.out", duration: .5 } });
+        hero.fromTo(select(".hero-copy > [data-enter]:not(h1)"), { opacity: .35, y: 16 }, { opacity: 1, y: 0, stagger: .06, clearProps: "opacity,transform" });
+        hero.fromTo(select("[data-title-reveal]"), { yPercent: 110 }, { yPercent: 0, stagger: .08, duration: .65, clearProps: "transform" }, .08);
+        hero.fromTo(select(".showcase-arrival"), { opacity: .4, y: 18 }, { opacity: 1, y: 0, duration: .75, clearProps: "opacity,transform" }, .2);
+        const syncEffects = () => {
+          const inactive = root.dataset.effectsInactive === "true" || document.hidden;
+          if (inactive) hero.progress(1).pause();
+        };
+        const effectsObserver = new MutationObserver(syncEffects);
+        effectsObserver.observe(root, { attributes: true, attributeFilter: ["data-effects-inactive"] });
+        document.addEventListener("visibilitychange", syncEffects);
+        syncEffects();
 
         select(".reveal").forEach((target: HTMLElement) => {
           const panel = target.hasAttribute("data-motion-panel");
@@ -164,7 +264,7 @@ export function useSiteMotion(rootRef: RefObject<HTMLElement | null>) {
           // Do not conceal an anchor destination or a panel already on screen.
           if (currentViewport.top < window.innerHeight && currentViewport.bottom > 0) return;
           gsap.fromTo(target, panel ? { opacity: 0 } : { opacity: 0, y: 18 }, {
-            opacity: 1, ...(panel ? {} : { y: 0 }), duration: .65, ease: "power3.out",
+            opacity: 1, ...(panel ? {} : { y: 0 }), duration: .45, ease: "power3.out",
             clearProps: panel ? "opacity" : "opacity,transform",
             scrollTrigger: { trigger: target, start: "top 94%", once: true },
           });
@@ -173,13 +273,18 @@ export function useSiteMotion(rootRef: RefObject<HTMLElement | null>) {
           scaleX: 1, ease: "none", scrollTrigger: { trigger: root, start: "top top", end: "bottom bottom", scrub: .2 },
         });
         const revealFocus = (event: FocusEvent) => {
+          if ((event.target as HTMLElement).closest(".hero")) hero.progress(1).pause();
           const target = (event.target as HTMLElement).closest<HTMLElement>(".reveal");
           if (!target) return;
           gsap.killTweensOf(target);
           gsap.set(target, { opacity: 1, ...(target.hasAttribute("data-motion-panel") ? {} : { y: 0 }) });
         };
         root.addEventListener("focusin", revealFocus);
-        return () => root.removeEventListener("focusin", revealFocus);
+        return () => {
+          effectsObserver.disconnect();
+          document.removeEventListener("visibilitychange", syncEffects);
+          root.removeEventListener("focusin", revealFocus);
+        };
       }, root);
       dispose = () => media.revert();
     }).catch(() => { /* The static page is the fallback. */ });

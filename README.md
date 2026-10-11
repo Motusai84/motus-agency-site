@@ -56,6 +56,92 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+### Selected opening and motion previews
+
+Branch `codex/motus-dimensional-hero` is a preview-only design iteration.
+The owner selected animated words and lighting (direction 3). This is now the
+default opening at `/`, as well as `/preview/type`. The two alternative routes
+remain available for comparison. Three static routes share the same page:
+
+- `/preview/signal`: a faceted Motus symbol with curved travelling light.
+- `/preview/flow`: messages, bookings and invoices converge on Motus, then
+  move towards a checked result. A separate mobile arrangement keeps labels legible.
+- `/preview/type`: rotating words and moving light, without a central object.
+
+The selected opening holds each phrase for 2.76 seconds and rolls between them
+in about 440 milliseconds. Fixed 100px desktop/74px phone slots give the serif
+lettering room above and below its baseline, with edge masks including the
+WebKit prefix. Responsive type sizes keep every phrase within its frame.
+The mobile artwork area is 210px tall, reducing empty space while keeping the
+light effect. One moving glow replaces the overlapping glow layers. Mouse
+tracking is skipped entirely for the typography direction.
+
+Phone supporting copy is 14px, the headline scales down at narrow widths, and
+the theme/menu buttons have 44px touch targets. Existing IDs and navigation
+behaviour are retained. No dependency or delivery-contract changes were made.
+
+The top salon website preview, decorative background video and Pause effects
+button are removed. The salon demonstration stays in Examples. The full work
+queue remains in How it works. Existing business copy, prices, calculator,
+form delivery and all four demo routes are preserved.
+
+The openings use local CSS/SVG and installed Framer Motion/GSAP dependencies.
+No packages were added. Pointer depth affects only the small symbol layer.
+Entrance timings are shorter: the artwork settles in 0.75 seconds, the headline
+in 0.65 seconds and section reveals in 0.45 seconds. Removing the hero image
+and background video removes their download/decoding work; no numerical speed
+or frame-rate improvement has been measured.
+
+Both themes use the same motion, with stronger blue/lavender contrast in light
+view. Decorative content is hidden from assistive technology. Continuous effects
+pause off screen and in hidden tabs; automatic reduced-motion support remains.
+The comparison routes carry noindex metadata and are absent from the sitemap.
+
+Validation on 11 October 2026: build, TypeScript and lint pass. Local browser
+checks on the selected opening cover 320x740, 390x844 and 430x932 in both
+colour themes, 844x390 landscape navigation, and 1440x900 desktop in both themes,
+with no horizontal overflow or clipped phrases. All four primary phone tap
+targets measure at least 44px tall. The preceding comparison pass checked all
+three openings at 390x844 and 1440x900. Shared-page checks cover mobile navigation and Escape focus
+return, visible keyboard focus, example links, work-queue filters, calculator
+updates, empty-form validation and offscreen animation pausing. No browser
+warnings/errors were reported. OS reduced-motion switching and physical-phone
+performance are not tested; reduced-motion guards are reviewed in source.
+No real enquiry was sent and no Cloudflare deployment was performed.
+
+Refined selected preview:
+https://motus-agency-mobile-review-hvu57x4k0-motusai84s-projects.vercel.app
+
+Vercel deployment `dpl_JBpFoB9dQ4Gnq2XFv7ZqjXhhnBF5` is READY in the
+`preview` environment, built from application commit `fa16393`. Authentication
+protection remains enabled. The dry-run selection contains 70 application and
+public-asset files (2,843,705 bytes), excluding private/generated paths.
+Both `/` and `/preview/type` return HTTP 200. Browser verification of the
+uploaded homepage confirms the chosen direction, 9.6-second word cycle,
+14px phone supporting copy, 74px word slot and 44px controls, with no overflow.
+Both themes retain active motion and report no browser warnings/errors.
+
+Preceding comparison review base:
+https://motus-agency-mobile-review-kzkr437lz-motusai84s-projects.vercel.app
+Use the three `/preview/` paths above to compare the openings.
+
+Vercel deployment `dpl_m6mdoAdcU3DQnvxYcfNdLA5nJ3SY` is READY in the
+`preview` environment, built from application commit `26f504d`. Authentication
+protection remains enabled. The dry-run file selection includes 70 application
+and public-asset files (2,842,554 bytes), with no private/generated paths.
+All three comparison routes return HTTP 200; browser checks confirm each
+uploaded route presents the correct direction.
+
+The preceding salon-opening preview remains available at
+https://motus-agency-mobile-review-d7jvqf92c-motusai84s-projects.vercel.app
+(deployment `dpl_59gfYju5hp5r68rmetoLEw21FbL9`, application commit `867a118`).
+It is superseded for this design comparison, not deleted.
+
+The explicit `.vercelignore` excludes local backups, private notes, historical
+prototypes, generated builds, logs and environment files from CLI previews.
+A deployment dry run checks only application source and public assets are
+selected. These experiments are not approved for production.
+
 ### Historical website prototypes
 
 Local `prototypes/` and `design-handoff/` directories contain rejected or
