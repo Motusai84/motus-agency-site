@@ -8,28 +8,38 @@ Canonical Agency OS source for the Motus public website.
 - Production platform: Cloudflare Workers
 - Worker: `motus-site`
 - Production URL: `https://motusautomation.co.uk`
-- Rollback URL: `https://motus-agency-site.vercel.app`
+- Rollback: retained Cloudflare version `992f14a3-e218-48e2-abea-b7cb2b521db8`
 - Deployment policy: Wrangler with explicit production approval
 
-The owner-selected refined typography opening and all four integrated demos
-are live as of 11 October 2026, 18:42 UTC. Cloudflare version
-`992f14a3-e218-48e2-abea-b7cb2b521db8` serves 100% of traffic. Publication was
-explicitly approved by the owner. Pull request #5 merged the tested source as
-`e538bf7`; its files match the approved preview source `aae0e55` exactly.
+Individually quoted projects and Craig's approved testimonial are live as of
+11 October 2026, 21:22 UTC. Cloudflare version
+`27ef86f4-8a4a-4f33-b2f4-236fb387eb02` serves 100% of traffic. The owner
+explicitly approved publication and confirmed Craig gave five stars. Pull
+request #7 merged the tested source as `a2ce151`; its files match the tested
+release source `e77774f` exactly. Draft feedback labels are removed and the
+generic barber photograph stays visibly labelled as illustrative. Advertised
+website/package fees are replaced with a conversation and individually agreed
+price. The approved typography opening, four demos, calculator and enquiry
+delivery contract are preserved.
 Lint, Next.js build, TypeScript, OpenNext packaging and Wrangler dry run pass.
-The prior version `26201c17-5a16-4af0-bb26-052bddb6a3b8`, including its assets,
+The prior version `992f14a3-e218-48e2-abea-b7cb2b521db8`, including its assets,
 is retained for rollback. A read-only Worker source export was checked before
 and after backup, and immediately before publication (SHA-256
-`9a11f7508e3f94756c53b472a17132a0dc19d3fc5b81ffbd2783ff84415b8bc7`).
-Rollback uses `npx wrangler versions deploy 26201c17-5a16-4af0-bb26-052bddb6a3b8@100 --yes`.
+`0b30ee1356ee5709ba852d65929680966eac670c9efc3bdc77f417c41ca3ebaf`).
+The local reference export is in the ignored
+`production-backups/2026-10-11-cloudflare-992f14a3/` directory. Rollback uses
+`npx wrangler versions deploy 992f14a3-e218-48e2-abea-b7cb2b521db8@100 --yes`.
 The owner explicitly deferred the business service
 address until after this deployment; it remains an outstanding follow-up.
 
 Post-deployment checks returned HTTP 200 for `/`, `/demos`, all four demo
-routes, `/privacy`, `/sitemap.xml` and `/robots.txt`. An empty JSON enquiry
+routes, `/privacy`, `/sitemap.xml`, `/robots.txt` and the testimonial WebP. An empty JSON enquiry
 returned HTTP 400 without reaching n8n. The live root serves the typography
-opening, with the duplicated hero dashboard and effects toggle removed.
-Live 390px phone and 1440px desktop checks cover both themes, the 9.6-second
+opening, approved Craig quote, five-star rating and individual-quote section;
+fixed website fees and draft testimonial wording are absent. Live 390px phone
+checks in both themes and a 1440px desktop check confirm the image loads and
+all testimonial text fits, with no overflow or console warnings/errors.
+The earlier typography release's browser checks covered the 9.6-second
 word cycle, 74px/100px word frames, 44px phone controls, mobile navigation and
 Escape/focus return. The calculator changes correctly to 48 hours/week and
 £44,928 for a six-person team; the attention filter shows two work items.
@@ -58,7 +68,7 @@ to the sitemap. Submit the sitemap in Search Console after these routes are live
 
 ## Local Development
 
-### Individually quoted projects and client feedback preview
+### Individually quoted projects and client feedback
 
 Branch `codex/motus-client-feedback-preview` contains the follow-up removing
 advertised website/package fees and adding barber client feedback. The owner
@@ -91,7 +101,7 @@ the calculator updates correctly and blank form validation focuses the name.
 No browser warnings/errors or real enquiry submissions occurred. The existing
 shared reveal/reduced-motion implementation is unchanged.
 
-Protected preview, Ready on 11 October 2026:
+Protected review preview, Ready before the approved production release on 11 October 2026:
 https://motus-agency-mobile-review-6is7h3ou2-motusai84s-projects.vercel.app
 Deployment `dpl_H4cypn2S4ewkRxfy1xsRrqgARSUe`, target `preview`, application
 source `f205a00`. Vercel authentication remains enabled. The initial upload selection
@@ -99,7 +109,7 @@ contains 72 application/asset files (2,940,239 bytes), excluding environment
 files, Git data, backups and local generated material. Online desktop and 390px
 checks confirm the new quote section, loaded image, draft feedback and absence
 of fixed website fees, with no overflow or console warnings/errors. The live
-Cloudflare website remains on the previously approved release. The revised quote
+Cloudflare website remained on the previous release during these preview checks. The revised quote
 passes build, TypeScript and lint, fits the 1440px desktop and 390px phone views,
 and contains no em dashes or 24-hour support claim. Local phone light view also
 passes; deployed desktop and phone checks have no overflow or console warnings/errors.
@@ -270,8 +280,9 @@ Validation covers lint, the Next.js production build, mobile `390x844` and
 desktop `1440x900` browser checks, keyboard focus, navigation, the calculator,
 all four example enquiry links, and a mocked lead-route check for validation,
 rate limiting and upstream failures. No real enquiry was submitted during QA.
-Client testimonials remain unpublished pending approval of their exact wording.
-Production publication requires separate approval.
+Craig's exact testimonial wording and publication were subsequently approved;
+the current release is recorded in Status above. Future production changes
+require separate approval.
 
 ### Salon website demonstration
 
