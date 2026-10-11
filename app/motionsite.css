@@ -506,3 +506,134 @@ html[data-theme="light"] .landing-page [data-motion-panel]::before { background:
   .cursor-glow, .border-light, .field-beam, .effects-toggle { display: none !important; }
   .landing-page [data-motion-panel]::before { display: none; }
 }
+
+/* A connected, dimensional preview of the actual Motus offer. Each transform
+   layer has one owner: pointer/scroll, entrance, then ambient movement. */
+.hero-title-mask { display: block; overflow: hidden; padding-bottom: .13em; margin-bottom: -.13em; }
+.hero-title-mask > span, .hero-title-mask > em { display: block; }
+.landing-page .hero h1 em { animation: none; background: none; -webkit-text-fill-color: currentColor; color: #c9ceec; }
+.hero-showcase {
+  --scene-scroll: 0;
+  --scene-x: 0;
+  --scene-y: 0;
+  --scene-light-x: 50;
+  --scene-light-y: 25;
+  --scene-surface: #172026;
+  --scene-ink: #edf1f3;
+  --scene-muted: #b0bec8;
+  position: relative; width: min(100% - 24px, 1240px); margin: 24px auto 0;
+  isolation: isolate; perspective: 1400px; text-align: left;
+}
+.showcase-art { position: absolute; z-index: -1; inset: 0 0 auto; height: 480px; pointer-events: none; }
+.showcase-light { position: absolute; inset: -90px -60px -180px; opacity: .8; background: radial-gradient(ellipse at calc(var(--scene-light-x) * 1%) calc(var(--scene-light-y) * 1%), rgba(160, 183, 220, .2), rgba(129, 156, 208, .07) 26%, transparent 61%); }
+.showcase-floor { position: absolute; inset: 60px -10% -230px; background-image: linear-gradient(rgba(178, 194, 209, .13) 1px, transparent 1px), linear-gradient(90deg, rgba(178, 194, 209, .13) 1px, transparent 1px); background-size: 80px 80px; transform: perspective(650px) rotateX(68deg); mask-image: radial-gradient(ellipse, #000 3%, transparent 67%); opacity: .5; }
+.showcase-connections { position: absolute; inset: -10px 0 auto; width: 100%; height: 360px; transform: translateY(calc(var(--scene-scroll) * -24px)); }
+.showcase-wire { stroke: rgba(179, 194, 221, .18); stroke-width: 1; }
+.showcase-current { stroke: #b9c6ff; stroke-width: 2; stroke-dasharray: 9 91; stroke-linecap: round; animation: showcase-route 6s linear infinite paused; }
+.showcase-connections g:nth-child(2) .showcase-current { animation-delay: -2s; }
+.showcase-connections g:nth-child(3) .showcase-current { animation-delay: -4s; }
+.showcase-hub { fill: #dbe2ff; }
+.showcase-pane-anchor { position: absolute; transform-style: preserve-3d; perspective: 900px; }
+.showcase-pane-anchor--website { top: 12px; left: 24px; width: 290px; transform: perspective(900px) translate3d(calc(var(--scene-x) * -18px), calc(var(--scene-y) * -12px + var(--scene-scroll) * -55px), 0) rotateY(calc(19deg + var(--scene-x) * 6deg)) rotateX(6deg) rotateZ(-7deg); }
+.showcase-pane-anchor--invoice { top: -16px; left: calc(50% + 28px); width: 210px; transform: perspective(900px) translate3d(calc(var(--scene-x) * 10px), calc(var(--scene-y) * -8px + var(--scene-scroll) * -95px), 0) rotateY(calc(-14deg + var(--scene-x) * 5deg)) rotateZ(4deg); }
+.showcase-pane-anchor--booking { top: 38px; right: 22px; width: 248px; transform: perspective(900px) translate3d(calc(var(--scene-x) * 22px), calc(var(--scene-y) * -16px + var(--scene-scroll) * -65px), 0) rotateY(calc(-24deg + var(--scene-x) * 7deg)) rotateX(7deg) rotateZ(8deg); }
+.showcase-pane-arrival { transform-style: preserve-3d; }
+.showcase-pane-float { animation: showcase-float 7s ease-in-out infinite alternate paused; }
+.showcase-pane-anchor--booking .showcase-pane-float { animation-delay: -3s; animation-duration: 8s; }
+.showcase-pane-anchor--invoice .showcase-pane-float { animation-delay: -5s; animation-duration: 9s; }
+.showcase-pane { position: relative; overflow: hidden; border: 1px solid rgba(208, 222, 236, .38); border-radius: 13px; background: linear-gradient(135deg, rgba(223, 235, 245, .1), transparent 42%), var(--scene-surface); color: var(--scene-ink); box-shadow: inset 0 1px 0 rgba(240, 247, 255, .34), inset 1px 0 0 rgba(240, 247, 255, .13), 4px 6px 0 -3px #33434f, 0 28px 50px -18px rgba(0, 0, 0, .68); }
+.showcase-pane::after { position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 4px rgba(224, 237, 249, .035); content: ""; pointer-events: none; }
+.showcase-reflection { position: absolute; inset: -70% auto -70% -110%; width: 55%; background: linear-gradient(90deg, transparent, rgba(234, 242, 255, .12), transparent); transform: rotate(-25deg); animation: showcase-reflect 10s ease-in-out infinite paused; }
+.showcase-pane-anchor--booking .showcase-reflection { animation-delay: -4s; }
+.showcase-pane-anchor--invoice .showcase-reflection { animation-delay: -7s; }
+.showcase-browser { display: flex; align-items: center; gap: 4px; height: 28px; padding: 0 12px; color: #c6d0d8; }
+.showcase-browser > span { width: 4px; height: 4px; border-radius: 50%; background: #82929e; }
+.showcase-browser > small { margin-left: auto; font-size: 8px; }
+.showcase-website-page { position: relative; height: 200px; overflow: hidden; background: #e4d4c0; }
+.showcase-website-page > img { object-fit: cover; object-position: 73% 33%; }
+.showcase-website-page::after { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(17, 15, 12, .72), rgba(17, 15, 12, .15) 70%); content: ""; }
+.showcase-website-copy { position: absolute; z-index: 1; inset: 15px 18px; display: flex; align-items: start; flex-direction: column; justify-content: space-between; color: #f5f1e8; }
+.showcase-website-copy > small { font-size: 9px; letter-spacing: .02em; }
+.showcase-website-copy > strong { font-family: "Instrument Serif", var(--font-display), Georgia, serif; font-size: 31px; font-weight: 400; line-height: .98; letter-spacing: -.025em; }
+.showcase-website-copy > span { display: flex; gap: 14px; align-items: center; border-bottom: 1px solid rgba(245, 241, 232, .45); padding-bottom: 5px; font-size: 8px; }
+.showcase-booking { padding: 18px; }
+.showcase-invoice { padding: 17px; }
+.showcase-pane > header { display: flex; align-items: center; gap: 8px; }
+.showcase-pane > header small { font-size: 11px; font-weight: 500; }
+.showcase-pane > header > i { margin-left: auto; width: 5px; height: 5px; border-radius: 50%; background: #b9c6ff; box-shadow: 0 0 9px rgba(185, 198, 255, .5); }
+.showcase-glyph { display: grid; width: 23px; height: 23px; place-items: center; border: 1px solid rgba(207, 220, 233, .25); border-radius: 7px; color: #c9d2ff; font-size: 13px; }
+.showcase-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 17px; }
+.showcase-calendar > span { display: grid; height: 22px; place-items: center; border-radius: 4px; color: var(--scene-muted); font-size: 8px; }
+.showcase-calendar .is-booked { background: #c4ccff; box-shadow: 0 2px 12px rgba(169, 187, 255, .15); color: #19212b; }
+.showcase-booking-line { display: flex; align-items: center; gap: 9px; margin-top: 14px; border-top: 1px solid rgba(207, 220, 233, .15); padding-top: 12px; }
+.showcase-booking-line > i { width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, #91a4b3, #344a5a); }
+.showcase-booking-line > span { width: 50%; height: 4px; border-radius: 3px; background: #617380; }
+.showcase-booking-line > b { margin-left: auto; color: #c4ccff; font-size: 11px; font-weight: 400; }
+.showcase-invoice > svg { display: block; width: 100%; height: 66px; margin: 12px 0 8px; }
+.showcase-chart-rule { stroke: rgba(192, 206, 219, .2); }
+.showcase-chart-line { stroke: #bac7ff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.showcase-chart-point { fill: #edf1f3; }
+.showcase-invoice-lines { display: grid; gap: 8px; }
+.showcase-invoice-lines > span { display: block; width: 100%; height: 3px; background: rgba(193, 206, 218, .25); border-radius: 3px; }
+.showcase-invoice-lines > span:nth-child(2) { width: 75%; }
+.showcase-invoice-lines > span:nth-child(3) { width: 45%; }
+.showcase-console { position: relative; padding-top: 155px; transform-origin: center 65%; }
+.hero-showcase .dashboard-preview { width: min(100% - 80px, 1030px); margin-top: 0; animation: none; opacity: 1; transform: none; background: linear-gradient(115deg, rgba(238, 244, 255, .19), rgba(238, 244, 255, .035) 35%, rgba(174, 195, 220, .14)), #192127; border-color: rgba(211, 225, 240, .38); box-shadow: inset 0 1px 0 rgba(243, 248, 255, .35), inset 1px 0 0 rgba(224, 238, 251, .12), 0 38px 85px -28px rgba(0, 0, 0, .85); }
+.hero-showcase .dashboard-preview.is-highlighted { border-color: #b9c6ff; box-shadow: 0 0 0 2px rgba(185, 198, 255, .3), 0 25px 70px -10px rgba(155, 163, 255, .3); }
+.hero-showcase[data-visible="true"] .showcase-pane-float, .hero-showcase[data-visible="true"] .showcase-current, .hero-showcase[data-visible="true"] .showcase-reflection { animation-play-state: running; }
+.landing-page[data-effects-inactive="true"] .hero-showcase { --scene-x: 0 !important; --scene-y: 0 !important; --scene-scroll: 0 !important; }
+.landing-page[data-effects-inactive="true"] .hero-showcase *, .hero-showcase[data-visible="false"] * { animation-play-state: paused; }
+html[data-theme="light"] .landing-page .hero h1 em { color: #5964a3; }
+html[data-theme="light"] .hero-showcase { --scene-surface: #eef2f6; --scene-ink: #27343f; --scene-muted: #526474; }
+html[data-theme="light"] .showcase-pane { border-color: rgba(89, 109, 132, .3); box-shadow: inset 0 1px 0 white, inset 1px 0 0 white, 4px 6px 0 -3px #bdc9d6, 0 28px 50px -18px rgba(45, 62, 86, .22); }
+html[data-theme="light"] .showcase-browser { color: #526474; }
+html[data-theme="light"] .showcase-glyph { color: #5964a3; border-color: #bfc8d8; }
+html[data-theme="light"] .showcase-chart-line { stroke: #6976b4; }
+html[data-theme="light"] .showcase-chart-point { fill: #5964a3; }
+html[data-theme="light"] .showcase-invoice-lines > span { background: #b8c4ce; }
+html[data-theme="light"] .showcase-wire { stroke: rgba(89, 109, 132, .2); }
+html[data-theme="light"] .showcase-current { stroke: #7988bf; }
+html[data-theme="light"] .hero-showcase .dashboard-preview { background: linear-gradient(115deg, #fff, rgba(211, 221, 234, .5)); border-color: #c6cfdb; box-shadow: inset 0 1px 0 white, 0 35px 70px -28px rgba(45, 62, 86, .25); }
+@keyframes showcase-float { from { transform: translateY(-4px); } to { transform: translateY(9px); } }
+@keyframes showcase-reflect { 0%, 25% { translate: 0 0; } 65%, 100% { translate: 440% 0; } }
+@keyframes showcase-route { to { stroke-dashoffset: -100; } }
+@media (max-width: 1050px) and (min-width: 761px) {
+  .showcase-pane-anchor--website { width: 240px; left: 7px; }
+  .showcase-pane-anchor--booking { width: 215px; right: 10px; }
+  .showcase-pane-anchor--invoice { width: 175px; left: calc(50% - 35px); }
+  .showcase-website-page { height: 180px; }
+}
+@media (max-width: 760px) {
+  .hero-showcase { width: 100%; margin-top: 18px; }
+  .showcase-art { height: 320px; }
+  .showcase-pane-anchor--website { top: 0; left: max(8px, calc(50% - 220px)); width: 170px; transform: perspective(700px) translateY(calc(var(--scene-scroll) * -20px)) rotateY(12deg) rotateZ(-6deg); }
+  .showcase-pane-anchor--booking { top: 13px; right: max(8px, calc(50% - 220px)); width: 163px; transform: perspective(700px) translateY(calc(var(--scene-scroll) * -30px)) rotateY(-15deg) rotateZ(7deg); }
+  .showcase-pane-anchor--invoice { display: none; }
+  .showcase-browser { height: 21px; padding: 0 8px; }
+  .showcase-browser > small { font-size: 7px; }
+  .showcase-website-page { height: 126px; }
+  .showcase-website-copy { inset: 10px 12px; }
+  .showcase-website-copy > strong { font-size: 23px; }
+  .showcase-website-copy > small, .showcase-website-copy > span { font-size: 7px; }
+  .showcase-booking { padding: 11px; }
+  .showcase-pane > header small { font-size: 9px; }
+  .showcase-glyph { width: 18px; height: 18px; font-size: 10px; border-radius: 5px; }
+  .showcase-calendar { gap: 2px; margin-top: 10px; }
+  .showcase-calendar > span { height: 17px; font-size: 7px; }
+  .showcase-booking-line { margin-top: 8px; padding-top: 7px; }
+  .showcase-booking-line > i { width: 14px; height: 14px; }
+  .showcase-connections { height: 235px; }
+  .showcase-floor { background-size: 55px 55px; opacity: .3; }
+  .showcase-console { padding-top: 116px; }
+  .hero-showcase .dashboard-preview { width: min(100% - 24px, 560px); padding: 6px; }
+}
+@media (max-width: 360px) {
+  .showcase-pane-anchor--website { width: 152px; }
+  .showcase-pane-anchor--booking { width: 146px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-showcase { --scene-x: 0 !important; --scene-y: 0 !important; --scene-scroll: 0 !important; }
+  .showcase-pane-float, .showcase-reflection, .showcase-current { animation: none !important; }
+  .showcase-reflection, .showcase-current { display: none; }
+  .showcase-console, .showcase-pane-arrival, [data-title-reveal] { opacity: 1 !important; transform: none !important; }
+}

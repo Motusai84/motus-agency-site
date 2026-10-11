@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore, type ComponentProps, type CSSProperties, type RefObject } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { useEffect, useRef, useSyncExternalStore, type ComponentProps, type CSSProperties, type ReactNode, type RefObject } from "react";
+import Image from "next/image";
+import { motion, useMotionValue, useReducedMotion, useSpring, type MotionStyle } from "framer-motion";
+import { salonDemo } from "@/src/clients/salon-demo";
 
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
 function subscribeToPointer(callback: () => void) {
@@ -82,7 +84,7 @@ export function useAmbientEffects(rootRef: RefObject<HTMLElement | null>, paused
         else void video.play().catch(() => { /* Decorative video is optional. */ });
       }
     };
-    const ambient = root.querySelectorAll<HTMLElement>(".signal-field, .border-light");
+    const ambient = root.querySelectorAll<HTMLElement>(".signal-field, .border-light, .hero-showcase");
     const observer = typeof IntersectionObserver === "undefined" ? undefined : new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         entry.target.setAttribute("data-visible", String(entry.isIntersecting));
@@ -130,6 +132,102 @@ export function BorderLight() {
   return <span className="border-light" aria-hidden="true" />;
 }
 
+/** Separate transform layers keep decorative depth away from dashboard controls. */
+export function HeroShowcase({ children, paused }: { children: ReactNode; paused: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const finePointer = useSyncExternalStore(subscribeToPointer, () => window.matchMedia(finePointerQuery).matches, () => false);
+  const x = useSpring(0, { stiffness: 90, damping: 24, mass: .7 });
+  const y = useSpring(0, { stiffness: 90, damping: 24, mass: .7 });
+  const lightX = useSpring(50, { stiffness: 100, damping: 26 });
+  const lightY = useSpring(25, { stiffness: 100, damping: 26 });
+
+  useEffect(() => {
+    const element = ref.current;
+    const reset = (immediate = false) => {
+      const method = immediate ? "jump" : "set";
+      x[method](0); y[method](0); lightX[method](50); lightY[method](25);
+    };
+    if (!element || reduced || paused || !finePointer) { reset(true); return; }
+    let frame = 0;
+    const cancel = () => { if (frame) cancelAnimationFrame(frame); frame = 0; };
+    const leave = () => { cancel(); reset(); };
+    const settle = () => { cancel(); reset(true); };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || document.hidden) return;
+      // The real workspace stays still when someone is using it.
+      if ((event.target as HTMLElement).closest(".dashboard-preview")) { leave(); return; }
+      cancel();
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const bounds = element.getBoundingClientRect();
+        const horizontal = Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1));
+        const vertical = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1));
+        x.set(horizontal); y.set(vertical);
+        lightX.set((horizontal + 1) * 50); lightY.set((vertical + 1) * 50);
+      });
+    };
+    element.addEventListener("pointermove", move, { passive: true });
+    element.addEventListener("pointerleave", leave);
+    element.addEventListener("focusin", settle);
+    window.addEventListener("blur", settle);
+    document.addEventListener("keydown", settle);
+    document.addEventListener("visibilitychange", settle);
+    return () => {
+      cancel();
+      element.removeEventListener("pointermove", move);
+      element.removeEventListener("pointerleave", leave);
+      element.removeEventListener("focusin", settle);
+      window.removeEventListener("blur", settle);
+      document.removeEventListener("keydown", settle);
+      document.removeEventListener("visibilitychange", settle);
+      reset(true);
+    };
+  }, [reduced, paused, finePointer, x, y, lightX, lightY]);
+
+  return <motion.div ref={ref} className="hero-showcase" data-visible="false" style={{ "--scene-x": x, "--scene-y": y, "--scene-light-x": lightX, "--scene-light-y": lightY } as MotionStyle}>
+    <div className="showcase-art" aria-hidden="true">
+      <div className="showcase-light" />
+      <div className="showcase-floor" />
+      <svg className="showcase-connections" viewBox="0 0 1200 400" fill="none" focusable="false">
+        {["M140 70 V180 Q140 230 210 230 H460 Q510 230 540 270 L600 330", "M1060 90 V180 Q1060 230 990 230 H740 Q690 230 660 270 L600 330", "M690 35 V140 Q690 180 650 210 L600 260 V330"].map((path) => <g key={path}><path className="showcase-wire" d={path} /><path className="showcase-current" pathLength="100" d={path} /></g>)}
+        <ellipse cx="600" cy="330" rx="7" ry="4" className="showcase-hub" />
+      </svg>
+      <div className="showcase-pane-anchor showcase-pane-anchor--website">
+        <div className="showcase-pane-arrival"><div className="showcase-pane-float">
+          <div className="showcase-pane showcase-website">
+            <div className="showcase-browser"><span /><span /><span /><small>Salon website</small></div>
+            <div className="showcase-website-page">
+              <Image src={salonDemo.hero.src} alt="" fill sizes="(max-width: 760px) 170px, 290px" />
+              <div className="showcase-website-copy"><small>{salonDemo.name}</small><strong>{salonDemo.headline[0]}<br /><em>{salonDemo.headline[1]}</em></strong><span>Explore the studio <b>↗</b></span></div>
+            </div>
+            <span className="showcase-reflection" />
+          </div>
+        </div></div>
+      </div>
+      <div className="showcase-pane-anchor showcase-pane-anchor--invoice">
+        <div className="showcase-pane-arrival"><div className="showcase-pane-float">
+          <div className="showcase-pane showcase-invoice">
+            <header><span className="showcase-glyph">↗</span><small>Invoices</small><i /></header>
+            <svg viewBox="0 0 180 85" fill="none" focusable="false"><path d="M3 73H177" className="showcase-chart-rule" /><path d="M3 73L34 54L65 58L98 25L130 34L175 8" className="showcase-chart-line" /><circle cx="175" cy="8" r="4" className="showcase-chart-point" /></svg>
+            <div className="showcase-invoice-lines"><span /><span /><span /></div><span className="showcase-reflection" />
+          </div>
+        </div></div>
+      </div>
+      <div className="showcase-pane-anchor showcase-pane-anchor--booking">
+        <div className="showcase-pane-arrival"><div className="showcase-pane-float">
+          <div className="showcase-pane showcase-booking">
+            <header><span className="showcase-glyph">↗</span><small>Bookings</small><i /></header>
+            <div className="showcase-calendar">{Array.from({ length: 21 }, (_, index) => <span key={index} className={[4, 9, 17].includes(index) ? "is-booked" : undefined}>{index + 1}</span>)}</div>
+            <div className="showcase-booking-line"><i /><span /><b>✓</b></div><span className="showcase-reflection" />
+          </div>
+        </div></div>
+      </div>
+    </div>
+    <div className="showcase-console">{children}</div>
+  </motion.div>;
+}
+
 /** Motion owns panel transforms; GSAP only reveals their opacity. */
 export function MotionPanel(props: Omit<ComponentProps<"article">, "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart">) {
   const reduced = useReducedMotion();
@@ -154,9 +252,21 @@ export function useSiteMotion(rootRef: RefObject<HTMLElement | null>) {
       const media = gsap.matchMedia();
       media.add("(prefers-reduced-motion: no-preference)", () => {
         const select = gsap.utils.selector(root);
-        const hero = gsap.timeline({ defaults: { ease: "power3.out", duration: .7 } });
-        hero.fromTo(select(".hero-copy > [data-enter]"), { opacity: .55, y: 12 }, { opacity: 1, y: 0, stagger: .075, clearProps: "opacity,transform" });
-        hero.fromTo(select(".dashboard-preview"), { opacity: .7, y: 24, scale: .985 }, { opacity: 1, y: 0, scale: 1, clearProps: "opacity,transform", duration: .85 }, .22);
+        const hero = gsap.timeline({ defaults: { ease: "power3.out", duration: .8 } });
+        hero.fromTo(select(".hero-copy > [data-enter]:not(h1)"), { opacity: .35, y: 16 }, { opacity: 1, y: 0, stagger: .1, clearProps: "opacity,transform" });
+        hero.fromTo(select("[data-title-reveal]"), { yPercent: 110 }, { yPercent: 0, stagger: .13, duration: .95, clearProps: "transform" }, .08);
+        hero.fromTo(select(".showcase-pane-arrival"), { opacity: 0, y: 75, rotateX: -12 }, { opacity: 1, y: 0, rotateX: 0, stagger: .12, duration: 1.25, clearProps: "opacity,transform" }, .2);
+        hero.fromTo(select(".showcase-console"), { opacity: .3, y: 65, rotateX: 8, scale: .97 }, { opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 1.2, clearProps: "opacity,transform" }, .4);
+        const scene = gsap.to(select(".hero-showcase"), { "--scene-scroll": 1, ease: "none", scrollTrigger: { trigger: root.querySelector(".hero"), start: "top top", end: "bottom top", scrub: .45 } });
+        const syncEffects = () => {
+          const inactive = root.dataset.effectsPaused === "true" || document.hidden;
+          if (inactive) { hero.progress(1).pause(); scene.scrollTrigger?.disable(false); }
+          else scene.scrollTrigger?.enable(false);
+        };
+        const effectsObserver = new MutationObserver(syncEffects);
+        effectsObserver.observe(root, { attributes: true, attributeFilter: ["data-effects-paused"] });
+        document.addEventListener("visibilitychange", syncEffects);
+        syncEffects();
 
         select(".reveal").forEach((target: HTMLElement) => {
           const panel = target.hasAttribute("data-motion-panel");
@@ -173,13 +283,18 @@ export function useSiteMotion(rootRef: RefObject<HTMLElement | null>) {
           scaleX: 1, ease: "none", scrollTrigger: { trigger: root, start: "top top", end: "bottom bottom", scrub: .2 },
         });
         const revealFocus = (event: FocusEvent) => {
+          if ((event.target as HTMLElement).closest(".hero")) hero.progress(1).pause();
           const target = (event.target as HTMLElement).closest<HTMLElement>(".reveal");
           if (!target) return;
           gsap.killTweensOf(target);
           gsap.set(target, { opacity: 1, ...(target.hasAttribute("data-motion-panel") ? {} : { y: 0 }) });
         };
         root.addEventListener("focusin", revealFocus);
-        return () => root.removeEventListener("focusin", revealFocus);
+        return () => {
+          effectsObserver.disconnect();
+          document.removeEventListener("visibilitychange", syncEffects);
+          root.removeEventListener("focusin", revealFocus);
+        };
       }, root);
       dispose = () => media.revert();
     }).catch(() => { /* The static page is the fallback. */ });

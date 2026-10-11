@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore }
 import Link from "next/link";
 import { demoCatalog } from "@/lib/demo-catalog";
 import { motion, useReducedMotion } from "framer-motion";
-import { BorderLight, CursorGlow, MotionPanel, SignalField, SignalRoute, useAmbientEffects, useSiteMotion } from "@/components/SiteMotion";
+import { BorderLight, CursorGlow, HeroShowcase, MotionPanel, SignalField, SignalRoute, useAmbientEffects, useSiteMotion } from "@/components/SiteMotion";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 type QueueFilter = "all" | "moving" | "attention" | "complete";
@@ -354,7 +354,7 @@ export default function App() {
         <SignalField />
         <div className="hero-copy">
           <p className="badge" data-enter="60">For UK small businesses</p>
-          <h1 id="hero-title" data-enter="150">Websites and tools <em>made for your business.</em></h1>
+          <h1 id="hero-title" data-enter="150"><span className="hero-title-mask"><span data-title-reveal>Websites and tools </span></span><span className="hero-title-mask"><em data-title-reveal>made for your business.</em></span></h1>
           <p className="subheading" data-enter="240">Make it easier for customers to book, get in touch and work with you. Keep your customers, jobs and everyday tasks organised.</p>
           <div className="hero-actions" data-enter="330">
             <a id="hero-examples-link" className="primary-button" href="#examples">See examples</a>
@@ -371,7 +371,7 @@ export default function App() {
           <p className="tour-status" aria-live="polite">{dashboardHighlighted ? "Demo workspace highlighted. Fictional records only; nothing is sent." : ""}</p>
         </div>
 
-        <SignalRoute variant="hero" />
+        <HeroShowcase paused={effectsPaused}>
         <section className={`dashboard-preview${dashboardHighlighted ? " is-highlighted" : ""}`} id="dashboard-preview" aria-label="Illustrative Motus tailored system preview">
           <BorderLight />
           <div className="dashboard-window">
@@ -430,6 +430,7 @@ export default function App() {
             </div>
           </div>
         </section>
+        </HeroShowcase>
       </section>
 
       <section className="site-section examples-section" id="examples" aria-labelledby="examples-title">

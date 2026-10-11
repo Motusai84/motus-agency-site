@@ -56,6 +56,33 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+### Dimensional opening prototype
+
+Branch `codex/motus-dimensional-hero` adds a preview-only opening composition:
+the existing interactive dashboard sits in front of floating salon, booking
+and invoice visuals. The salon visual reuses the fictional demo configuration
+and its credited local photograph. Pointer-responsive lighting, reflections,
+masked headline entrances and scroll-linked signal paths use the existing
+Framer Motion, GSAP and CSS stack; no dependencies were added.
+
+The wording, prices, form delivery, calculator and all four demo routes are
+unchanged. Decorative previews are hidden from assistive technology; the real
+dashboard stays still during interaction. Loops pause off screen, in hidden
+tabs and through the existing effects control. Reduced-motion visitors get a
+static composition. Desktop, phone and light-theme layouts are included.
+
+Validation on 11 October 2026: production build, TypeScript, lint and diff
+checks pass. Local HTTP checks return 200 for the homepage, showroom, all
+four demos and the reused image. The browser connection was unavailable, so
+desktop/mobile appearance, pointer interactions, keyboard behaviour and
+reduced-motion switching still need visual/browser verification. The
+prototype is not approved for production.
+
+The explicit `.vercelignore` excludes local backups, private notes, historical
+prototypes, generated builds, logs and environment files from CLI previews.
+A deployment dry run confirmed only application source and public assets are
+selected. This branch does not change the canonical Cloudflare deployment.
+
 ### Historical website prototypes
 
 Local `prototypes/` and `design-handoff/` directories contain rejected or
