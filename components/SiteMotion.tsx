@@ -128,7 +128,7 @@ function SignalMark() {
 }
 
 /** The same landing page with three reviewable, lightweight art directions. */
-export function HeroShowcase({ direction = "signal" }: { direction?: "signal" | "flow" | "type" }) {
+export function HeroShowcase({ direction = "type" }: { direction?: "signal" | "flow" | "type" }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const finePointer = useSyncExternalStore(subscribeToPointer, () => window.matchMedia(finePointerQuery).matches, () => false);
@@ -140,7 +140,7 @@ export function HeroShowcase({ direction = "signal" }: { direction?: "signal" | 
   useEffect(() => {
     const element = ref.current;
     const reset = (immediate = false) => { const method = immediate ? "jump" : "set"; x[method](0); y[method](0); };
-    if (!element || reduced || !finePointer) { reset(true); return; }
+    if (!element || direction === "type" || reduced || !finePointer) { reset(true); return; }
     let frame = 0;
     const cancel = () => { if (frame) cancelAnimationFrame(frame); frame = 0; };
     const leave = () => { cancel(); reset(); };
@@ -165,7 +165,7 @@ export function HeroShowcase({ direction = "signal" }: { direction?: "signal" | 
       window.removeEventListener("blur", settle); document.removeEventListener("keydown", settle);
       document.removeEventListener("visibilitychange", settle); reset(true);
     };
-  }, [reduced, finePointer, x, y]);
+  }, [direction, reduced, finePointer, x, y]);
 
   const inputs = [
     { name: "Messages", y: 64, icon: "M-12-8H12V7H-3L-10 13V7H-12Z M-6-2H6 M-6 3H2" },

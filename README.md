@@ -56,15 +56,29 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-### Motion comparison previews
+### Selected opening and motion previews
 
 Branch `codex/motus-dimensional-hero` is a preview-only design iteration.
-Three static routes share the same page, with different animated openings:
+The owner selected animated words and lighting (direction 3). This is now the
+default opening at `/`, as well as `/preview/type`. The two alternative routes
+remain available for comparison. Three static routes share the same page:
 
 - `/preview/signal`: a faceted Motus symbol with curved travelling light.
 - `/preview/flow`: messages, bookings and invoices converge on Motus, then
   move towards a checked result. A separate mobile arrangement keeps labels legible.
 - `/preview/type`: rotating words and moving light, without a central object.
+
+The selected opening holds each phrase for 2.76 seconds and rolls between them
+in about 440 milliseconds. Fixed 100px desktop/74px phone slots give the serif
+lettering room above and below its baseline, with edge masks including the
+WebKit prefix. Responsive type sizes keep every phrase within its frame.
+The mobile artwork area is 210px tall, reducing empty space while keeping the
+light effect. One moving glow replaces the overlapping glow layers. Mouse
+tracking is skipped entirely for the typography direction.
+
+Phone supporting copy is 14px, the headline scales down at narrow widths, and
+the theme/menu buttons have 44px touch targets. Existing IDs and navigation
+behaviour are retained. No dependency or delivery-contract changes were made.
 
 The top salon website preview, decorative background video and Pause effects
 button are removed. The salon demonstration stays in Examples. The full work
@@ -84,15 +98,20 @@ pause off screen and in hidden tabs; automatic reduced-motion support remains.
 The comparison routes carry noindex metadata and are absent from the sitemap.
 
 Validation on 11 October 2026: build, TypeScript and lint pass. Local browser
-checks cover all three openings at 390x844 and 1440x900 in both themes, with no
-horizontal overflow. Shared-page checks cover mobile navigation and Escape focus
+checks on the selected opening cover 320x740, 390x844 and 430x932 in both
+colour themes, 844x390 landscape navigation, and 1440x900 desktop in both themes,
+with no horizontal overflow or clipped phrases. All four primary phone tap
+targets measure at least 44px tall. The preceding comparison pass checked all
+three openings at 390x844 and 1440x900. Shared-page checks cover mobile navigation and Escape focus
 return, visible keyboard focus, example links, work-queue filters, calculator
 updates, empty-form validation and offscreen animation pausing. No browser
 warnings/errors were reported. OS reduced-motion switching and physical-phone
 performance are not tested; reduced-motion guards are reviewed in source.
 No real enquiry was sent and no Cloudflare deployment was performed.
 
-Comparison review base:
+Refined selected preview: pending upload.
+
+Preceding comparison review base:
 https://motus-agency-mobile-review-kzkr437lz-motusai84s-projects.vercel.app
 Use the three `/preview/` paths above to compare the openings.
 

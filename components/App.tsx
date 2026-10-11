@@ -70,7 +70,7 @@ function clearPrivacyInterest() {
   window.dispatchEvent(new Event("popstate"));
 }
 
-export default function App({ heroDirection = "signal" }: { heroDirection?: "signal" | "flow" | "type" }) {
+export default function App({ heroDirection = "type" }: { heroDirection?: "signal" | "flow" | "type" }) {
   const rootRef = useRef<HTMLElement>(null);
   useAmbientEffects(rootRef);
   useSiteMotion(rootRef);
