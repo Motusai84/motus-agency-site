@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore, type ComponentProps, type CSSProperties, type ReactNode, type RefObject } from "react";
+import { useEffect, useRef, useSyncExternalStore, type ComponentProps, type CSSProperties, type RefObject } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useReducedMotion, useSpring, type MotionStyle } from "framer-motion";
 import { salonDemo } from "@/src/clients/salon-demo";
@@ -132,8 +132,8 @@ export function BorderLight() {
   return <span className="border-light" aria-hidden="true" />;
 }
 
-/** Separate transform layers keep decorative depth away from dashboard controls. */
-export function HeroShowcase({ children, paused }: { children: ReactNode; paused: boolean }) {
+/** One website preview carried by the Motus signal; each transform has one owner. */
+export function HeroShowcase({ paused }: { paused: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const finePointer = useSyncExternalStore(subscribeToPointer, () => window.matchMedia(finePointerQuery).matches, () => false);
@@ -155,8 +155,6 @@ export function HeroShowcase({ children, paused }: { children: ReactNode; paused
     const settle = () => { cancel(); reset(true); };
     const move = (event: PointerEvent) => {
       if (event.pointerType !== "mouse" || document.hidden) return;
-      // The real workspace stays still when someone is using it.
-      if ((event.target as HTMLElement).closest(".dashboard-preview")) { leave(); return; }
       cancel();
       frame = requestAnimationFrame(() => {
         frame = 0;
@@ -186,45 +184,33 @@ export function HeroShowcase({ children, paused }: { children: ReactNode; paused
   }, [reduced, paused, finePointer, x, y, lightX, lightY]);
 
   return <motion.div ref={ref} className="hero-showcase" data-visible="false" style={{ "--scene-x": x, "--scene-y": y, "--scene-light-x": lightX, "--scene-light-y": lightY } as MotionStyle}>
-    <div className="showcase-art" aria-hidden="true">
+    <div className="showcase-stage" aria-hidden="true">
       <div className="showcase-light" />
-      <div className="showcase-floor" />
-      <svg className="showcase-connections" viewBox="0 0 1200 400" fill="none" focusable="false">
-        {["M140 70 V180 Q140 230 210 230 H460 Q510 230 540 270 L600 330", "M1060 90 V180 Q1060 230 990 230 H740 Q690 230 660 270 L600 330", "M690 35 V140 Q690 180 650 210 L600 260 V330"].map((path) => <g key={path}><path className="showcase-wire" d={path} /><path className="showcase-current" pathLength="100" d={path} /></g>)}
-        <ellipse cx="600" cy="330" rx="7" ry="4" className="showcase-hub" />
+      <svg className="showcase-signal showcase-signal--back" viewBox="0 0 1200 430" fill="none" focusable="false">
+        <defs><linearGradient id="showcase-signal-ink" x1="0" y1="430" x2="1200" y2="0" gradientUnits="userSpaceOnUse"><stop stopColor="#9ba3ff" stopOpacity="0" /><stop offset=".3" stopColor="#9ba3ff" stopOpacity=".5" /><stop offset=".65" stopColor="#e3e8ff" stopOpacity=".7" /><stop offset="1" stopColor="#9ba3ff" stopOpacity="0" /></linearGradient></defs>
+        <path className="showcase-trail" d="M-80 370 C100 385 120 130 335 115 C560 100 755 390 970 270 C1140 175 1100 35 1280 65" />
+        <path className="showcase-current" pathLength="100" d="M-80 370 C100 385 120 130 335 115 C560 100 755 390 970 270 C1140 175 1100 35 1280 65" />
       </svg>
-      <div className="showcase-pane-anchor showcase-pane-anchor--website">
-        <div className="showcase-pane-arrival"><div className="showcase-pane-float">
-          <div className="showcase-pane showcase-website">
-            <div className="showcase-browser"><span /><span /><span /><small>Salon website</small></div>
+      <div className="showcase-website-anchor">
+        <div className="showcase-arrival"><div className="showcase-drift">
+          <div className="showcase-website">
+            <div className="showcase-browser"><span /><span /><span /><small>Website demo</small></div>
             <div className="showcase-website-page">
-              <Image src={salonDemo.hero.src} alt="" fill sizes="(max-width: 760px) 170px, 290px" />
-              <div className="showcase-website-copy"><small>{salonDemo.name}</small><strong>{salonDemo.headline[0]}<br /><em>{salonDemo.headline[1]}</em></strong><span>Explore the studio <b>↗</b></span></div>
+              <Image src={salonDemo.hero.src} alt="" fill sizes="(max-width: 760px) 84vw, 600px" />
+              <div className="showcase-website-copy"><small>{salonDemo.name}</small><strong>{salonDemo.headline[0]}<br /><em>{salonDemo.headline[1]}</em></strong><span>{salonDemo.tagline}</span></div>
             </div>
+            <div className="showcase-website-footer"><span>Services</span><span>Our collection</span><span>Visit the studio <b>↗</b></span></div>
             <span className="showcase-reflection" />
           </div>
         </div></div>
       </div>
-      <div className="showcase-pane-anchor showcase-pane-anchor--invoice">
-        <div className="showcase-pane-arrival"><div className="showcase-pane-float">
-          <div className="showcase-pane showcase-invoice">
-            <header><span className="showcase-glyph">↗</span><small>Invoices</small><i /></header>
-            <svg viewBox="0 0 180 85" fill="none" focusable="false"><path d="M3 73H177" className="showcase-chart-rule" /><path d="M3 73L34 54L65 58L98 25L130 34L175 8" className="showcase-chart-line" /><circle cx="175" cy="8" r="4" className="showcase-chart-point" /></svg>
-            <div className="showcase-invoice-lines"><span /><span /><span /></div><span className="showcase-reflection" />
-          </div>
-        </div></div>
-      </div>
-      <div className="showcase-pane-anchor showcase-pane-anchor--booking">
-        <div className="showcase-pane-arrival"><div className="showcase-pane-float">
-          <div className="showcase-pane showcase-booking">
-            <header><span className="showcase-glyph">↗</span><small>Bookings</small><i /></header>
-            <div className="showcase-calendar">{Array.from({ length: 21 }, (_, index) => <span key={index} className={[4, 9, 17].includes(index) ? "is-booked" : undefined}>{index + 1}</span>)}</div>
-            <div className="showcase-booking-line"><i /><span /><b>✓</b></div><span className="showcase-reflection" />
-          </div>
-        </div></div>
-      </div>
+      <svg className="showcase-signal showcase-signal--front" viewBox="0 0 1200 430" fill="none" focusable="false">
+        <path className="showcase-trail" d="M-60 385 C180 440 230 310 440 338 C650 366 755 460 985 344 C1090 290 1150 320 1260 300" />
+        <path className="showcase-current" pathLength="100" d="M-60 385 C180 440 230 310 440 338 C650 366 755 460 985 344 C1090 290 1150 320 1260 300" />
+      </svg>
+      <div className="showcase-outcomes"><span>Customer messages</span><span>Bookings</span><span>Invoices</span></div>
     </div>
-    <div className="showcase-console">{children}</div>
+    <div className="showcase-caption"><span>A fictional salon website, built to explore.</span><a id="hero-salon-demo-link" href="/demos/salon-website">Try this website demo <b aria-hidden="true">↗</b></a></div>
   </motion.div>;
 }
 
@@ -255,8 +241,7 @@ export function useSiteMotion(rootRef: RefObject<HTMLElement | null>) {
         const hero = gsap.timeline({ defaults: { ease: "power3.out", duration: .8 } });
         hero.fromTo(select(".hero-copy > [data-enter]:not(h1)"), { opacity: .35, y: 16 }, { opacity: 1, y: 0, stagger: .1, clearProps: "opacity,transform" });
         hero.fromTo(select("[data-title-reveal]"), { yPercent: 110 }, { yPercent: 0, stagger: .13, duration: .95, clearProps: "transform" }, .08);
-        hero.fromTo(select(".showcase-pane-arrival"), { opacity: 0, y: 75, rotateX: -12 }, { opacity: 1, y: 0, rotateX: 0, stagger: .12, duration: 1.25, clearProps: "opacity,transform" }, .2);
-        hero.fromTo(select(".showcase-console"), { opacity: .3, y: 65, rotateX: 8, scale: .97 }, { opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 1.2, clearProps: "opacity,transform" }, .4);
+        hero.fromTo(select(".showcase-arrival"), { opacity: .25, y: 36 }, { opacity: 1, y: 0, duration: 1.3, clearProps: "opacity,transform" }, .2);
         const scene = gsap.to(select(".hero-showcase"), { "--scene-scroll": 1, ease: "none", scrollTrigger: { trigger: root.querySelector(".hero"), start: "top top", end: "bottom top", scrub: .45 } });
         const syncEffects = () => {
           const inactive = root.dataset.effectsPaused === "true" || document.hidden;

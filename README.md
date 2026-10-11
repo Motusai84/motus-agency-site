@@ -56,39 +56,37 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-### Dimensional opening prototype
+### Flowing opening prototype
 
-Review URL: https://motus-agency-mobile-review-ata07tjzw-motusai84s-projects.vercel.app
+Branch `codex/motus-dimensional-hero` is a preview-only design iteration.
+The duplicate interactive hero dashboard and its floating booking/invoice
+panels have been removed. One larger fictional salon website now sits within
+two curved Motus signal trails, with restrained pointer depth, a coordinated
+entrance and softer framing. The full interactive work queue remains in
+How it works. The new `hero-salon-demo-link` opens the existing salon demo.
 
-Vercel deployment `dpl_F4VLE8uSYX9KgvGSFVhPmGTUiDsa` is READY in the
-`preview` environment, built from application commit `b00c2a3`. Vercel
-authentication protection remains enabled. Authenticated HTTP checks on
-11 October 2026 return 200 for the homepage and all four demos. No Cloudflare
-production deployment was performed.
+The salon image and content reuse `src/clients/salon-demo.ts` and its credited
+local photograph. The wording, prices, form delivery, calculator and all four
+demo routes remain unchanged outside the approved hero simplification.
+Framer Motion, GSAP and CSS use existing dependencies. Decorative content is
+hidden from assistive technology. Loops pause off screen, in background tabs
+and through the existing effects control. Reduced motion uses a static scene.
 
-Branch `codex/motus-dimensional-hero` adds a preview-only opening composition:
-the existing interactive dashboard sits in front of floating salon, booking
-and invoice visuals. The salon visual reuses the fictional demo configuration
-and its credited local photograph. Pointer-responsive lighting, reflections,
-masked headline entrances and scroll-linked signal paths use the existing
-Framer Motion, GSAP and CSS stack; no dependencies were added.
+Validation on 11 October 2026: build, TypeScript and lint pass. Local browser
+checks at 390x844 and 1440x900 cover the hero, phone navigation and Escape focus
+return, keyboard focus, pause/resume, workspace filters, calculator updates,
+empty-form validation and the new salon-demo link. Both themes are checked.
+OS reduced-motion switching and physical-phone performance are not tested;
+reduced-motion guards are reviewed in source. The prototype is not approved
+for production. No Cloudflare deployment was performed.
 
-The wording, prices, form delivery, calculator and all four demo routes are
-unchanged. Decorative previews are hidden from assistive technology; the real
-dashboard stays still during interaction. Loops pause off screen, in hidden
-tabs and through the existing effects control. Reduced-motion visitors get a
-static composition. Desktop, phone and light-theme layouts are included.
-
-Validation on 11 October 2026: production build, TypeScript, lint and diff
-checks pass. Local HTTP checks return 200 for the homepage, showroom, all
-four demos and the reused image. The browser connection was unavailable, so
-desktop/mobile appearance, pointer interactions, keyboard behaviour and
-reduced-motion switching still need visual/browser verification. The
-prototype is not approved for production.
+Preview upload is pending for this revision. The previous layered-panel
+preview remains at https://motus-agency-mobile-review-ata07tjzw-motusai84s-projects.vercel.app
+until this section is updated with the replacement deployment.
 
 The explicit `.vercelignore` excludes local backups, private notes, historical
 prototypes, generated builds, logs and environment files from CLI previews.
-A deployment dry run confirmed only application source and public assets are
+A deployment dry run checks only application source and public assets are
 selected. This branch does not change the canonical Cloudflare deployment.
 
 ### Historical website prototypes
