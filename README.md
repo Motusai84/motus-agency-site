@@ -74,8 +74,11 @@ cost calculator, four demos and server-side enquiry contract are unchanged.
 The client feedback layout uses a generated illustrative barber image, visibly
 labelled as not the client, and an expanded draft based on feedback reported by
 the owner. Attribution is `Men’s grooming specialist`, London, age 45, as
-requested. The five-star design and meaning of `24-hour support` remain labelled
-for confirmation. No review schema or external review-platform endorsement is
+requested. The owner selected a new quote about excellent service, one of the
+best tools used for the client's business and a fit with the way he works. The
+quote contains no em dashes or Motus name. The earlier 24-hour support claim is
+removed following the owner's direction. Final client wording and the five-star
+design remain labelled for confirmation. No review schema or external review-platform endorsement is
 added. Preserve these review labels until the claims are confirmed; publication
 needs a separate owner approval. Image provenance and the generation prompt are
 in `public/images/client-feedback/SOURCES.md`; the WebP is about 90 KB.
