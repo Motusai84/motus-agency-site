@@ -78,8 +78,8 @@ requested. The owner selected a new quote about excellent service, one of the
 best tools used for the client's business and a fit with the way he works. The
 quote contains no em dashes or Motus name. The earlier 24-hour support claim is
 removed following the owner's direction. Final client wording and the five-star
-design remain labelled for confirmation. No review schema or external review-platform endorsement is
-added. Preserve these review labels until the claims are confirmed; publication
+design remain labelled for confirmation. No review schema or external
+review-platform endorsement is added. Preserve these review labels until the claims are confirmed; publication
 needs a separate owner approval. Image provenance and the generation prompt are
 in `public/images/client-feedback/SOURCES.md`; the WebP is about 90 KB.
 
@@ -91,14 +91,17 @@ No browser warnings/errors or real enquiry submissions occurred. The existing
 shared reveal/reduced-motion implementation is unchanged.
 
 Protected preview, Ready on 11 October 2026:
-https://motus-agency-mobile-review-mmtugqnoj-motusai84s-projects.vercel.app
-Deployment `dpl_CfPQRxG4nfTwt1AnjXnRQeWQwyja`, target `preview`, application
-source `eafa808`. Vercel authentication remains enabled. The upload selection
+https://motus-agency-mobile-review-2lmskibbu-motusai84s-projects.vercel.app
+Deployment `dpl_B6Z49U74GzAAHPj53grZ4veum91Q`, target `preview`, application
+source `249b70d`. Vercel authentication remains enabled. The initial upload selection
 contains 72 application/asset files (2,940,239 bytes), excluding environment
 files, Git data, backups and local generated material. Online desktop and 390px
 checks confirm the new quote section, loaded image, draft feedback and absence
 of fixed website fees, with no overflow or console warnings/errors. The live
-Cloudflare website remains on the previously approved release.
+Cloudflare website remains on the previously approved release. The revised quote
+passes build, TypeScript and lint, fits the 1440px desktop and 390px phone views,
+and contains no em dashes or 24-hour support claim. Local phone light view also
+passes; deployed desktop and phone checks have no overflow or console warnings/errors.
 
 ```bash
 npm ci
