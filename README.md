@@ -91,9 +91,9 @@ No browser warnings/errors or real enquiry submissions occurred. The existing
 shared reveal/reduced-motion implementation is unchanged.
 
 Protected preview, Ready on 11 October 2026:
-https://motus-agency-mobile-review-2lmskibbu-motusai84s-projects.vercel.app
-Deployment `dpl_B6Z49U74GzAAHPj53grZ4veum91Q`, target `preview`, application
-source `249b70d`. Vercel authentication remains enabled. The initial upload selection
+https://motus-agency-mobile-review-6is7h3ou2-motusai84s-projects.vercel.app
+Deployment `dpl_H4cypn2S4ewkRxfy1xsRrqgARSUe`, target `preview`, application
+source `f205a00`. Vercel authentication remains enabled. The initial upload selection
 contains 72 application/asset files (2,940,239 bytes), excluding environment
 files, Git data, backups and local generated material. Online desktop and 390px
 checks confirm the new quote section, loaded image, draft feedback and absence
@@ -102,6 +102,9 @@ Cloudflare website remains on the previously approved release. The revised quote
 passes build, TypeScript and lint, fits the 1440px desktop and 390px phone views,
 and contains no em dashes or 24-hour support claim. Local phone light view also
 passes; deployed desktop and phone checks have no overflow or console warnings/errors.
+Craig's supplied first name is now the leading attribution. Build, TypeScript
+and lint pass again; local 1440px desktop and 390px phone checks confirm all
+three attribution lines fit. The protected online preview visibly shows Craig.
 
 ```bash
 npm ci
