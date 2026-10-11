@@ -60,9 +60,11 @@ to the sitemap. Submit the sitemap in Search Console after these routes are live
 
 ### Individually quoted projects and client feedback preview
 
-Branch `codex/motus-client-feedback-preview` is a preview-only follow-up. The
-owner requested removing advertised website/package fees and reviewing a
-barber client feedback section before any production publication.
+Branch `codex/motus-client-feedback-preview` contains the follow-up removing
+advertised website/package fees and adding barber client feedback. The owner
+approved the reviewed version for publication on 11 October 2026 and explicitly
+confirmed that Craig gave a five-star rating. The production preparation removes
+the draft labels and preserves the illustrative-image disclosure.
 
 The homepage removes the three fixed-price packages, monthly care fees, VAT
 price note and website starting-price badge. Navigation now calls the section
@@ -72,15 +74,14 @@ no longer offers the retired package names. Its optional budget input, admin
 cost calculator, four demos and server-side enquiry contract are unchanged.
 
 The client feedback layout uses a generated illustrative barber image, visibly
-labelled as not the client, and an expanded draft based on feedback reported by
+labelled as not the client, and approved wording based on feedback reported by
 the owner. Attribution is `Craig`, `Men’s grooming specialist`, London, age 45, as
 requested. The owner selected a new quote about excellent service, one of the
 best tools used for the client's business and a fit with the way he works. The
 quote contains no em dashes or Motus name. The earlier 24-hour support claim is
-removed following the owner's direction. Final client wording and the five-star
-design remain labelled for confirmation. No review schema or external
-review-platform endorsement is added. Preserve these review labels until the claims are confirmed; publication
-needs a separate owner approval. Image provenance and the generation prompt are
+removed following the owner's direction. The owner approved the wording and
+confirmed the five-star rating. No review schema or external review-platform
+endorsement is added. Image provenance and the generation prompt are
 in `public/images/client-feedback/SOURCES.md`; the WebP is about 90 KB.
 
 Local validation: build, TypeScript and lint pass. Desktop 1440px, phone 390px
