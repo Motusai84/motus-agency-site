@@ -275,7 +275,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
           <figcaption>
             <div className="feedback-stars" role="img" aria-label="Five-star design preview; client rating to confirm">{[0, 1, 2, 3, 4].map((star) => <svg key={star} viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z" /></svg>)}</div>
             <blockquote>“One of the best tools I’ve used for my business. It’s been tailored to the way I work, so it feels simple to use and makes sense for me. The service has been excellent too, with personal attention, clear explanations and someone who takes the time to understand what I need.”</blockquote>
-            <div className="feedback-client"><strong>Men’s grooming specialist</strong><span>London · 45</span></div>
+            <div className="feedback-client"><strong>Craig</strong><span>Men’s grooming specialist</span><span>London · 45</span></div>
             <p className="feedback-review-note">Draft client feedback. Final wording and five-star rating to confirm before publication.</p>
           </figcaption>
         </figure>

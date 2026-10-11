@@ -73,7 +73,7 @@ cost calculator, four demos and server-side enquiry contract are unchanged.
 
 The client feedback layout uses a generated illustrative barber image, visibly
 labelled as not the client, and an expanded draft based on feedback reported by
-the owner. Attribution is `Men’s grooming specialist`, London, age 45, as
+the owner. Attribution is `Craig`, `Men’s grooming specialist`, London, age 45, as
 requested. The owner selected a new quote about excellent service, one of the
 best tools used for the client's business and a fit with the way he works. The
 quote contains no em dashes or Motus name. The earlier 24-hour support claim is
