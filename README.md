@@ -80,9 +80,13 @@ OS reduced-motion switching and physical-phone performance are not tested;
 reduced-motion guards are reviewed in source. The prototype is not approved
 for production. No Cloudflare deployment was performed.
 
-Preview upload is pending for this revision. The previous layered-panel
-preview remains at https://motus-agency-mobile-review-ata07tjzw-motusai84s-projects.vercel.app
-until this section is updated with the replacement deployment.
+Review URL: https://motus-agency-mobile-review-d7jvqf92c-motusai84s-projects.vercel.app
+
+Vercel deployment `dpl_59gfYju5hp5r68rmetoLEw21FbL9` is READY in the
+`preview` environment, built from application commit `867a118`. Vercel
+reports authentication protection enabled. The uploaded file selection contains
+69 application/public-asset files (2.84 MB), excluding private/generated paths.
+The previous layered-panel preview remains available for comparison.
 
 The explicit `.vercelignore` excludes local backups, private notes, historical
 prototypes, generated builds, logs and environment files from CLI previews.
