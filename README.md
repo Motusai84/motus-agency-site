@@ -92,7 +92,16 @@ warnings/errors were reported. OS reduced-motion switching and physical-phone
 performance are not tested; reduced-motion guards are reviewed in source.
 No real enquiry was sent and no Cloudflare deployment was performed.
 
-Comparison deployment: pending preview upload.
+Comparison review base:
+https://motus-agency-mobile-review-kzkr437lz-motusai84s-projects.vercel.app
+Use the three `/preview/` paths above to compare the openings.
+
+Vercel deployment `dpl_m6mdoAdcU3DQnvxYcfNdLA5nJ3SY` is READY in the
+`preview` environment, built from application commit `26f504d`. Authentication
+protection remains enabled. The dry-run file selection includes 70 application
+and public-asset files (2,842,554 bytes), with no private/generated paths.
+All three comparison routes return HTTP 200; browser checks confirm each
+uploaded route presents the correct direction.
 
 The preceding salon-opening preview remains available at
 https://motus-agency-mobile-review-d7jvqf92c-motusai84s-projects.vercel.app
