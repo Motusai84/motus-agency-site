@@ -58,6 +58,35 @@ to the sitemap. Submit the sitemap in Search Console after these routes are live
 
 ## Local Development
 
+### Individually quoted projects and client feedback preview
+
+Branch `codex/motus-client-feedback-preview` is a preview-only follow-up. The
+owner requested removing advertised website/package fees and reviewing a
+barber client feedback section before any production publication.
+
+The homepage removes the three fixed-price packages, monthly care fees, VAT
+price note and website starting-price badge. Navigation now calls the section
+`Your project`; existing `#pricing` links still resolve. The replacement explains
+that the work, quote and support are agreed with the customer. The enquiry form
+no longer offers the retired package names. Its optional budget input, admin
+cost calculator, four demos and server-side enquiry contract are unchanged.
+
+The client feedback layout uses a generated illustrative barber image, visibly
+labelled as not the client, and an expanded draft based on feedback reported by
+the owner. Attribution is `Men’s grooming specialist`, London, age 45, as
+requested. The five-star design and meaning of `24-hour support` remain labelled
+for confirmation. No review schema or external review-platform endorsement is
+added. Preserve these review labels until the claims are confirmed; publication
+needs a separate owner approval. Image provenance and the generation prompt are
+in `public/images/client-feedback/SOURCES.md`; the WebP is about 90 KB.
+
+Local validation: build, TypeScript and lint pass. Desktop 1440px, phone 390px
+and narrow 320px checks find no horizontal overflow; both themes render the
+image and quote, revised mobile navigation resolves, keyboard focus is visible,
+the calculator updates correctly and blank form validation focuses the name.
+No browser warnings/errors or real enquiry submissions occurred. The existing
+shared reveal/reduced-motion implementation is unchanged.
+
 ```bash
 npm ci
 npm run dev
