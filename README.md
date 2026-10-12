@@ -8,12 +8,39 @@ Canonical Agency OS source for the Motus public website.
 - Production platform: Cloudflare Workers
 - Worker: `motus-site`
 - Production URL: `https://motusautomation.co.uk`
-- Rollback: retained Cloudflare version `27ef86f4-8a4a-4f33-b2f4-236fb387eb02`
+- Rollback: retained Cloudflare version `218295c7-519e-47c7-a4ab-cfa84f4514ee`
 - Deployment policy: Wrangler with explicit production approval
 
-The client feedback navigation update is live as of 11 October 2026,
-21:36 UTC. Cloudflare version `218295c7-519e-47c7-a4ab-cfa84f4514ee` serves
-100% of traffic. Pull request #9 merged the tested source as `ed7faec`, whose
+The mobile browser theme correction is live as of 12 October 2026, 05:56 UTC.
+Cloudflare version `31c1d828-87f5-4aa2-aef4-279654d10a82` serves 100% of traffic.
+Pull request #11 merged the tested source to `main` as `8343dc3`; its files match
+the tested branch exactly. The owner explicitly approved this publication and
+GitHub sync. Light view now updates the page palette, browser color-scheme and
+browser theme color together, including after privacy-page navigation. It uses
+the `only light` hint to request that compatible browsers preserve the palette.
+
+Next.js build, TypeScript, lint, OpenNext packaging and Wrangler dry run pass.
+Live 390x844 phone and 1440x900 desktop checks confirm white light-view
+backgrounds, matching browser metadata, both themes, mobile-menu closing,
+privacy navigation, no horizontal overflow and no console warnings/errors.
+Ten public routes/assets returned HTTP 200; an empty JSON enquiry returned HTTP
+400 without being forwarded. Both enquiry secret binding names remain present;
+their values were not read. No real enquiry was sent during this release.
+Samsung Internet on a physical phone and its forced-dark settings remain
+unverified; the owner should refresh and test Light view on the affected device.
+
+The previous Worker version `218295c7-519e-47c7-a4ab-cfa84f4514ee`, including its
+assets and bindings, is retained for rollback. Its active version and source
+were verified before and after the ignored local reference export, and again
+immediately before publication. The exported Worker SHA-256 is
+`7160796e018089d513de5e76c97fa5b2927b0085979594c959d37079981d1e24`.
+The reference copy is in `production-backups/2026-10-12-cloudflare-218295c7/`;
+it must not be uploaded to GitHub or preview hosting. Rollback uses
+`npx wrangler versions deploy 218295c7-519e-47c7-a4ab-cfa84f4514ee@100 --yes`.
+
+The earlier client feedback navigation update was published on 11 October 2026,
+21:36 UTC. Cloudflare version `218295c7-519e-47c7-a4ab-cfa84f4514ee` served
+100% of traffic before the theme correction. Pull request #9 merged the tested source as `ed7faec`, whose
 files match tested source `21f681e` exactly. The homepage desktop navigation
 and phone menu now include `Client feedback`, linking to `#client-feedback`.
 The Examples page header links to `/#client-feedback`; selecting the phone
@@ -101,7 +128,7 @@ visible keyboard focus and no horizontal overflow. The browser reported no
 errors; an existing development warning about smooth-scroll route metadata was
 observed. No enquiry was submitted. Samsung Internet on a physical phone and
 its forced-dark settings have not been tested; browser overrides may still need
-the owner's device check. Production publication remains subject to approval.
+the owner's device check. Further production changes require owner approval.
 
 ### Individually quoted projects and client feedback
 
