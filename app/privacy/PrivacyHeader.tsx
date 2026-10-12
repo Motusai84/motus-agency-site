@@ -2,17 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
-type Theme = "dark" | "light";
+import { applySiteTheme, type SiteTheme } from "@/lib/site-theme";
 
 export default function PrivacyHeader() {
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [theme, setTheme] = useState<SiteTheme>(() => {
     if (typeof document === "undefined") return "dark";
     return document.documentElement.dataset.theme === "light" ? "light" : "dark";
   });
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+    return applySiteTheme(theme);
   }, [theme]);
 
   return (
