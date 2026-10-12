@@ -82,6 +82,25 @@ to the sitemap. Submit the sitemap in Search Console after these routes are live
 
 ## Local Development
 
+### Mobile browser theme correction
+
+Branch `codex/mobile-theme-colour-scheme` contains a focused correction prepared
+on 12 October 2026. It has not been pushed or published to the live site.
+The previous light-view toggle changed the CSS palette but left the browser
+metadata declaring dark mode. The shared theme helper now updates both browser
+hints, retains them when Next.js replaces route metadata, and disconnects its
+observer on unmount. Light CSS uses `color-scheme: only light` to request that
+browsers preserve the chosen palette instead of automatically darkening it.
+
+Next.js build, TypeScript and lint pass. Local 390x844 phone and 1440x900 desktop
+checks verify both themes, white light-view backgrounds, correct browser hints,
+privacy navigation, phone menu closing, queue filtering, calculator updates,
+visible keyboard focus and no horizontal overflow. The browser reported no
+errors; an existing development warning about smooth-scroll route metadata was
+observed. No enquiry was submitted. Samsung Internet on a physical phone and
+its forced-dark settings have not been tested; browser overrides may still need
+the owner's device check. Production publication remains subject to approval.
+
 ### Individually quoted projects and client feedback
 
 Branch `codex/motus-client-feedback-preview` contains the follow-up removing

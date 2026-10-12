@@ -4,12 +4,12 @@ import { FormEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore }
 import Link from "next/link";
 import Image from "next/image";
 import { demoCatalog } from "@/lib/demo-catalog";
+import { applySiteTheme, type SiteTheme } from "@/lib/site-theme";
 import { motion, useReducedMotion } from "framer-motion";
 import { CursorGlow, HeroShowcase, MotionPanel, SignalField, SignalRoute, useAmbientEffects, useSiteMotion } from "@/components/SiteMotion";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 type QueueFilter = "all" | "moving" | "attention" | "complete";
-type Theme = "dark" | "light";
 const solutions = [
   ["Built around your business", "Get online professionally", "Show what you offer and make it easy for customers to get in touch."],
   ["Price agreed before work starts", "Keep track of enquiries", "Keep customer messages together and know who needs a reply."],
@@ -71,7 +71,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
   useSiteMotion(rootRef);
   const reducedMotion = useReducedMotion();
   const [queueMotion, setQueueMotion] = useState(false);
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<SiteTheme>("dark");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuMotion, setMobileMenuMotion] = useState(false);
   const [queueFilter, setQueueFilter] = useState<QueueFilter>("all");
@@ -93,7 +93,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
   }, [adminTime, hourlyCost, teamSize]);
   const visibleQueue = queueFilter === "all" ? queueItems : queueItems.filter(([status]) => status === queueFilter);
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+    return applySiteTheme(theme);
   }, [theme]);
 
   useEffect(() => {
