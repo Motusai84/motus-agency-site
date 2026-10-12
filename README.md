@@ -85,14 +85,16 @@ to the sitemap. Submit the sitemap in Search Console after these routes are live
 ### Mobile browser theme correction
 
 Branch `codex/mobile-theme-colour-scheme` contains a focused correction prepared
-on 12 October 2026. It has not been pushed or published to the live site.
+on 12 October 2026. The owner authorised publication and GitHub sync; the
+production release record above identifies the active deployed version.
 The previous light-view toggle changed the CSS palette but left the browser
 metadata declaring dark mode. The shared theme helper now updates both browser
 hints, retains them when Next.js replaces route metadata, and disconnects its
 observer on unmount. Light CSS uses `color-scheme: only light` to request that
 browsers preserve the chosen palette instead of automatically darkening it.
 
-Next.js build, TypeScript and lint pass. Local 390x844 phone and 1440x900 desktop
+Next.js build, TypeScript, lint, OpenNext packaging and Wrangler dry run pass.
+Local 390x844 phone and 1440x900 desktop
 checks verify both themes, white light-view backgrounds, correct browser hints,
 privacy navigation, phone menu closing, queue filtering, calculator updates,
 visible keyboard focus and no horizontal overflow. The browser reported no
