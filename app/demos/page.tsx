@@ -9,14 +9,14 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Websites, bookings, enquiries and invoices: try the examples | Motus",
   description:
-    "Try four working examples for a salon website, bookings, customer enquiries and invoices. See what a website or business tool could make easier.",
+    "Try five interactive examples for a salon website, bookings, customer enquiries, invoices and property emails. See what a website or business tool could make easier.",
   alternates: {
     canonical: "/demos",
   },
   openGraph: {
     title: "Websites, bookings, enquiries and invoices: try the examples | Motus",
     description:
-      "Explore a salon website and working examples for bookings, customer enquiries and invoices, built around everyday business needs.",
+      "Explore a salon website and interactive examples for bookings, customer enquiries, invoices and property emails, built around everyday business needs.",
     url: "/demos",
   },
 };
@@ -33,7 +33,7 @@ export default function DemosPage() {
         <p className={styles.eyebrow}>Examples to try</p>
         <h1>See what could work for you.</h1>
         <p className={styles.lead}>
-          Explore a salon website, or try an example for bookings, customer messages or invoices.
+          Explore a salon website, or try an example for bookings, customer messages, invoices or property emails.
         </p>
         <div className={styles.notice}>
           <ShieldCheck size={20} aria-hidden="true" />
