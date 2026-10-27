@@ -127,6 +127,59 @@ html[data-theme="light"] .connection-steps > li:not(:last-child)::before { backg
 /* Keep the first action visible before a visitor opens each demonstration. */
 .offer-clarity-page .ledger-card > .demo-start-hint { margin: -8px 0 0; padding-top: 14px; border-top: 1px solid rgba(218, 228, 234, .16); color: #c4cad4; font-size: 12px; line-height: 1.75; }
 .offer-clarity-page .demo-start-hint strong { color: #edf1f3; font-weight: 500; }
+.offer-clarity-page .showroom-demo-list > .ledger-card {
+  min-height: 350px;
+  grid-template-rows: auto auto 1fr auto;
+  border-color: rgba(177, 184, 255, .38);
+  background: linear-gradient(135deg, #2a3040, #1c2329 72%);
+}
+.offer-clarity-page .showroom-demo-list > .ledger-card > .demo-open-link {
+  display: flex;
+  width: 100%;
+  min-height: 68px;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  border: 1px solid rgba(177, 184, 255, .78);
+  border-radius: 9px;
+  padding: 16px 20px;
+  background: #b1b8ff;
+  color: #10141a;
+  font-size: 17px;
+  font-weight: 650;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+.offer-clarity-page .showroom-demo-list > .ledger-card > .demo-open-link:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+.offer-clarity-page .showroom-demo-list > .ledger-card > .demo-open-link b {
+  color: #10141a;
+  font-size: 24px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .offer-clarity-page .showroom-demo-list > .ledger-card > .demo-open-link:hover {
+    background: #c8ceff;
+    box-shadow: 0 12px 28px -18px rgba(177, 184, 255, .72);
+    transform: translateY(-2px);
+  }
+}
+.offer-clarity-page .showroom-demo-list > .ledger-card > .demo-open-link:active {
+  transform: translateY(0) scale(.99);
+}
 @media (max-width: 600px) {
   .offer-clarity-page .ledger-card > .demo-start-hint { grid-column: auto; font-size: 13px; }
+  .offer-clarity-page .showroom-demo-list > .ledger-card {
+    min-height: 0;
+    grid-template-rows: none;
+  }
+  .offer-clarity-page .showroom-demo-list > .ledger-card > .demo-open-link {
+    min-height: 64px;
+    grid-column: 1 / -1;
+    font-size: 16px;
+  }
 }
