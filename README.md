@@ -199,11 +199,39 @@ Canonical Agency OS source for the Motus public website.
 - Production platform: Cloudflare Workers
 - Worker: `motus-site`
 - Production URL: `https://motusautomation.co.uk`
-- Rollback: retained Cloudflare version `218295c7-519e-47c7-a4ab-cfa84f4514ee`
+- Rollback: retained Cloudflare version `31c1d828-87f5-4aa2-aef4-279654d10a82`
 - Deployment policy: Wrangler with explicit production approval
 
-The mobile browser theme correction is live as of 12 October 2026, 05:56 UTC.
-Cloudflare version `31c1d828-87f5-4aa2-aef4-279654d10a82` serves 100% of traffic.
+Property Desk is live as the fifth example as of 26 October 2026, 13:40 UTC.
+Cloudflare version `cf072190-c36b-4d15-836b-eaf52a95e59e` serves 100% of traffic.
+The owner explicitly requested live publication. PR #13 merged the tested source
+as `0c048b0`; the application files match tested commit `031a73a`.
+The homepage and catalogue link to `/demos/property-desk`, included in the
+sitemap. The old `/preview/property-desk` link redirects to the public route.
+Gmail and Outlook share the fictional walkthrough, seven-second holds, visible
+Next button, step count and explicit optional sidebar add-on explanation.
+The enquiry link selects Property Desk and Cut repeated admin. No live mailbox
+integration or installable add-on is included.
+
+Lint, TypeScript, Next.js/OpenNext builds and Wrangler dry run passed. Local
+desktop and mobile checks covered the catalogue, demo controls and final review,
+calculator, work filter, mobile navigation and empty-form validation. Live route
+checks returned HTTP 200 for all ten public routes checked; sitemap and canonical
+metadata include the demo. The old preview redirects and an empty JSON enquiry
+returns HTTP 400 without forwarding. Both existing webhook secret names remain
+present; their values were not read. No real enquiry was submitted.
+
+The previous live Worker was reconciled against its release commit `8343dc3`
+(only README changes separated it from the source baseline), then exported and
+rechecked immediately before publication. Its SHA-256 is
+`feea308efd01a89888aa27a19d5f275cc01c91c48805111261a08444db486880`.
+The private reference export is in ignored
+`production-backups/2026-10-26-cloudflare-31c1d828/`. The retained Cloudflare
+version includes assets and bindings for full rollback:
+`npx wrangler versions deploy 31c1d828-87f5-4aa2-aef4-279654d10a82@100 --yes`.
+
+The earlier mobile browser theme correction was published on 12 October 2026, 05:56 UTC.
+Cloudflare version `31c1d828-87f5-4aa2-aef4-279654d10a82` served 100% of traffic before Property Desk.
 Pull request #11 merged the tested source to `main` as `8343dc3`; its files match
 the tested branch exactly. The owner explicitly approved this publication and
 GitHub sync. Light view now updates the page palette, browser color-scheme and
