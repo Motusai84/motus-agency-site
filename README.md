@@ -1,31 +1,30 @@
 # Motus Agency Site
 
-## Published clarity release — 27 October 2026
+## Published demo-button release — 27 October 2026
 
-Seun explicitly approved the public GitHub push, merge and publication of the
-reviewed clarity release. Pull request #15 merged as `bf36b57`. Its application
-source matches the validated `5ccb4ab` candidate; only the release notes differ.
-The saved production package was verified against all 1,535 manifest entries
-before publication, without rebuilding with the protected local preview flags.
+The owner explicitly approved the homepage demo-button update for publication.
+Pull request #17 merged to `main` as `c347f40`; the production site serves that
+application source.
 
-`https://motusautomation.co.uk` now serves Worker version
-`44111488-eef6-4025-a373-ef431d4a5337` at 100% traffic, published at
-10:36 UTC on 27 October with message `motus-clarity-bf36b57`. Exported Worker
-SHA-256: `167b59f55f8da8b53b5c2966948e1a974e607bc979f0d2f5a0d2cf9a3e43af5d`.
+`https://motusautomation.co.uk` serves Worker version
+`8a69c966-ee6a-4956-a731-60f36e8b3cd8` (version 34) at 100% traffic.
+Deployment `1cc4a39f-5040-48db-b434-ea71960bfa0f` was published at 11:54 UTC.
+All five homepage demo cards have a prominent, full-width “Open this demo”
+button, and each keeps its existing destination.
 
-Live verification confirmed all ten public route/metadata endpoints return
-HTTP 200, the legacy Property Desk URL redirects correctly, the homepage is
-indexable, and an empty enquiry is rejected with HTTP 400. Browser checks
-confirmed both calculators, Calculate-only updates, seven enquiry topics,
-sticky navigation, all five demo links and no review-only form notice. No
-browser console errors were captured. No real enquiry was sent, so downstream
-delivery and email receipt were not tested during this release.
+The production Next.js build, lint, OpenNext build and Wrangler deployment dry
+run pass. Live browser checks at 1440×900 and 390×844 confirmed the five buttons
+render at 549×70px on desktop and 287×70px on a phone, with no horizontal
+overflow. The salon demo button opened `/demos/salon-website`. The homepage,
+`/demos`, and all five demo routes returned HTTP 200; `GET /api/leads` returned
+HTTP 405. No browser console errors were captured, and no enquiry was submitted.
 
-Existing webhook secret binding names and the assets, images, rate-limit and
+The existing webhook secret binding names and assets, images, rate-limit and
 self-reference bindings were retained. Secret values were not read. The prior
-version `cf072190-c36b-4d15-836b-eaf52a95e59e`, including assets and bindings,
-is the retained Cloudflare rollback target. Rollback requires explicit approval:
-`npx wrangler versions deploy cf072190-c36b-4d15-836b-eaf52a95e59e@100 --yes`.
+version `44111488-eef6-4025-a373-ef431d4a5337`, including its assets and
+bindings, is the retained Cloudflare rollback target. Rollback requires explicit
+approval: `npx wrangler versions deploy
+44111488-eef6-4025-a373-ef431d4a5337@100 --yes`.
 
 Public source and static assets are recoverable from GitHub `main`. Private
 business decisions and recovery notes belong in the two private agency vaults.
