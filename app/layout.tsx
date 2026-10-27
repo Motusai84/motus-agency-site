@@ -17,9 +17,12 @@ const body = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://motusautomation.co.uk"),
-  title: "Motus | Websites and tools made for your business",
+  title: "Motus | Websites, apps and automations for small businesses",
   description:
-    "Custom websites and business tools for UK small businesses. Make bookings, customer enquiries and everyday work easier.",
+    "Websites, custom online apps and automated workflows for UK small businesses. Connect the tools you use and make enquiries, bookings and everyday admin easier.",
+  robots: process.env.MOTUS_LOCAL_PREVIEW === "1"
+    ? { index: false, follow: false }
+    : { index: true, follow: true },
   alternates: {
     canonical: "/",
   },
@@ -28,15 +31,15 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: "/",
     siteName: "Motus",
-    title: "Motus | Websites and tools made for your business",
+    title: "Motus | Websites, apps and automations for small businesses",
     description:
-      "Custom websites and workspaces for small businesses. Make it easier for customers to book, get in touch and work with you.",
+      "Websites, online apps, automated workflows and connected tools, built around the way your business works.",
   },
   twitter: {
     card: "summary",
-    title: "Motus | Websites and tools made for your business",
+    title: "Motus | Websites, apps and automations for small businesses",
     description:
-      "Websites and tools made for your business. Built around the needs of UK small businesses.",
+      "Websites, online apps and automations for UK small businesses. Build what you need and connect the tools you use.",
   },
   formatDetection: {
     email: false,
@@ -52,7 +55,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="dark" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" data-theme="dark" data-scroll-behavior="smooth" className={`${display.variable} ${body.variable}`}>
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

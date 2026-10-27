@@ -8,15 +8,15 @@ import styles from "./SiteChrome.module.css";
 
 const navigation = [
   ["What we build", "/#solutions"],
-  ["How it works", "/#automation"],
+  ["How tools connect", "/#automation"],
   ["Calculator", "/#calculator"],
   ["Examples", "/demos"],
   ["Client feedback", "/#client-feedback"],
-  ["Website pricing", "/#pricing"],
+  ["Your project", "/#pricing"],
 ] as const;
 
 function navigationId(label: string) {
-  return label === "What we build" ? "solutions" : label === "How it works" ? "automation" : label.toLowerCase().replaceAll(" ", "-");
+  return label === "What we build" ? "solutions" : label === "How tools connect" ? "automation" : label.toLowerCase().replaceAll(" ", "-");
 }
 
 export default function SiteHeader() {
@@ -45,7 +45,7 @@ export default function SiteHeader() {
           ))}
         </nav>
         <Link id="header-enquiry-link" className={styles.headerCta} href="/#contact">
-          Tell us what you need <ArrowRight size={15} aria-hidden="true" />
+          Discuss a project <ArrowRight size={15} aria-hidden="true" />
         </Link>
         <button
           id="mobile-menu-button"
@@ -72,7 +72,7 @@ export default function SiteHeader() {
               {label}
             </Link>
           ))}
-          <Link id="mobile-nav-enquiry-link" href="/#contact" onClick={() => setOpen(false)}>Tell us what you need</Link>
+          <Link id="mobile-nav-enquiry-link" href="/#contact" onClick={() => setOpen(false)}>Discuss a project</Link>
         </nav>
       )}
     </header>

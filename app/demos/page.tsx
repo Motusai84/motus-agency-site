@@ -7,16 +7,16 @@ import SiteHeader from "@/components/SiteHeader";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Websites, bookings, enquiries and invoices: try the examples | Motus",
+  title: "Websites, online apps and workflows: try the examples | Motus",
   description:
-    "Try four working examples for a salon website, bookings, customer enquiries and invoices. See what a website or business tool could make easier.",
+    "Explore a website, online apps and automation demos for bookings, enquiries, billing and email organisation. See what Motus can build around your work.",
   alternates: {
     canonical: "/demos",
   },
   openGraph: {
-    title: "Websites, bookings, enquiries and invoices: try the examples | Motus",
+    title: "Websites, online apps and workflows: try the examples | Motus",
     description:
-      "Explore a salon website and working examples for bookings, customer enquiries and invoices, built around everyday business needs.",
+      "Explore a salon website and interactive examples for bookings, customer enquiries, invoices and email organisation.",
     url: "/demos",
   },
 };
@@ -31,14 +31,14 @@ export default function DemosPage() {
           <ArrowLeft size={15} aria-hidden="true" /> Back to Motus
         </Link>
         <p className={styles.eyebrow}>Examples to try</p>
-        <h1>See what could work for you.</h1>
+        <h1>Websites, apps and automations.<br />See them in use.</h1>
         <p className={styles.lead}>
-          Explore a salon website, or try an example for bookings, customer messages or invoices.
+          Explore a complete salon website, try apps for bookings, enquiries and invoices, or follow Property Desk through an email automation. Choose Gmail or Outlook and watch the example at your own pace. Motus can design and build a setup around your business.
         </p>
         <div className={styles.notice}>
           <ShieldCheck size={20} aria-hidden="true" />
           <p>
-            Fictional demos. Nothing is booked or sent.
+            Demonstrations with fictional information. Your project is scoped separately. Nothing is booked or sent.
           </p>
         </div>
       </section>
@@ -56,7 +56,7 @@ export default function DemosPage() {
       <section className={styles.model} aria-labelledby="model-title">
         <div>
           <p className={styles.eyebrow}>Built around your business</p>
-          <h2 id="model-title">A clear next step for everyone.</h2>
+          <h2 id="model-title">A website, an app and the steps between them.</h2>
         </div>
         <div className={styles.modelSteps}>
           <article>
@@ -67,8 +67,8 @@ export default function DemosPage() {
           <ArrowRight size={21} aria-hidden="true" />
           <article>
             <span>Your team</span>
-            <strong>The details where you need them</strong>
-            <p>Keep messages, bookings and job updates together, with less copying and chasing.</p>
+            <strong>Tools that share the details</strong>
+            <p>Connect forms, email and records so useful information reaches the right place.</p>
           </article>
           <ArrowRight size={21} aria-hidden="true" />
           <article>
@@ -81,15 +81,15 @@ export default function DemosPage() {
 
       <section className={styles.cta}>
         <div>
-          <p className={styles.eyebrow}>Have something else in mind?</p>
-          <h2>Tell us what you’d like to make easier.</h2>
+          <p className={styles.eyebrow}>Your project</p>
+          <h2>What would you like to build or connect?</h2>
         </div>
         <div>
           <p>
-            You don’t need to know which tool to choose. Tell us what your business needs and we’ll talk it through.
+            A website, a custom online app, an automation or a connection between existing tools. Tell us what your business needs and we will talk it through.
           </p>
           <Link id="demos-enquiry-link" href="/#contact">
-            Tell us what you need <ArrowRight size={17} aria-hidden="true" />
+            Discuss a project <ArrowRight size={17} aria-hidden="true" />
           </Link>
         </div>
       </section>

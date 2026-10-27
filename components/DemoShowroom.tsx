@@ -32,10 +32,11 @@ export default function DemoShowroom() {
           <MotionPanel className={styles.example} id={`example-${example.slug}`} key={example.slug}>
             <div className={styles.exampleBody}>
               <div className={styles.exampleMeta}>
-                <span>{example.name ?? example.title}</span><span>Demo you can try</span>
+                <span>{example.name ?? example.title}</span><span>{example.slug === "salon-website" ? "Website demonstration" : example.slug === "property-desk" ? "Email automation demonstration" : "Online app and workflow demo"}</span>
               </div>
               <h3>{example.category ?? example.title}</h3>
               <p>{example.demoSummary ?? example.interfaceSummary}</p>
+              {example.startHint && <p className={styles.startHint}><strong>Try it:</strong> {example.startHint}</p>}
             </div>
             <div className={styles.exampleState}>
               <Link id={`launch-demo-${example.slug}`} href={example.url!}>

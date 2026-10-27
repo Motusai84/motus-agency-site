@@ -49,6 +49,14 @@ const isAllowedSystemInterest = (value: unknown) =>
   (typeof value === "string" && allowedSystemInterests.has(value.trim()));
 
 export async function POST(request: Request) {
+  // This isolated copy is a review preview and must never contact live n8n.
+  if (process.env.MOTUS_LOCAL_PREVIEW === "1") {
+    return Response.json(
+      { message: "Preview only. This form has not sent an enquiry or saved your details." },
+      { status: 409 },
+    );
+  }
+
   let payload: LeadPayload;
   const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
   const declaredLength = Number(request.headers.get("content-length") ?? "0");
