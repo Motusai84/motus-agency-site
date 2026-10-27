@@ -1,6 +1,42 @@
 # Motus Agency Site
 
-## Clarity release candidate — 27 October 2026
+## Published clarity release — 27 October 2026
+
+Seun explicitly approved the public GitHub push, merge and publication of the
+reviewed clarity release. Pull request #15 merged as `bf36b57`. Its application
+source matches the validated `5ccb4ab` candidate; only the release notes differ.
+The saved production package was verified against all 1,535 manifest entries
+before publication, without rebuilding with the protected local preview flags.
+
+`https://motusautomation.co.uk` now serves Worker version
+`44111488-eef6-4025-a373-ef431d4a5337` at 100% traffic, published at
+10:36 UTC on 27 October with message `motus-clarity-bf36b57`. Exported Worker
+SHA-256: `167b59f55f8da8b53b5c2966948e1a974e607bc979f0d2f5a0d2cf9a3e43af5d`.
+
+Live verification confirmed all ten public route/metadata endpoints return
+HTTP 200, the legacy Property Desk URL redirects correctly, the homepage is
+indexable, and an empty enquiry is rejected with HTTP 400. Browser checks
+confirmed both calculators, Calculate-only updates, seven enquiry topics,
+sticky navigation, all five demo links and no review-only form notice. No
+browser console errors were captured. No real enquiry was sent, so downstream
+delivery and email receipt were not tested during this release.
+
+Existing webhook secret binding names and the assets, images, rate-limit and
+self-reference bindings were retained. Secret values were not read. The prior
+version `cf072190-c36b-4d15-836b-eaf52a95e59e`, including assets and bindings,
+is the retained Cloudflare rollback target. Rollback requires explicit approval:
+`npx wrangler versions deploy cf072190-c36b-4d15-836b-eaf52a95e59e@100 --yes`.
+
+Public source and static assets are recoverable from GitHub `main`. Private
+business decisions and recovery notes belong in the two private agency vaults.
+Runtime credentials remain in Cloudflare/Bitwarden and must be restored through
+their own account access, never from this public repository. Ignored source
+exports, build packages and local screenshots are not part of the public backup.
+
+The preparation and earlier preview notes below are historical. Future live
+changes still require a fresh live-version reconciliation and explicit approval.
+
+### Preparation record — 27 October 2026
 
 Prepared for final approval; not published. Reviewed application source is
 `5ccb4ab`, reconciled with current production source `origin/main` at `7c0aa7f`.
