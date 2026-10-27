@@ -313,7 +313,7 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
               <h3>{demo.enquiryOutcome ?? demo.category ?? demo.title}</h3>
               <p>{demo.demoSummary ?? demo.interfaceSummary}</p>
               {demo.startHint && <p className="demo-start-hint"><strong>Try it:</strong> {demo.startHint}</p>}
-              <a id={demo.slug === "ledger-desk" ? "ledger-demo-link" : "showroom-demo-" + demo.slug + "-link"} href={demo.url ?? "/demos"}>{demo.ctaLabel ?? "Try this example"} <b aria-hidden="true">→</b></a>
+              <a className="demo-open-link" aria-label={`Open the ${demo.name ?? demo.title} demo`} id={demo.slug === "ledger-desk" ? "ledger-demo-link" : "showroom-demo-" + demo.slug + "-link"} href={demo.url ?? "/demos"}><span>Open this demo</span> <b aria-hidden="true">→</b></a>
             </MotionPanel>
           ))}
         </div>
