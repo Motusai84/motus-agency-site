@@ -1,5 +1,239 @@
 # Motus Agency Site
 
+## Clarity release candidate — 27 October 2026
+
+Prepared for final approval; not published. Reviewed application source is
+`5ccb4ab`, reconciled with current production source `origin/main` at `7c0aa7f`.
+Property Desk's component, configuration and public route match that baseline.
+Its legacy preview redirect and the production lint exclusions are retained.
+Dependencies, Wrangler settings, webhook destination contract and existing
+secret bindings are unchanged.
+
+Production Next.js/Webpack and standalone builds, TypeScript, full ESLint,
+OpenNext packaging and Wrangler deployment dry run pass. The local Cloudflare
+package returns HTTP 200 for ten public route/metadata checks, redirects the
+old Property Desk URL, and rejects an empty enquiry with HTTP 400. Twenty-two
+browser checks pass, including both Calculate buttons, deferred results,
+contact topic selection, empty-form validation, indexing, desktop/phone
+navigation, theme switching and Property Desk's Outlook interface. No browser
+console errors were recorded. No real enquiry was sent, so end-to-end email
+receipt is not claimed. Physical-phone operation remains unverified.
+
+Public builds allow indexing and have no review-only form notice. Protected
+local review builds retain noindex and both form/API guards. Root metadata now
+uses the same `MOTUS_LOCAL_PREVIEW` switch as the API. Production preparation
+sets both `MOTUS_LOCAL_PREVIEW` and `NEXT_PUBLIC_MOTUS_LOCAL_PREVIEW` to `0`;
+the ignored local review environment retains `1`. Standalone packaging also
+sets `NEXT_PRIVATE_STANDALONE=true` and the project output trace root before
+`npm run build -- --webpack`, then uses
+`opennextjs-cloudflare build --skipNextBuild`. The reviewed production package
+is retained separately from the restored local review build.
+
+The active Worker remains `cf072190-c36b-4d15-836b-eaf52a95e59e` at 100%
+traffic. Its exported source matches the recorded Property Desk build:
+SHA-256 `91e6149dedf4e316f65c35641493930fb6e4fec8eaa4ee43e604576dbe6097b1`.
+Private backup: `production-backups/2026-10-27-cloudflare-cf072190/`.
+That retained Cloudflare version, including assets and bindings, is the
+rollback target for this release. Both existing webhook secret binding names
+were confirmed; their values were not read. The backup, package, checks and
+screenshots are ignored and excluded from the public pull request.
+
+Publication requires explicit approval of this release, a fresh live-version
+match and verification of the saved package manifest. A rebuild for publication
+must use production flags rather than the protected local review flags.
+Deployment and live verification have not been performed.
+
+## Local offer clarity review
+
+This checkout is the separate review copy requested by Seun on 20 October 2026.
+It was created from source commit `232bbd4` on branch
+`codex/motus-offer-clarity`. The original website checkout is untouched.
+
+The homepage now names websites, custom online apps, automations and workflows,
+and connections between existing tools. It adds three illustrative connected
+journeys, explains the terms in plain English, and aligns the examples page,
+project copy, enquiry topics and shared footer. Existing demos, themes,
+calculator and approved testimonial remain available. The latest layout state
+is recorded under the 27 October reconciliation below; earlier dated notes
+describe previous preview iterations.
+
+The agreed 22 October combination places the four services before all four
+existing demos, then six compact outcomes with visible demo/workspace links.
+The three connected-example tabs now update both the steps and matching fictional
+workspace records. The workspace stays visible, with the original work filters;
+filter counts are derived from the selected example. The hero links directly to
+"Try the demos". FAQs, the calculator, project scope, feedback and contact remain.
+The 22 October webpack production build and its TypeScript compilation pass.
+The original checkout still has only its pre-existing untracked property-desk work.
+
+Final clarity pass, 22 October: each existing demo now displays its first action
+to try on the homepage and examples page. The FAQ explicitly explains what a
+client buys from Motus, and the project section covers included features,
+delivery planning, ongoing software/hosting costs, handover and support.
+The six outcomes remain business benefits; only the four finished website demos
+are listed. Property Desk and the unselected sixth demo are separate next steps;
+Client Studio is parked and absent from the website. The final webpack build and
+TypeScript compilation pass. Canonical copy and portfolio notes are aligned in
+`04_BUSINESS/website-strategy/` in the Agency OS workspace.
+
+Combined review, 26 October: includes all five published demos. Property Desk's
+public page, component, styles and fictional client configuration were copied
+unchanged from the clean website checkout at `4de03a0`. Its catalogue entry was
+added, and homepage/examples descriptions now include email organisation.
+The admin outcome opens Property Desk. The six outcomes still describe business
+benefits. Seun considers the five-demo portfolio complete; no sixth demo is
+planned. All clarity copy and preview form/API guards are retained. No original website files, dependencies,
+credentials or deployment settings were changed by this integration.
+The 26 October webpack production build and TypeScript compilation pass. The
+combined homepage was viewed in the browser, including all five demo cards and
+the updated admin outcome; its Property Desk link opens the copied public demo.
+Screenshot: `.codex-build/clarity/combined-five-demos.jpg` (local, ignored).
+
+Calculator implementation, 26 October: the visible calculator section now has
+Reduce admin and Win more business tabs. `components/BusinessImpact.tsx` contains
+the interactive UI, with task options, demo links and clearly illustrative
+starting inputs in `src/clients/business-impact.ts`. Styles follow the existing
+Motus palette and typography in `components/BusinessImpact.module.css`.
+Admin categories change the task options and relevant demo. Owners can use an
+illustrative hourly value, enter their own or view time only. Daily/weekly
+counts use adjustable working weeks; monthly counts use adjustable active months.
+Monthly financial figures average annual value over twelve calendar months.
+The enquiry calculator limits additional customers to the existing enquiry pool,
+offers optional delivery costs and capacity guidance, and supports seasonal
+annual scenarios. It keeps sales, time value and costs distinct; no combined
+ROI or guaranteed saving is shown. Inputs stay in React state, without storage,
+submission, new dependencies or external integrations. The existing preview
+contact form/API guards remain in place. This change is local preview work only;
+the production checkout and Cloudflare site have not been edited or published.
+Earlier calculator check results below describe the previous calculator.
+The completed calculator production build and TypeScript compilation pass.
+The local calculator was visually reviewed at desktop and 390x844 phone sizes;
+both tabs and the optional delivery-cost result were viewed. No automated test
+suite was added or run. Preview image:
+`.codex-build/clarity/impact-calculator-admin.jpg` (local, ignored).
+
+Calculator simplification, 26 October: owners now supply current task time,
+frequency and enquiry figures only. Future task time and extra-customer sliders
+are removed. Motus supplies a clearly labelled illustrative 50% time reduction
+and one additional customer per month; these are not measured or predicted
+outcomes. Both assumptions live in the client configuration. Hourly valuations,
+capacity, delivery costs and seasonal assumptions are available in collapsed
+details. Category-specific copy explains how Motus could help. A review is
+needed before estimating an achievable improvement. The live site is unchanged.
+
+Functional calculator review, 26 October: 78 final browser regression checks
+passed after fixing two reproduced input issues. Editing the enquiry count no
+longer silently reduces the current booking count; inconsistent answers are
+flagged instead. Large typed values extend the slider scale without shrinking
+it while the user moves back down. Financial results now preserve pence, time
+units use singular wording when appropriate, and period controls are labelled
+Money view (and hidden in time-only mode). The enquiry result explains that
+the illustration values one additional booking, rather than forecasting an
+increase based on enquiry volume.
+The checks cover custom/example inputs, all categories and units, daily/weekly/
+monthly work, seasonal annual calculations, zero/blank/invalid/upper-bound
+values, costs and negative contribution, keyboard/focus, tab state, contact
+topic selection and control IDs. Interactions and layout bounds were checked
+at measured CSS sizes 390x844 and 1440x900. Physical-phone operation was not
+tested; screenshots under the virtual viewport override were unreliable.
+The normal-browser screenshot was saved, with Seun's original 47 enquiries,
+4 bookings and GBP 15 booking value restored. No enquiry was submitted.
+Production build, TypeScript and targeted ESLint checks pass. Results including
+the initial reproduced failures and the passing regression checks are in
+`.codex-build/clarity/calculator-test-results.json` (local, ignored). The
+production checkout remains clean and the live site has not been changed.
+
+Manual calculation controls, 27 October: both calculators now start with a
+clear Calculate button and an empty result. Editing inputs, sliders, categories
+or optional settings keeps the last calculated result and its labels intact,
+with a visible message asking the visitor to press Calculate again. Money-view
+periods reformat that submitted scenario only. Enter also submits the local
+calculator form. Example/own-figure resets clear the relevant calculation;
+each tab preserves its own draft and result. Blank or inconsistent submissions
+show correction guidance rather than a financial result. Nothing is transmitted.
+The webpack production build, TypeScript and targeted ESLint checks pass.
+Focused browser checks cover submission, pending results, period views, costs,
+negative contribution, input validation, keyboard submission, reset and tab
+independence, including measured 390x844 and 1440x900 viewports. A premature
+negative-contribution text read was rechecked after the result rendered; the
+displayed figure and repeated invalid-to-valid submission both passed. The
+existing ignored test report retains that observation and the successful checks.
+The updated enquiry screenshot shows the button alongside the calculated value.
+No production files or live deployment were changed.
+
+Closing-section copy, 27 October: Seun approved 1B (project), 2A (feedback),
+3B (process), 4B (FAQs) and 5B (contact/footer). The preview now uses those
+headings and copy, simplifies Craig's attribution and presents six optional
+contact topics. Existing demo/calculator topic names map to the relevant
+service choice; submitted option values retain the existing endpoint names.
+The other four FAQs, approved quotation, privacy enquiry flow, optional form
+fields, footer and preview safeguards are preserved. Canonical wording is in
+`04_BUSINESS/website-strategy/motus-copy.md`. The outcomes/workspace overlap
+is resolved in the reconciliation below. Publication remains separate work.
+The webpack build and TypeScript compilation pass. The updated project,
+process and contact copy was inspected in the running browser, and the contact
+section was visually reviewed at the normal browser size. No new test suite
+was run for this copy pass. Screenshot:
+`.codex-build/clarity/closing-sections-contact.jpg` (local, ignored).
+
+Layout reconciliation, 27 October: the five homepage demo cards now lead with
+their business benefit and retain their names, explanations, first actions and
+links. The separate six-outcome grid and the repeated generic workspace are
+removed. Their unused local state, queue data and preview-only styles were
+removed as part of the same change. The three connected-workflow tabs remain,
+with a visible invitation to select an example; each explains steps, connected
+tools and owner review points. The calculators and all approved closing copy
+are retained. This combines offer, proof, connections and financial relevance
+without presenting the benefits or integration concepts as more demo products.
+No production source or deployment was changed.
+The webpack build and TypeScript compilation pass. The combined demo cards
+and shortened connection section were viewed in the browser, including the
+selected enquiry example and a phone-width visual inspection. No new test
+suite was run for this layout pass. Normal-browser screenshots are in
+`.codex-build/clarity/reconciled-demos.jpg` and
+`.codex-build/clarity/reconciled-connections.jpg` (local, ignored).
+
+Final review corrections, 27 October: the preview homepage uses horizontal
+overflow clipping instead of a hidden-overflow scroll container, allowing its
+sticky navigation to remain visible at desktop/tablet widths. Section anchor
+offsets leave room for that navigation. The change is scoped to the clarity
+homepage. Homepage and shared-page desktop/mobile navigation now say
+How tools connect, retaining their existing IDs and destinations. The contact
+copy explains that a free workflow review looks at one routine process,
+identifies repeated work and suggests a practical next step.
+The webpack production build and TypeScript compilation pass. Browser checks
+confirmed the homepage header stays at viewport top while reading lower-page
+sections at normal tablet width, approximately 1440x900 desktop and 390x844
+phone sizes. The longer navigation label fits on desktop; the phone menu opens,
+uses the renamed link and closes on selection. The connection heading remains
+below the header after anchor navigation. The contact description is visible.
+No new test suite was added or run, and the original website checkout remains
+unchanged. Screenshot: `.codex-build/clarity/review-fixes.jpg` (local, ignored).
+
+Local preview settings in the ignored `.env.local` file set
+`MOTUS_LOCAL_PREVIEW=1` and `NEXT_PUBLIC_MOTUS_LOCAL_PREVIEW=1`. These contain no
+credentials. The form displays a preview notice and sends nothing. The lead API
+also rejects preview submissions before accessing Cloudflare or n8n. No source
+environment files, deployment credentials or production backups were copied.
+Root metadata marks this review copy as noindex. This is not a production release.
+
+Run `npm run dev -- --webpack --hostname 127.0.0.1 --port 3107` to review locally.
+Publishing or removing preview safeguards requires a separate decision.
+
+Review checks completed on 20 October 2026: the production build with
+`npm run build -- --webpack`, TypeScript, full ESLint and a final lint pass of
+changed TypeScript files pass. Webpack was used because the Windows sandbox
+interrupted Turbopack's local subprocess connection; the existing fonts were
+fetched during the build outside the sandbox. No dependencies were changed.
+Desktop 1440x900 and phone 390x844 browser reviews cover both themes, mobile
+navigation, keyboard operation of the three journey tabs, service selection,
+the work-queue filter, calculator, FAQs and the safe preview form. The calculator
+returns 48 hours/week and GBP 44,928 for six people at the default other inputs.
+All four demo routes, the homepage, examples page and privacy page return 200;
+the local lead route returns 409 without reaching n8n. No real enquiry was sent.
+Reduced-motion handling is retained and reviewed in source; physical-phone
+performance and OS preference switching were not measured.
+
 Canonical Agency OS source for the Motus public website.
 
 ## Status
