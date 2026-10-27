@@ -1,5 +1,48 @@
 # Motus Agency Site
 
+## Clarity release candidate — 27 October 2026
+
+Prepared for final approval; not published. Reviewed application source is
+`5ccb4ab`, reconciled with current production source `origin/main` at `7c0aa7f`.
+Property Desk's component, configuration and public route match that baseline.
+Its legacy preview redirect and the production lint exclusions are retained.
+Dependencies, Wrangler settings, webhook destination contract and existing
+secret bindings are unchanged.
+
+Production Next.js/Webpack and standalone builds, TypeScript, full ESLint,
+OpenNext packaging and Wrangler deployment dry run pass. The local Cloudflare
+package returns HTTP 200 for ten public route/metadata checks, redirects the
+old Property Desk URL, and rejects an empty enquiry with HTTP 400. Twenty-two
+browser checks pass, including both Calculate buttons, deferred results,
+contact topic selection, empty-form validation, indexing, desktop/phone
+navigation, theme switching and Property Desk's Outlook interface. No browser
+console errors were recorded. No real enquiry was sent, so end-to-end email
+receipt is not claimed. Physical-phone operation remains unverified.
+
+Public builds allow indexing and have no review-only form notice. Protected
+local review builds retain noindex and both form/API guards. Root metadata now
+uses the same `MOTUS_LOCAL_PREVIEW` switch as the API. Production preparation
+sets both `MOTUS_LOCAL_PREVIEW` and `NEXT_PUBLIC_MOTUS_LOCAL_PREVIEW` to `0`;
+the ignored local review environment retains `1`. Standalone packaging also
+sets `NEXT_PRIVATE_STANDALONE=true` and the project output trace root before
+`npm run build -- --webpack`, then uses
+`opennextjs-cloudflare build --skipNextBuild`. The reviewed production package
+is retained separately from the restored local review build.
+
+The active Worker remains `cf072190-c36b-4d15-836b-eaf52a95e59e` at 100%
+traffic. Its exported source matches the recorded Property Desk build:
+SHA-256 `91e6149dedf4e316f65c35641493930fb6e4fec8eaa4ee43e604576dbe6097b1`.
+Private backup: `production-backups/2026-10-27-cloudflare-cf072190/`.
+That retained Cloudflare version, including assets and bindings, is the
+rollback target for this release. Both existing webhook secret binding names
+were confirmed; their values were not read. The backup, package, checks and
+screenshots are ignored and excluded from the public pull request.
+
+Publication requires explicit approval of this release, a fresh live-version
+match and verification of the saved package manifest. A rebuild for publication
+must use production flags rather than the protected local review flags.
+Deployment and live verification have not been performed.
+
 ## Local offer clarity review
 
 This checkout is the separate review copy requested by Seun on 20 October 2026.
