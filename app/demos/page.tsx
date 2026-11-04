@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import DemoShowroom from "@/components/DemoShowroom";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -33,7 +34,9 @@ export default function DemosPage() {
         <p className={styles.eyebrow}>Examples to try</p>
         <h1>Websites, apps and automations.<br />See them in use.</h1>
         <p className={styles.lead}>
-          Explore a complete salon website, try apps for bookings, enquiries and invoices, or follow Property Desk through an email automation. Choose Gmail or Outlook and watch the example at your own pace. Motus can design and build a setup around your business.
+          {process.env.MOTUS_LOCAL_PREVIEW === "1"
+            ? "Watch a proposed after-hours call, explore a complete salon website, try apps for bookings, enquiries and invoices, or follow Property Desk through an email automation. Motus can design and build a setup around your business."
+            : "Explore a complete salon website, try apps for bookings, enquiries and invoices, or follow Property Desk through an email automation. Choose Gmail or Outlook and watch the example at your own pace. Motus can design and build a setup around your business."}
         </p>
         <div className={styles.notice}>
           <ShieldCheck size={20} aria-hidden="true" />
@@ -49,6 +52,18 @@ export default function DemosPage() {
             <h2 id="library-title">Choose an example.</h2>
           </div>
         </div>
+
+        {process.env.MOTUS_LOCAL_PREVIEW === "1" && (
+          <Link id="demos-voice-receptionist-film-link" className={styles.filmFeature} href="/preview/voice-receptionist">
+            <span className={styles.filmImage}><Image src="/video/ai-receptionist-poster.png" alt="" width={1920} height={1080} /></span>
+            <span className={styles.filmCopy}>
+              <small>Concept film · 60 seconds</small>
+              <strong>When a customer calls after closing</strong>
+              <span>Watch a proposed AI receptionist handle a booking request and pass the details to the team. Scripted example; no live booking.</span>
+              <span className={styles.filmAction}>Watch the film <ArrowRight size={18} aria-hidden="true" /></span>
+            </span>
+          </Link>
+        )}
 
         <DemoShowroom />
       </section>

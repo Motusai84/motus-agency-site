@@ -125,6 +125,18 @@ html[data-theme="light"] .connection-steps > li:not(:last-child)::before { backg
 }
 
 /* Keep the first action visible before a visitor opens each demonstration. */
+.offer-clarity-page .voice-film-feature { display:grid; grid-template-columns:minmax(0,.44fr) minmax(0,.56fr); overflow:hidden; min-height:238px; border:1px solid #53647d; border-top:3px solid #2864ff; border-radius:10px; background:#101318; color:#f2f0ea; text-decoration:none; }
+.offer-clarity-page .voice-film-feature__image { display:flex; min-height:100%; align-items:center; justify-content:center; overflow:hidden; padding:12px; background:#202937; }
+.offer-clarity-page .voice-film-feature__image img { width:100%; height:auto; border:1px solid #53647d; }
+.offer-clarity-page .voice-film-feature__copy { display:flex; flex-direction:column; align-items:flex-start; gap:12px; padding:25px 26px; }
+.offer-clarity-page .voice-film-feature__copy small { color:#a9c1ff; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; }
+.offer-clarity-page .voice-film-feature__copy strong { font-size:clamp(24px,2.2vw,32px); font-weight:650; letter-spacing:-.04em; line-height:1.13; }
+.offer-clarity-page .voice-film-feature__copy > span:not(.voice-film-feature__action) { color:#c9d0dc; font-size:13px; line-height:1.55; }
+.offer-clarity-page .voice-film-feature__action { display:inline-flex; align-items:center; gap:9px; margin-top:auto; color:#a9c1ff; font-size:15px; font-weight:700; }
+.offer-clarity-page .voice-film-feature:focus-visible { outline:3px solid #77d7a8; outline-offset:4px; }
+@media (hover:hover) and (pointer:fine) { .offer-clarity-page .voice-film-feature:hover { border-color:#a9c1ff; } .offer-clarity-page .voice-film-feature:hover .voice-film-feature__action svg { transform:translateX(4px); } }
+@media (max-width:600px) { .offer-clarity-page .voice-film-feature { grid-template-columns:1fr; } .offer-clarity-page .voice-film-feature__image { aspect-ratio:16/9; min-height:0; } .offer-clarity-page .voice-film-feature__copy { padding:22px; } }
+@media (prefers-reduced-motion:reduce) { .offer-clarity-page .voice-film-feature__action svg { transition:none; } }
 .offer-clarity-page .ledger-card > .demo-start-hint { margin: -8px 0 0; padding-top: 14px; border-top: 1px solid rgba(218, 228, 234, .16); color: #c4cad4; font-size: 12px; line-height: 1.75; }
 .offer-clarity-page .demo-start-hint strong { color: #edf1f3; font-weight: 500; }
 .offer-clarity-page .showroom-demo-list > .ledger-card {

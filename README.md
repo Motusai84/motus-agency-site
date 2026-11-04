@@ -1,5 +1,22 @@
 # Motus Agency Site
 
+## Local AI receptionist film preview — 4 November 2026
+
+The approved 60-second scripted concept film is staged locally on branch
+`codex/voice-receptionist-demo`. The existing
+`/preview/voice-receptionist` route now uses the current UK-voice film,
+captions and a matching poster. A featured film link appears above the five
+interactive examples on the homepage and `/demos` when both
+`MOTUS_LOCAL_PREVIEW=1` and `NEXT_PUBLIC_MOTUS_LOCAL_PREVIEW=1` are set.
+The page labels the voices as AI-generated and the calendar/email sequence
+as simulated. It makes no claim of a live phone or Google integration.
+
+Local Next.js Webpack build and targeted ESLint pass. Browser checks at
+1440×900 and 390×844 found no horizontal overflow; the MP4 loaded with a
+60-second duration, advanced during playback and exposed an English caption
+track. The live Cloudflare Worker has not changed. This preview needs Seun's
+review and an explicit production publication approval before any live change.
+
 ## Published demo-button release — 27 October 2026
 
 The owner explicitly approved the homepage demo-button update for publication.
