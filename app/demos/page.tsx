@@ -10,14 +10,14 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Websites, online apps and workflows: try the examples | Motus",
   description:
-    "Explore a website, online apps and automation demos for bookings, enquiries, billing and email organisation. See what Motus can build around your work.",
+    "Watch an after-hours AI receptionist concept film and explore demos for websites, bookings, enquiries, billing and email organisation.",
   alternates: {
     canonical: "/demos",
   },
   openGraph: {
     title: "Websites, online apps and workflows: try the examples | Motus",
     description:
-      "Explore a salon website and interactive examples for bookings, customer enquiries, invoices and email organisation.",
+      "Watch an after-hours call concept and explore a salon website and interactive examples for bookings, enquiries, invoices and email organisation.",
     url: "/demos",
   },
 };
@@ -34,9 +34,7 @@ export default function DemosPage() {
         <p className={styles.eyebrow}>Examples to try</p>
         <h1>Websites, apps and automations.<br />See them in use.</h1>
         <p className={styles.lead}>
-          {process.env.MOTUS_LOCAL_PREVIEW === "1"
-            ? "Watch a proposed after-hours call, explore a complete salon website, try apps for bookings, enquiries and invoices, or follow Property Desk through an email automation. Motus can design and build a setup around your business."
-            : "Explore a complete salon website, try apps for bookings, enquiries and invoices, or follow Property Desk through an email automation. Choose Gmail or Outlook and watch the example at your own pace. Motus can design and build a setup around your business."}
+          Watch a proposed after-hours call, explore a complete salon website, try apps for bookings, enquiries and invoices, or follow Property Desk through an email automation. Motus can design and build a setup around your business.
         </p>
         <div className={styles.notice}>
           <ShieldCheck size={20} aria-hidden="true" />
@@ -53,17 +51,16 @@ export default function DemosPage() {
           </div>
         </div>
 
-        {process.env.MOTUS_LOCAL_PREVIEW === "1" && (
-          <Link id="demos-voice-receptionist-film-link" className={styles.filmFeature} href="/preview/voice-receptionist">
-            <span className={styles.filmImage}><Image src="/video/ai-receptionist-poster.png" alt="" width={1920} height={1080} /></span>
-            <span className={styles.filmCopy}>
-              <small>Concept film · 60 seconds</small>
-              <strong>When a customer calls after closing</strong>
-              <span>Watch a proposed AI receptionist handle a booking request and pass the details to the team. Scripted example; no live booking.</span>
-              <span className={styles.filmAction}>Watch the film <ArrowRight size={18} aria-hidden="true" /></span>
-            </span>
-          </Link>
-        )}
+        <Link id="demos-voice-receptionist-film-link" className={styles.filmFeature} href="/demos/voice-receptionist">
+          <span className={styles.filmCopy}>
+            <small>Featured film / 60 seconds</small>
+            <strong>An enquiry arrives after closing.</strong>
+            <span>Follow a scripted call from the first question to a proposed booking and team handover.</span>
+            <span className={styles.filmAction}>Watch the concept film <ArrowRight size={18} aria-hidden="true" /></span>
+            <span className={styles.filmDisclosure}>AI-generated voices · simulated booking</span>
+          </span>
+          <span className={styles.filmImage}><Image src="/video/ai-receptionist-still.jpg" alt="" width={1920} height={1080} /></span>
+        </Link>
 
         <DemoShowroom />
       </section>

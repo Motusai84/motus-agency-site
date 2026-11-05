@@ -303,21 +303,20 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
         <div className="section-intro reveal">
           <span>Examples to try</span>
           <h2 id="examples-title">Explore a website.<br /><em>Try an online tool.</em></h2>
-          <p>{previewOnly ? "Watch a proposed after-hours call, explore a complete salon website, or try booking, enquiry and invoice tools. Each example shows a different part of what we could build for your business." : "Open a complete salon website, try bookings, enquiries and invoices, or see property emails organised. Each example shows a different part of what we can build for your business."}</p>
+          <p>Watch a proposed after-hours call, explore a complete salon website, or try booking, enquiry and invoice tools. Each example shows a different part of what we could build for your business.</p>
           <p className="muted-note">These are demonstrations with fictional information. Your project is scoped separately. Nothing is booked or sent.</p>
         </div>
         <div className="showroom-demo-list">
-          {previewOnly && (
-            <Link id="voice-receptionist-film-link" className="voice-film-feature reveal" href="/preview/voice-receptionist">
-              <span className="voice-film-feature__image"><Image src="/video/ai-receptionist-poster.png" alt="" width={1920} height={1080} /></span>
-              <span className="voice-film-feature__copy">
-                <small>After-hours calls · 60-second concept film</small>
-                <strong>What happens when someone calls after closing?</strong>
-                <span>Follow a proposed receptionist from the first call to a booking and team handover.</span>
-                <span className="voice-film-feature__action">Watch the film <ArrowRight size={19} aria-hidden="true" /></span>
-              </span>
-            </Link>
-          )}
+          <Link id="voice-receptionist-film-link" className="voice-film-feature reveal" href="/demos/voice-receptionist">
+            <span className="voice-film-feature__copy">
+              <small>Featured film / 60 seconds</small>
+              <strong>An enquiry arrives after closing.</strong>
+              <span>Follow a scripted call from the first question to a proposed booking and team handover.</span>
+              <span className="voice-film-feature__action">Watch the concept film <ArrowRight size={19} aria-hidden="true" /></span>
+              <span className="voice-film-feature__disclosure">AI-generated voices · simulated booking</span>
+            </span>
+            <span className="voice-film-feature__image"><Image src="/video/ai-receptionist-still.jpg" alt="" width={1920} height={1080} /></span>
+          </Link>
           {showroomDemos.map((demo) => (
             <MotionPanel className="ledger-card reveal" key={demo.slug}>
               <div><span>{demo.name ?? demo.title}</span><small>{demo.slug === "salon-website" ? "Website demonstration" : demo.slug === "property-desk" ? "Email automation demonstration" : "Online app and workflow demo"}</small></div>
