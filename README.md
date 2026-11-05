@@ -3,20 +3,20 @@
 ## AI receptionist demo in the Motus website — 5 November 2026
 
 The 60-second scripted concept film is integrated on branch
-`codex/voice-receptionist-demo` at `/demos/voice-receptionist`. The homepage
-Examples section and `/demos` both link to it in preview and production
-builds. The former `/preview/voice-receptionist` route has been removed.
+`codex/voice-receptionist-demo` at `/demos/voice-receptionist`. It is one of
+the six regular examples in both the homepage Examples section and `/demos`
+catalogue. The former `/preview/voice-receptionist` route has been removed.
 The film has captions and a smaller still for the links and player poster.
 The demo states that the voices are AI-generated and the calendar and email
 scenes are simulated. It does not claim a live phone or booking integration.
 
 Local Next.js Webpack builds pass in preview and production configurations,
 as does targeted ESLint. Browser checks at 1440×900 and 390×844 found no
-horizontal overflow on the demo, `/demos` or homepage. Both links resolve to
-the demo; the MP4 loaded with a 60-second duration, advanced during playback
-and exposed an English caption track. The live Cloudflare Worker has not
-changed. Publication requires a fresh live-version reconciliation, a
-recoverable backup and Seun's explicit approval of this exact change.
+horizontal overflow on the demo, `/demos` or homepage. The film loaded with
+a 60-second duration, advanced during playback and exposed an English caption
+track. The live Cloudflare Worker has not changed. Publication requires a
+fresh live-version reconciliation, a recoverable backup and Seun's explicit
+approval of this exact change.
 
 ## Published demo-button release — 27 October 2026
 

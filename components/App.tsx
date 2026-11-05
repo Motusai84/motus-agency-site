@@ -307,19 +307,9 @@ export default function App({ heroDirection = "type" }: { heroDirection?: "signa
           <p className="muted-note">These are demonstrations with fictional information. Your project is scoped separately. Nothing is booked or sent.</p>
         </div>
         <div className="showroom-demo-list">
-          <Link id="voice-receptionist-film-link" className="voice-film-feature reveal" href="/demos/voice-receptionist">
-            <span className="voice-film-feature__copy">
-              <small>Featured film / 60 seconds</small>
-              <strong>An enquiry arrives after closing.</strong>
-              <span>Follow a scripted call from the first question to a proposed booking and team handover.</span>
-              <span className="voice-film-feature__action">Watch the concept film <ArrowRight size={19} aria-hidden="true" /></span>
-              <span className="voice-film-feature__disclosure">AI-generated voices · simulated booking</span>
-            </span>
-            <span className="voice-film-feature__image"><Image src="/video/ai-receptionist-still.jpg" alt="" width={1920} height={1080} /></span>
-          </Link>
           {showroomDemos.map((demo) => (
             <MotionPanel className="ledger-card reveal" key={demo.slug}>
-              <div><span>{demo.name ?? demo.title}</span><small>{demo.slug === "salon-website" ? "Website demonstration" : demo.slug === "property-desk" ? "Email automation demonstration" : "Online app and workflow demo"}</small></div>
+              <div><span>{demo.name ?? demo.title}</span><small>{demo.slug === "salon-website" ? "Website demonstration" : demo.slug === "property-desk" ? "Email automation demonstration" : demo.slug === "voice-receptionist" ? "Scripted concept film" : "Online app and workflow demo"}</small></div>
               <h3>{demo.enquiryOutcome ?? demo.category ?? demo.title}</h3>
               <p>{demo.demoSummary ?? demo.interfaceSummary}</p>
               {demo.startHint && <p className="demo-start-hint"><strong>Try it:</strong> {demo.startHint}</p>}

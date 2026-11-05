@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import DemoShowroom from "@/components/DemoShowroom";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -50,17 +49,6 @@ export default function DemosPage() {
             <h2 id="library-title">Choose an example.</h2>
           </div>
         </div>
-
-        <Link id="demos-voice-receptionist-film-link" className={styles.filmFeature} href="/demos/voice-receptionist">
-          <span className={styles.filmCopy}>
-            <small>Featured film / 60 seconds</small>
-            <strong>An enquiry arrives after closing.</strong>
-            <span>Follow a scripted call from the first question to a proposed booking and team handover.</span>
-            <span className={styles.filmAction}>Watch the concept film <ArrowRight size={18} aria-hidden="true" /></span>
-            <span className={styles.filmDisclosure}>AI-generated voices · simulated booking</span>
-          </span>
-          <span className={styles.filmImage}><Image src="/video/ai-receptionist-still.jpg" alt="" width={1920} height={1080} /></span>
-        </Link>
 
         <DemoShowroom />
       </section>

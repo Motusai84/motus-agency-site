@@ -32,7 +32,7 @@ export default function DemoShowroom() {
           <MotionPanel className={styles.example} id={`example-${example.slug}`} key={example.slug}>
             <div className={styles.exampleBody}>
               <div className={styles.exampleMeta}>
-                <span>{example.name ?? example.title}</span><span>{example.slug === "salon-website" ? "Website demonstration" : example.slug === "property-desk" ? "Email automation demonstration" : "Online app and workflow demo"}</span>
+                <span>{example.name ?? example.title}</span><span>{example.slug === "salon-website" ? "Website demonstration" : example.slug === "property-desk" ? "Email automation demonstration" : example.slug === "voice-receptionist" ? "Scripted concept film" : "Online app and workflow demo"}</span>
               </div>
               <h3>{example.category ?? example.title}</h3>
               <p>{example.demoSummary ?? example.interfaceSummary}</p>

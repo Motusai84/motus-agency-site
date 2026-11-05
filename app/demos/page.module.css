@@ -21,18 +21,6 @@
 .notice p { margin: 0; }
 .library { padding: 36px max(24px, calc((100vw - 1180px) / 2)) 50px; background: #edf1f3; color: #252b31; }
 .sectionHeading h2 { margin: 0; font-size: 34px; }
-.filmFeature { display:grid; grid-template-columns:minmax(0,.44fr) minmax(0,.56fr); overflow:hidden; min-height:320px; margin:28px 0 30px; border:1px solid #596576; background:#101318; color:#f2f0ea; text-decoration:none; }
-.filmImage { position:relative; display:flex; min-width:0; min-height:220px; align-items:center; justify-content:center; overflow:hidden; padding:12px; background:#202937; }
-.filmImage img { width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; border:1px solid #53647d; }
-.filmImage::after { position:absolute; top:50%; left:50%; display:grid; width:62px; height:62px; place-items:center; border:1px solid #f2f0ea; border-radius:50%; background:#05070add; color:#fff; font-size:18px; transform:translate(-50%,-50%); content:"▶"; }
-.filmCopy { display:flex; flex-direction:column; align-items:flex-start; gap:11px; padding:35px 36px; }
-.filmCopy small { color:#a9c1ff; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
-.filmCopy strong { font-family:var(--font-body),Arial,sans-serif; font-size:clamp(29px,2.7vw,40px); font-weight:650; letter-spacing:-.05em; line-height:1.13; }
-.filmCopy > span:not(.filmAction):not(.filmDisclosure) { max-width:520px; color:#c3cbd4; font-size:14px; line-height:1.55; }
-.filmAction { display:inline-flex; align-items:center; gap:9px; margin-top:auto; color:#a9c1ff; font-size:15px; font-weight:700; }
-.filmDisclosure { color:#91a0ad; font-size:11px; }
-.filmFeature:focus-visible { outline:3px solid #2864ff; outline-offset:4px; }
-@media (hover:hover) and (pointer:fine) { .filmFeature:hover { border-color:#2864ff; } }
 .quickLinks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
 .quickLinks a { display: inline-flex; min-height: 44px; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid #bcc5cb; border-radius: 999px; color: #343d45; font-size: 14px; }
 .quickLinks a:hover { background: #dce2e7; }
@@ -96,9 +84,6 @@
   .exampleState { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
 }
 @media (max-width: 600px) {
-  .filmFeature { grid-template-columns:1fr; margin:24px 0; }
-  .filmImage { min-height:0; aspect-ratio:16/9; }
-  .filmCopy { padding:24px; }
   .hero, .model { width: calc(100% - 36px); }
   .hero { padding: 12px 0 26px; }
   .backLink { margin-bottom: 12px; }
