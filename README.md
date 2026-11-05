@@ -1,22 +1,33 @@
 # Motus Agency Site
 
-## AI receptionist demo in the Motus website — 5 November 2026
+## Published AI receptionist concept demo — 5 November 2026
 
-The 60-second scripted concept film is integrated on branch
-`codex/voice-receptionist-demo` at `/demos/voice-receptionist`. It is one of
-the six regular examples in both the homepage Examples section and `/demos`
-catalogue. The former `/preview/voice-receptionist` route has been removed.
-The film has captions and a smaller still for the links and player poster.
-The demo states that the voices are AI-generated and the calendar and email
-scenes are simulated. It does not claim a live phone or booking integration.
+Seun approved publication of the 60-second scripted concept film. Source
+commit `3d14f4b` added `/demos/voice-receptionist` as one of six regular
+examples on the homepage and `/demos`. The former
+`/preview/voice-receptionist` route returns 404. The film has captions and a
+matching still. The page states that both voices are AI-generated and the
+calendar and email scenes are simulated; no live phone or booking integration
+is claimed.
 
-Local Next.js Webpack builds pass in preview and production configurations,
-as does targeted ESLint. Browser checks at 1440×900 and 390×844 found no
-horizontal overflow on the demo, `/demos` or homepage. The film loaded with
-a 60-second duration, advanced during playback and exposed an English caption
-track. The live Cloudflare Worker has not changed. Publication requires a
-fresh live-version reconciliation, a recoverable backup and Seun's explicit
-approval of this exact change.
+`https://motusautomation.co.uk` serves Cloudflare Worker version
+`af84ddfe-f45b-4451-a6ba-c3579fe32273` at 100% traffic through deployment
+`aeb106b2-6db0-4f99-86c1-92da2da17b2c`. The prior version
+`8a69c966-ee6a-4956-a731-60f36e8b3cd8` is the retained rollback target.
+Its source was exported and verified in the ignored private directory
+`production-backups/2026-11-05-cloudflare-8a69c966/`. Rollback requires
+explicit approval: `npx wrangler versions deploy
+8a69c966-ee6a-4956-a731-60f36e8b3cd8@100 --yes`.
+
+Production Next.js/Webpack, targeted ESLint, OpenNext packaging and the
+Wrangler dry run passed. The uploaded version kept the same binding names and
+types, including both lead-webhook secret bindings; secret values were not
+read. Live HTTP checks returned 200 for the homepage, demos, film, captions,
+still and existing salon demo; the removed preview returned 404 and GET
+`/api/leads` returned 405. Live browser checks at 1440×900 and 390×844
+found no horizontal overflow, confirmed both demo links, and verified that
+the 60-second video advances with an English caption track. No real enquiry
+was submitted.
 
 ## Published demo-button release — 27 October 2026
 
