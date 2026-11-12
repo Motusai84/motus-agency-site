@@ -1,5 +1,28 @@
 # Motus Agency Site
 
+## Published dependency security update — 12 November 2026
+
+Seun approved [PR #19](https://github.com/Motusai84/motus-agency-site/pull/19)
+and the live Cloudflare release. The PR merged to `main` as `ab8e029` and
+changed only `package.json` and `package-lock.json`: Next.js and
+`eslint-config-next` are pinned to `16.4.5`, and OpenNext to `1.20.15`.
+OpenNext `1.20.15` resolves the local Worker runtime failure seen with
+Next.js `16.4.5` and OpenNext `1.20.2`.
+
+`https://motusautomation.co.uk` serves Cloudflare Worker version
+`326882c0-a205-4173-b4ff-70c0f81663ac` at 100% traffic. The prior version
+`af84ddfe-f45b-4451-a6ba-c3579fe32273` remains the rollback target;
+rolling back production requires an explicit decision. A source archive of
+the prior `main` commit was retained privately before release. No credential
+values were read or committed.
+
+The exact merged source passed `npm ci`, the Next.js and OpenNext production
+builds, and Wrangler's deployment dry run. The new Worker retained both
+`N8N_LEAD_WEBHOOK_*` secret binding names. Live GET checks returned 200 for
+`/`, `/demos`, `/demos/voice-receptionist`, `/privacy`, and `/robots.txt`;
+`GET /api/leads` returned 405 and an empty JSON POST returned 400. No real
+enquiry was submitted, so end-to-end delivery was not retested in this release.
+
 ## Published AI receptionist concept demo — 5 November 2026
 
 Seun approved publication of the 60-second scripted concept film. Source
