@@ -1,0 +1,52 @@
+/* AI Workforce · Bob (card 0) — motion + runtime state.
+   These classes are applied by JS only, so they must NEVER become Webflow
+   classes: "Clean Up Unused Styles" deletes any class no element carries. */
+.aiwf_stage{font-family:Inter,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+.aiwf_art{transform:scale(var(--aiwf-s,1));transform-origin:50% 50%}
+.aiwf_composer{opacity:0;backdrop-filter:blur(58px);-webkit-backdrop-filter:blur(58px);transition:height .32s cubic-bezier(.22,.61,.36,1),opacity .4s cubic-bezier(.22,.61,.36,1),transform .4s cubic-bezier(.22,.61,.36,1)}
+.aiwf_composer.aiwf-in{opacity:1}
+.aiwf_composer.aiwf-out{opacity:0;transform:translateY(-10px) scale(.97)}
+.aiwf_composer-text{flex:none}
+.aiwf_composer-text.aiwf-typed{color:#111827;line-height:1.5}
+.aiwf_composer-row{flex:none}
+.aiwf_caret{display:none;width:1px;height:14px;margin-left:1px;vertical-align:-2px;background:#111827}
+.aiwf_composer.aiwf-typing{will-change:height;transition:opacity .4s cubic-bezier(.22,.61,.36,1),transform .4s cubic-bezier(.22,.61,.36,1)}
+.aiwf_composer.aiwf-typing .aiwf_caret{display:inline-block;animation:aiwfCaret .9s steps(1,end) infinite}
+@keyframes aiwfCaret{50%{opacity:0}}
+.aiwf_ibtn.is-send{transition:transform .14s ease,filter .14s ease}
+.aiwf_ibtn.is-send.aiwf-press{transform:scale(.86);filter:brightness(.88)}
+.aiwf_results{will-change:transform;transition:transform .82s cubic-bezier(.4,0,.2,1)}
+.aiwf_results.aiwf-fading{opacity:0;transition:opacity .42s ease}
+.aiwf_box{opacity:0;transform:translateY(10px) scale(.99);will-change:opacity,transform;transition:opacity .38s cubic-bezier(.22,1,.36,1),transform .44s cubic-bezier(.22,1,.36,1)}
+.aiwf_box.aiwf-show{opacity:1;transform:none}
+.aiwf_box-in{opacity:0;transform:translateY(4px);transition:opacity .32s cubic-bezier(.22,1,.36,1),transform .34s cubic-bezier(.22,1,.36,1)}
+.aiwf_box.aiwf-reveal>.aiwf_box-in{opacity:1;transform:none}
+.aiwf_flash{background-size:250% 100%;background-position:130% 0}
+.aiwf_box.aiwf-show>.aiwf_flash{animation:aiwfFlash .6s cubic-bezier(.22,.61,.36,1)}
+@keyframes aiwfFlash{0%{opacity:0;background-position:130% 0}18%{opacity:1}82%{opacity:1}100%{opacity:0;background-position:-30% 0}}
+/* chart blocks run three beats: heading, then the empty card, then the chart */
+.aiwf_box.is-chart .aiwf_chartcard{opacity:0;transform:translateY(10px) scale(.99);transition:opacity .38s cubic-bezier(.22,1,.36,1),transform .44s cubic-bezier(.22,1,.36,1)}
+.aiwf_box.is-chart.aiwf-card-in .aiwf_chartcard{opacity:1;transform:none}
+.aiwf_box.is-chart.aiwf-content-in .aiwf_chartcard .aiwf_box-in{opacity:1;transform:none}
+.aiwf_box.is-chart.aiwf-show>.aiwf_flash{animation:none}
+.aiwf_box.is-chart.aiwf-card-in .aiwf_flash{animation:aiwfFlash .36s cubic-bezier(.22,.61,.36,1)}
+.aiwf_legend{font-size:8px;font-weight:600;letter-spacing:-.08px;color:#4959e4;text-align:center}
+.aiwf_svg{display:block;width:100%;height:auto}
+.aiwf_xaxis{display:flex;justify-content:space-between;font-size:8px;font-weight:500;color:#6b7280}
+.aiwf_grid{opacity:0;transition:opacity .4s ease}
+.aiwf-content-in .aiwf_grid{opacity:1}
+.aiwf_line{stroke-dasharray:1;stroke-dashoffset:1}
+.aiwf-content-in .aiwf_line{animation:aiwfDraw .95s cubic-bezier(.33,.9,.25,1) .15s forwards}
+@keyframes aiwfDraw{to{stroke-dashoffset:0}}
+.aiwf_dot{opacity:0;transform:scale(.3);transform-box:fill-box;transform-origin:center}
+.aiwf-content-in .aiwf_dot{animation:aiwfDot .45s cubic-bezier(.22,1,.36,1) .78s forwards}
+@keyframes aiwfDot{to{opacity:1;transform:scale(1)}}
+.aiwf_bar{transform-box:fill-box;transform:scaleY(0)}
+.aiwf_bar.is-up{transform-origin:bottom}
+.aiwf_bar.is-down{transform-origin:top}
+.aiwf-content-in .aiwf_bar{animation:aiwfBar .72s cubic-bezier(.22,1,.36,1) var(--bd,0ms) forwards}
+@keyframes aiwfBar{to{transform:scaleY(1)}}
+/* teardown: kill every transition for one frame so the finished answer
+   cannot flash back at the top before the next run starts */
+.aiwf_stage.aiwf-notrans *{transition:none!important;animation:none!important}
+@media (prefers-reduced-motion:reduce){.aiwf_stage *{animation:none!important;transition:none!important}}

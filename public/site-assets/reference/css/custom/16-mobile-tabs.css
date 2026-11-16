@@ -1,0 +1,31 @@
+/* billdrmobiletabs v2.4.0 — ring appearance + the animatable custom property.
+
+   MECHANISM (proven in v1.1.0 — do not "improve" it):
+   an `@property` at-rule makes --bd-p transitionable, and a CSS transition drives it.
+   v2.1.0 tried to drop this <style> block by registering the property from script with
+   CSS.registerProperty() + WAAPI; the ring would not close. Reverted.
+
+   ⚠️ WHY THE RING HAS NO BORDER: `background-origin` defaults to `padding-box` while
+   `background-clip` and `mask-origin` default to `border-box`. With a 2px border the
+   conic gradient was sized to the 20x20 padding box and tiled outward, while the mask
+   kept only the outer 2px band (radius 10-12px) — a band lying entirely outside the
+   gradient's own tile, so it rendered repeated tile edges instead of the arc. The
+   border was removed from the Webflow class; `background-origin: border-box` below is
+   belt-and-braces in case one ever comes back.
+
+   ⭐ STROKE WIDTH KNOB: --bd-ring-w. The stroke is NOT a border (see above) — it is the
+   mask's inset, i.e. how far in from the edge the transparent hole starts. Bigger value
+   = thicker ring. Applies at every breakpoint; the ring box itself stays 24x24 on the
+   Webflow class. v2.4.0 took it 2px -> 3px at the user's request 2026-09-02. */
+@property --bd-p { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+
+.mobile_item-ring {
+  --bd-p: 0%;
+  --bd-ring-w: 3px;
+  background: conic-gradient(from -90deg, #4959e4 var(--bd-p), rgba(73,89,228,.14) 0);
+  background-origin: border-box;
+  background-clip: border-box;
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - var(--bd-ring-w)), #000 calc(100% - var(--bd-ring-w)));
+  mask: radial-gradient(farthest-side, #0000 calc(100% - var(--bd-ring-w)), #000 calc(100% - var(--bd-ring-w)));
+}
+@media (prefers-reduced-motion: reduce) { .mobile_item-ring { transition: none !important; } }

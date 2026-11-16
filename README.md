@@ -1,5 +1,17 @@
 # Motus Agency Site
 
+## Approved website replacement — 16 November 2026
+
+The owner explicitly approved replacing `motusautomation.co.uk` with the reviewed Billdr-based Motus design. The five marketing pages are now `public/index.html`, `services.html`, `examples.html`, `about.html` and `privacy.html`; Cloudflare's existing asset-first routing serves these before the retained Next.js application. `/demos`, all six individual demos and `/api/leads` remain in Next.js unchanged. Public HTML links use the clean `/services`, `/examples`, `/about` and `/privacy` routes.
+
+The editable layout/content source remains in the agency vault at `06_BUILDS/websites/billdr-code-export/motus-preview/`. After `python build.py`, run `python build-public.py --output <this-checkout>/public` there. The publication packager copies only public pages, scripts, styles and media into this repository; `.qa`, Python source, logs and local-server code are not published. `src/clients/publication.json` in that source supplies publication copy and metadata. Rebuild these files through that source rather than editing generated HTML. For exact local hosting/routing, use the OpenNext build and `wrangler dev`; Next's dev server alone does not reproduce Cloudflare asset-first routing.
+
+The approved layout, static opening image, single-picture demo selector, calculator, Craig/Seeds Barber testimonial, onboarding photos and keyboard/phone fixes are preserved. The published form uses the existing `/api/leads` payload and success contract; it no longer depends on the laptop's Python relay. Existing demo links ending in `#contact` open the new form. No webhook secret, n8n node, DNS record or demo implementation was changed. Preview labels/noindex metadata were removed, canonical/description/social metadata added, and the sitemap extended. The privacy text describes the new form and existing providers without publishing local-preview/draft instructions.
+
+The immediately preceding Worker version is `326882c0-a205-4173-b4ff-70c0f81663ac`. It was verified active at 100% before preparation; its Worker content and `origin/main` source archive were retained in the private ignored `production-backups/2026-11-16-cloudflare-326882c0/` directory in the agency checkout. Worker export SHA-256: `d7a3a92b395c822659c1a479cdaf4c33cb1988ddd18e48a5387b0fede80d8dd4`. Emergency rollback: `wrangler versions deploy 326882c0-a205-4173-b4ff-70c0f81663ac@100 --name motus-site --yes`.
+
+The owner's Android browser still darkened light sections during local phone review despite the `color-scheme: only light` hint. That physical-device issue remains open; publishing is explicitly approved with follow-up editing planned. Do not claim the browser override is resolved.
+
 ## Published dependency security update — 12 November 2026
 
 Seun approved [PR #19](https://github.com/Motusai84/motus-agency-site/pull/19)

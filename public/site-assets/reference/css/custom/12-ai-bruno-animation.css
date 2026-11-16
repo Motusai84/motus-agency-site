@@ -1,0 +1,81 @@
+/* AI Workforce · Bruno (card 1) — six stages cross-faded as one run.
+   Every aiwf-* class below is applied by JS only, so none of them may become
+   a Webflow class: "Clean Up Unused Styles" deletes any class no element carries. */
+.aiwf_bstage{opacity:0;visibility:hidden;transition:opacity .5s cubic-bezier(.22,1,.36,1),visibility 0s .5s}
+.aiwf_bstage.aiwf-on{opacity:1;visibility:visible;transition:opacity .5s cubic-bezier(.22,1,.36,1),visibility 0s}
+/* poster frame: until the driver boots, show the finished quote rather than
+   six stacked stages or an empty bed */
+.aiwf_stage:not([data-aiwf-anim]) .aiwf_bstage{opacity:0;visibility:hidden}
+.aiwf_stage:not([data-aiwf-anim]) .aiwf_bstage[data-aiwf-s="6"]{opacity:1;visibility:visible}
+
+/* 1 · context picker */
+.aiwf_bopt{opacity:0;transform:translateY(10px);transition:opacity .42s cubic-bezier(.22,1,.36,1),transform .42s cubic-bezier(.22,1,.36,1)}
+.aiwf_bopt.aiwf-in{opacity:1;transform:none}
+
+/* 2 · the plans are dragged in. The file rides in from off-frame and comes to
+   rest centred over the drop zone, then releases; the next stage's cross-fade
+   covers the tail so the hand-off reads as one move. */
+.aiwf_bupload{transition:box-shadow .3s ease,background-color .3s ease}
+.aiwf_bupload.aiwf-hot{box-shadow:inset 0 0 0 1.5px #4959e4,0 0 0 1px rgba(0,0,0,.05)}
+.aiwf_bdrag{opacity:0;transform:translate(210px,180px);transition:transform 1.15s cubic-bezier(.22,1,.36,1),opacity .35s ease}
+.aiwf_bdrag.aiwf-in{opacity:1;transform:translate(0,0)}
+.aiwf_bdrag.aiwf-drop{opacity:0;transform:scale(.78);transition:transform .16s ease,opacity .14s ease}
+/* macOS multi-file drag: a second sheet fanned behind the first and the red
+   count badge, so "Bruno takes several plans at once" reads in a single frame.
+   Both are pseudo-elements on .aiwf_bdrag (already position:absolute, so it is
+   their containing block) — no extra nodes, nothing for the Designer to lose. */
+.aiwf_bdrag-img{position:relative;z-index:1}
+.aiwf_bdrag::before{content:"";position:absolute;top:6px;left:27px;width:60px;height:76px;border-radius:9.33px;background:#fff;transform:rotate(3.5deg);box-shadow:0 0 0 1px rgba(0,0,0,.07),0 8px 16px -10px rgba(0,0,0,.4)}
+.aiwf_bdrag::after{content:"2";position:absolute;top:-7px;left:9px;z-index:2;width:22px;height:22px;border-radius:50%;background:#ff3b30;color:#fff;font-size:12.5px;font-weight:700;line-height:22px;text-align:center;box-shadow:0 0 0 1.5px #fff,0 2px 6px rgba(0,0,0,.28)}
+
+/* 3 · file preview + CTA */
+.aiwf_bfile,.aiwf_bcta{opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1)}
+.aiwf_bprev.aiwf-in .aiwf_bfile,.aiwf_bprev.aiwf-in .aiwf_bcta{opacity:1;transform:none}
+/* the two plans land one after the other, not as one block */
+.aiwf_bprev.aiwf-in .aiwf_bfile:nth-of-type(2){transition-delay:.09s}
+/* has to out-rank the rule above, or the press never shows */
+.aiwf_bprev.aiwf-in .aiwf_bcta.aiwf-press{transform:scale(.94);filter:brightness(.9)}
+
+/* 4 · the working card: every row spins, then checks off */
+.aiwf_bwork-ico.is-done{display:none}
+.aiwf_bwork-ico.is-load{animation:aiwfSpin 1s linear infinite;transform-origin:50% 50%}
+@keyframes aiwfSpin{to{transform:rotate(360deg)}}
+.aiwf_bwork-item.aiwf-ok .aiwf_bwork-ico.is-load,.aiwf_bwork-ghead.aiwf-ok .aiwf_bwork-ico.is-load{display:none}
+.aiwf_bwork-item.aiwf-ok .aiwf_bwork-ico.is-done,.aiwf_bwork-ghead.aiwf-ok .aiwf_bwork-ico.is-done{display:block;animation:aiwfTick .34s cubic-bezier(.22,1,.36,1)}
+@keyframes aiwfTick{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+
+/* 5 · skeleton — geometry mirrors the real table so the swap lands in place.
+   Each bar shimmers on its own rather than one sweep crossing the whole card. */
+.aiwf_bskel{width:426px;height:404px;overflow:hidden;background-color:#f3f4f6;border-radius:14px;box-shadow:inset 0 0 0 1px #ffffff,0 0 0 1px rgba(0,0,0,.05)}
+.aiwf_ssec{background-color:#fff;padding:0 10px}
+.aiwf_sdiv{height:1px;background-color:rgba(231,229,225,.65);margin:0 -10px}
+.aiwf_srow{display:flex;align-items:center;justify-content:space-between;height:42px}
+.aiwf_scell{display:flex;align-items:center;gap:11px}
+.aiwf_scol{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.aiwf_sbar{display:block;border-radius:99px;background-image:linear-gradient(90deg,rgba(231,229,225,.65) 0%,rgba(231,229,225,.65) 35%,rgba(246,245,243,.95) 50%,rgba(231,229,225,.65) 65%,rgba(231,229,225,.65) 100%);background-size:300% 100%;background-position:100% 0}
+.aiwf_bstage.aiwf-on .aiwf_sbar{animation:aiwfShimmer 1.35s ease-in-out infinite}
+@keyframes aiwfShimmer{to{background-position:-100% 0}}
+
+/* 6 · the quote lands, row by row */
+/* 2026-09-14: text-align:left overrides the centring inherited from the embed wrapper
+   (.code-embed-2); 404px = 394px of content + 10px bottom padding, and the skeleton
+   above matches it so the cross-fade still lands in place */
+.aiwf_bquote{width:426px;height:404px;padding-bottom:10px;text-align:left;overflow:hidden;border-radius:14px;background-image:linear-gradient(180deg,rgba(255,255,255,.93),rgba(255,255,255,.8));box-shadow:inset 0 0 0 1px #ffffff,0 0 0 1px rgba(0,0,0,.05)}
+.aiwf_qhead{display:flex;align-items:center;justify-content:space-between;height:40px;padding:0 9.78px}
+.aiwf_qhl{display:flex;align-items:center;gap:9.78px}
+.aiwf_qchev{color:#4959e4;font-size:8.56px;font-weight:600;line-height:1}
+.aiwf_qnm{font-size:9.78px;font-weight:600;color:#111827}
+.aiwf_qhr{display:flex;flex-direction:column;align-items:flex-end;gap:2.44px}
+.aiwf_qtot{font-size:9.78px;font-weight:600;color:#111827}
+.aiwf_qsub{font-size:7.33px;color:#6b7280}
+.aiwf_qgrid{display:grid;grid-template-columns:177px 43px 46px 46px 28px 40px;gap:4.89px;padding:0 9.78px;align-items:center}
+.aiwf_qcols{height:20px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}
+.aiwf_qcols span{font-size:6.11px;font-weight:600;color:#6b7280;text-align:center}
+.aiwf_qcols span:first-child{text-align:left}
+.aiwf_qrow{height:42px;border-bottom:1px solid #e5e7eb;opacity:0;transform:translateY(8px);transition:opacity .4s cubic-bezier(.22,1,.36,1),transform .4s cubic-bezier(.22,1,.36,1)}
+.aiwf_qrow.aiwf-in{opacity:1;transform:none}
+.aiwf_qtask{font-size:8px;font-weight:500;line-height:1.25;color:#111827}
+.aiwf_qcell{height:20px;display:flex;align-items:center;justify-content:center;border-radius:3.67px;box-shadow:inset 0 0 0 1px #e5e7eb;font-size:7.33px;color:#111827}
+.aiwf_qrt{font-size:7.33px;font-weight:600;color:#111827;text-align:right}
+
+@media (prefers-reduced-motion:reduce){.aiwf_stage *{animation:none!important;transition:none!important}}

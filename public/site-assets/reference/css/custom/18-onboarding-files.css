@@ -1,0 +1,8 @@
+/* billdrfilesreveal v1.0.0 — staggered tile pop-in + check snap for .onboarding_files */
+.onboarding_files-embed{position:absolute;left:0;top:0;width:0;height:0;overflow:hidden}
+/* image slots not yet connected: hide the broken-image glyph (Designer still shows the placeholder) */
+.onboarding_files img:not([src]),.onboarding_files img[src=""]{opacity:0}
+.onboarding_files [data-files-tile]{opacity:0;transform:translateY(14px) scale(.88);transition:opacity .5s cubic-bezier(.16,.84,.44,1),transform .55s cubic-bezier(.34,1.4,.64,1);will-change:opacity,transform}
+.onboarding_files [data-files-badge]{opacity:0;transform:scale(.2);transition:opacity .28s ease-out,transform .4s cubic-bezier(.34,1.56,.64,1);will-change:opacity,transform}
+.onboarding_files.is-in [data-files-tile],.onboarding_files.is-in [data-files-badge]{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.onboarding_files [data-files-tile],.onboarding_files [data-files-badge]{opacity:1!important;transform:none!important;transition:none!important}}

@@ -1,0 +1,15 @@
+.bl-wm { --bl-ink:#E0DACC; --bl-hatch:#F4F0EB;
+            display:block; width:100%; aspect-ratio:1440/538; }
+  .bl-wm__svg { display:block; width:100%; height:100%; }
+
+  /* Everything drawable starts empty; the timeline grows it in. */
+  .bl-draw  { fill:none; stroke:var(--bl-ink); stroke-width:2;
+               stroke-linecap:butt; stroke-linejoin:round; }
+  .bl-guide { fill:none; stroke:var(--bl-ink); stroke-width:1; stroke-dasharray:6 6; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bl-draw { stroke-dasharray:none !important; }
+    .bl-hatchcol { opacity:1 !important; }
+    .bl-hatchfill { fill-opacity:1 !important; }
+    .bl-wipe { width:1440px !important; height:538px !important; }
+  }

@@ -1,0 +1,9 @@
+/* Only the active card shows its dot. Scoped to .copilots_card on purpose — the
+   fourth .copilots_dot lives in .copilots_quote and must stay visible.
+   This has to be a descendant selector, so it cannot be a Webflow class; keeping
+   it here also means "Clean Up Unused Styles" has no record to delete. */
+.copilots_card .copilots_dot { opacity: 0; transition: opacity .25s ease; }
+.copilots_card.is-active .copilots_dot { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .copilots_card .copilots_dot { transition: none; }
+}

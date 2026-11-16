@@ -1,0 +1,12 @@
+/* billdrmeetreveal v1.0.1 — appear + stagger for .onboarding_meet */
+.onboarding_meet-embed{position:absolute;left:0;top:0;width:0;height:0;overflow:hidden}
+/* image slots not yet connected: hide the broken-image glyph (Designer still shows the placeholder) */
+.onboarding_meet img:not([src]),.onboarding_meet img[src=""]{opacity:0}
+.onboarding_meet [data-meet-card]{opacity:0;transform:translateY(20px) scale(.972);transition:opacity .8s cubic-bezier(.16,.84,.44,1),transform .8s cubic-bezier(.16,.84,.44,1);will-change:opacity,transform}
+.onboarding_meet [data-meet-anim]{opacity:0;transform:translateY(9px);transition:opacity .5s cubic-bezier(.16,.84,.44,1),transform .5s cubic-bezier(.16,.84,.44,1);will-change:opacity,transform}
+.onboarding_meet [data-meet-anim].onboarding_meet-avatar{transform:translateY(0) scale(.78)}
+.onboarding_meet [data-meet-anim].onboarding_meet-quote{position:relative;border-left-color:transparent}
+.onboarding_meet [data-meet-anim].onboarding_meet-quote::before{content:"";position:absolute;left:-2px;top:0;width:2px;height:100%;background:#4959e4;transform:scaleY(0);transform-origin:0 0;transition:transform .55s cubic-bezier(.16,.84,.44,1);transition-delay:inherit}
+.onboarding_meet.is-in [data-meet-card],.onboarding_meet.is-in [data-meet-anim]{opacity:1;transform:none}
+.onboarding_meet.is-in [data-meet-anim].onboarding_meet-quote::before{transform:scaleY(1)}
+@media (prefers-reduced-motion:reduce){.onboarding_meet [data-meet-card],.onboarding_meet [data-meet-anim]{opacity:1!important;transform:none!important;transition:none!important}.onboarding_meet [data-meet-anim].onboarding_meet-quote::before{transform:scaleY(1)!important;transition:none!important}}

@@ -1,0 +1,32 @@
+/* ONE menu DOM for every breakpoint (merged 2026-09-21). At <=991 (tablet + mobile, since 2026-09-22) the desktop .navbar_menu IS the drawer:
+   its CLOSED state lives on the .navbar_menu Webflow class (medium breakpoint, cascades to small/tiny) so the Designer canvas hides it;
+   .navbar_menu.is-open exists BOTH as a Webflow combo and here, so "Clean Up Unused Styles" cannot break it.
+   Each mega menu drops inline via the class overrides, and Webflow's own dropdown open/close is the accordion. */
+@media (max-width:991px){
+.navbar_menu{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.navbar_menu.is-open{clip-path:inset(0% 0% 0% 0%);visibility:visible;transition:clip-path 340ms cubic-bezier(.22,1,.36,1),visibility 0s linear 0s}
+.navbar_dropdown-list.w--open{animation:billdrNavPanelIn 240ms cubic-bezier(.22,1,.36,1)}
+.navbar_actions .is-transparent{display:none}
+html.nav-locked,html.nav-locked body{overflow:hidden}
+}
+@keyframes billdrNavPanelIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.navbar_mobile-chev{transition:transform 240ms cubic-bezier(.22,1,.36,1)}
+.navbar_link.w--open .navbar_mobile-chev{transform:rotate(180deg)}
+
+/* Burger -> lucide-sized X (24px box, 12x12 diagonals = 16.97px strokes) */
+.navbar_burger-line{transition:transform .2s ease,width .2s ease}
+.navbar_burger.is-open .navbar_burger-line{width:17px}
+.navbar_burger.is-open .navbar_burger-line:first-child{transform:translateY(3.5px) rotate(45deg)}
+.navbar_burger.is-open .navbar_burger-line:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+.w-variant-8ba0bbb8-7773-5651-7f4e-df123c1d5e7b .navbar_burger-line{background-color:#111111}
+
+/* Drawer open: the bar adopts the Light look - white bar, hairline rule, dark logo, close icon only.
+   Mirrors the desktop :has(.w--open) treatment in the mega-menu embed. */
+html.nav-locked .navbar_component{background-color:var(--background-color-primary);border-bottom:1px solid var(--border-color-primary);-webkit-backdrop-filter:none;backdrop-filter:none}
+html.nav-locked .navbar_component,html.nav-locked .navbar_component .navbar_brand,html.nav-locked .navbar_component .button{transition-delay:0s}
+html.nav-locked .navbar_component .navbar_brand{filter:brightness(0) invert(.208)}
+html.nav-locked .navbar_burger-line{background-color:#353535}
+html.nav-locked .navbar_actions{display:none}
+html.nav-locked .navbar_burger{margin-left:auto}
+
+@media (prefers-reduced-motion:reduce){.navbar_menu,.navbar_menu.is-open{transition-duration:1ms}.navbar_dropdown-list.w--open{animation:none}.navbar_mobile-chev{transition:none}}

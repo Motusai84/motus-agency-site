@@ -1,0 +1,8 @@
+@media (max-width:991px){
+/* .aiwf_art centres with `inset:0; margin:auto`, but the artboard is 545px wide. When an
+   absolutely-positioned box is WIDER than its containing block the auto margins resolve to
+   0, so it sits flush left and then scales about its own centre -- landing
+   (545 - stageWidth)/2 to the right and clipping. Pinning the centre explicitly is correct
+   at ANY stage width, so this holds in portrait, landscape and tablet alike. */
+.aiwf_art{left:50%!important;right:auto!important;margin-left:-272.5px!important;margin-right:0!important}
+}

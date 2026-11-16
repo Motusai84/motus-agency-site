@@ -1,0 +1,37 @@
+/* --- Mega menu open sequence ------------------------------------------------
+   click -> navbar adopts the Light look immediately (200ms)
+         -> 90ms later the panel begins its top-to-bottom reveal (340ms)
+   On close the order reverses: the panel retracts first and the navbar only
+   returns to its base look 200ms later, so a white panel never hangs beneath a
+   dark navbar mid-transition. */
+
+/* Panel stays rendered so the reveal can transition; visibility + pointer-events
+   keep it out of hit-testing and the a11y tree while shut.
+   NOTE: Webflow puts w--open on the LIST and the TOGGLE, never on the .w-dropdown
+   wrapper (its dropdown module: list.removeClass(v), toggle.removeClass(v)). */
+/* Desktop only (>=992; tablet uses the drawer since 2026-09-22). Below that the same panels drop inline inside the mobile drawer and
+   Webflow's native display:none / w--open display:block is the accordion - so this !important reveal
+   must never reach the medium breakpoint. */
+@media (min-width:992px){
+.navbar_dropdown-list{display:block!important;clip-path:inset(0 0 100% 0);transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:clip-path 340ms cubic-bezier(.22,.61,.36,1) 0s,transform 340ms cubic-bezier(.22,.61,.36,1) 0s,visibility 0s linear 340ms}
+.navbar_dropdown-list.w--open{clip-path:inset(0 0 0 0);transform:translateY(0);visibility:visible;pointer-events:auto;transition:clip-path 340ms cubic-bezier(.22,.61,.36,1) 90ms,transform 340ms cubic-bezier(.22,.61,.36,1) 90ms,visibility 0s linear 0s}
+}
+
+/* Navbar colour leads on open, lags on close. Scoped to the navbar so that
+   site-wide .button hovers are not given a delay. */
+.navbar_component,.navbar_component .navbar_brand,.navbar_component .navbar_link,.navbar_component .navbar_icon,.navbar_component .button{transition:background-color 200ms ease 200ms,color 200ms ease 200ms,border-color 200ms ease 200ms,filter 200ms ease 200ms}
+.navbar_component:has(.w--open),.navbar_component:has(.w--open) .navbar_brand,.navbar_component:has(.w--open) .navbar_link,.navbar_component:has(.w--open) .navbar_icon,.navbar_component:has(.w--open) .button{transition-delay:0s}
+
+/* While any dropdown is open the navbar adopts the Light variant look.
+   CSS-only via :has() - no script, and it reverts on close. */
+.navbar_component:has(.w--open){background-color:var(--background-color-primary)}
+.navbar_component:has(.w--open) .navbar_brand{filter:brightness(0) invert(.208)}
+.navbar_component:has(.w--open) .navbar_link{color:var(--text-color-primary)}
+.navbar_component:has(.w--open) .navbar_icon{color:var(--text-color-muted)}
+.navbar_component:has(.w--open) .button.is-transparent{background-color:var(--background-color-brand);-webkit-backdrop-filter:none;backdrop-filter:none;color:#fff}
+.navbar_component:has(.w--open) .button.is-light{border:1px solid var(--border-color-primary)}
+
+/* Row hover: the glyph tile goes from the secondary fill to brand blue.
+   The tile is square - the radius lives on .mega_item-icon.
+   (Webflow cannot express descendant-on-hover natively, hence this rule.) */
+.mega_item:hover .mega_item-icon{background-color:var(--background-color-brand);color:#fff}
