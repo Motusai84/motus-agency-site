@@ -1,5 +1,9 @@
 # AGENTS.md - Motus agency website instructions
 
+## Current published design — 16 November 2026
+
+The owner approved replacing the main marketing site with the reviewed Billdr-based Motus design. Preserve that published layout, typography, animations and copy; the older ModuloX instructions below describe the previous homepage, not a mandate to redesign the new one. The five marketing pages are static files under `public/`, served by Cloudflare asset-first routing. Their editable source and client configuration are in the agency vault's `06_BUILDS/websites/billdr-code-export/motus-preview/`; rebuild with `build.py` and `build-public.py` as documented in README. Next.js still owns the six demos and `/api/leads`. Do not remove or replace those routes when editing the marketing pages. Use OpenNext plus Wrangler locally to verify production routing.
+
 These instructions apply inside `06_BUILDS/websites/motus-agency-site/`. They are the local source of truth for this website and should be followed by Codex, Claude Code, Cursor, Copilot, or any other AI coding assistant working here.
 
 ## Project context
