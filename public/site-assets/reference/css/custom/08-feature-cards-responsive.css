@@ -1,0 +1,45 @@
+@media (max-width:991px){
+/* Every card renders open. Only the HEIGHT needs overriding: the footer stylesheet's
+   .w--current rule pins 252px and loads after this embed, hence !important. Its
+   background-color is #fbfaf8, which is exactly the fill .features_tab now carries at
+   these breakpoints, so the cards stay uniform and no colour override is needed. */
+.features_tab.w--current{height:auto!important}
+.features_tab.w--current .features_tab-body{flex:0 0 auto!important;height:auto!important;padding-top:12px}
+/* Webflow's tab JS writes display/opacity inline on inactive panes */
+.features_tab-pane{display:block!important;opacity:1!important}
+
+/* Every card is equal here, so the title must NOT shade differently for the card that
+   happens to be playing -- otherwise titles flicker between muted and dark as you scroll.
+   Base .features_tab-label (0,1,0) is the muted variable; this (0,2,0) beats it, and the
+   .w--current rule (0,3,0) already sets the same #353535. */
+.features_tab .features_tab-label{color:#353535}
+
+/* All panes are on screen at once, but the driver only ever plays ONE. Every pane it is
+   not currently playing gets pinned to its settled first-beat state -- otherwise rewind()
+   leaves it offstage and the card shows a bare background photo. */
+.features_tab-pane:not(.w--tab-active) :is(.features_scene-stack,.features_scene-card,.features_scene-tcard,.features_scene-templates,.features_scene-actions,.features_scene-team,.features_scene-tmrow,.features_scene-receipt,.features_scene-invoice,.features_scene-exrow,.features_scene-payrow,.features_scene-paybtn,.features_scene-phone){opacity:1!important;visibility:visible!important;transform:none!important;animation:none!important}
+/* later-beat alternates + interaction affordances stay hidden on the non-playing cards */
+.features_tab-pane:not(.w--tab-active) :is(.features_scene-quote,.features_scene-signcard,.features_scene-gantt,.features_scene-tasks,.features_scene-expenses,.features_scene-scanline,.features_scene-paycard,.features_scene-cursor,.features_scene-tapdot,.features_scene-tapring,.features_scene-phchip,.features_scene-phblink,.features_scene-qcaret){display:none!important}
+
+/* ---- FLUID SCENE SCALE ----
+   The scenes are authored at a fixed 760x636. --fs is set per pane by the script below as
+   paneWidth/760, so the panel fits ANY width -- 390 portrait, ~727 landscape, ~951 tablet
+   (where it scales UP, which is fine: the scenes are DOM/text, not bitmaps, and the one
+   raster is a 1520px-variant photo). The pane carries aspect-ratio:760/636 as a real
+   Webflow class, so its height follows automatically and nothing here touches spacing. */
+.features_tab-visual{transform:scale(var(--fs,1))}
+
+/* ---- CURSOR TRAVEL FIX ----
+   cursorTo() measures its target with getBoundingClientRect (POST-transform, i.e. viewport
+   px) but writes the result as a translate on the cursor, which lives INSIDE the scaled box
+   -- so the translate was multiplied by --fs a second time and the cursor never landed on
+   target (so watchHover never fired the click states).
+   The driver only ever sets style.transform, never the independent `scale` property, so
+   counter-scaling composes cleanly: scale-prop applies BEFORE transform-prop, and
+   fs x (1/fs) = 1, leaving the translate in true viewport px.
+   transform-origin:0 0 is load-bearing -- with the default centre origin the counter-scale
+   adds a constant offset and the tip sits off-target. */
+.features_scene-cursor{scale:calc(1 / var(--fs,1));transform-origin:0 0}
+/* shrink the glyph back toward its tip so it reads in proportion to the scaled scene */
+.features_scene-cursor-glyphs{scale:0.62;transform-origin:0 0}
+}

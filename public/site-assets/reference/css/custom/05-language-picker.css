@@ -1,0 +1,20 @@
+/* Current locale never appears in its own list (works without JS - Webflow sets <html lang> per locale). */
+html[lang^="en"] .navbar_lang-link[data-lang="en"],
+html[lang^="fr"] .navbar_lang-link[data-lang="fr"],
+html[lang^="es"] .navbar_lang-link[data-lang="es"]{display:none}
+/* Colour follows the navbar: white over dark sections, dark on the Light variant / while any menu is open. */
+.navbar_component .navbar_lang-toggle{transition:color 200ms ease 200ms}
+.navbar_component:has(.w--open) .navbar_lang-toggle{transition-delay:0s}
+.w-variant-8ba0bbb8-7773-5651-7f4e-df123c1d5e7b .navbar_lang-toggle,
+.w-variant-8ba0bbb8-7773-5651-7f4e-df123c1d5e7b .navbar_lang-toggle:hover,
+.navbar_component:has(.w--open) .navbar_lang-toggle{color:var(--text-color-primary)}
+/* Mobile: an open language list turns the bar white - keep the burger visible. */
+.navbar_component:has(.navbar_lang-list.w--open) .navbar_burger-line{background-color:#353535}
+.navbar_lang-caret{transition:transform 200ms ease}
+.navbar_lang-toggle.w--open .navbar_lang-caret{transform:rotate(180deg)}
+.navbar_lang-list.w--open{animation:billdrLangIn 180ms cubic-bezier(.22,1,.36,1)}
+@keyframes billdrLangIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* Hidden Webflow Locales List = source of the exact localized URL of this page (CMS slugs included). */
+.navbar_component .w-locales-list,[data-lang-source]{display:none!important}
+.navbar_lang-link:focus-visible,.navbar_lang-toggle:focus-visible{outline:2px solid var(--background-color-brand);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.navbar_lang-caret{transition:none}.navbar_lang-list.w--open{animation:none}}

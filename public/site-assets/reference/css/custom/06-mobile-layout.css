@@ -1,0 +1,18 @@
+@media (max-width:991px){
+/* The footer block sets .results_slider{width:calc(100% + 40px)!important} as a deliberate
+   desktop bleed. It loads after any body embed, so an equal-specificity rule loses even with
+   !important -- the descendant selector below outranks it (0,2,0 vs 0,1,0). */
+.section_results .results_slider{width:100%!important}
+
+/* Reviews become one-card-per-swipe (the artboard shows a single card, not a stack).
+   The layout is Webflow classes; only scroll-snap lives here. */
+.reviews_grid{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.reviews_grid::-webkit-scrollbar{display:none}
+.reviews_card{scroll-snap-align:start}
+
+/* The onboarding tab rail scrolls horizontally and bleeds to the right viewport edge (that
+   width lives on the Webflow class). Hide its scrollbar and give the auto-scroll below a
+   little lead-in so the active tab never sits flush against the left edge. */
+.onboarding_tabs-menu{scrollbar-width:none;scroll-padding-left:16px}
+.onboarding_tabs-menu::-webkit-scrollbar{display:none}
+}

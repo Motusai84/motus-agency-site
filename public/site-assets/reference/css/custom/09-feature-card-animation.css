@@ -1,0 +1,145 @@
+@keyframes bdCardDrop{0%{opacity:0;transform:translateY(-26px) scale(.94)}55%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes bdRipple{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(3.4)}}
+@keyframes bdQuoteIn{from{opacity:0;transform:scale(.965)}to{opacity:1;transform:none}}
+@keyframes bdBlink{50%{opacity:0}}
+@keyframes bdCardRise{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes bdPenDraw{from{opacity:1}to{opacity:1;stroke-dashoffset:0}}
+@keyframes bdMemberIn{to{opacity:1;transform:none}}
+@keyframes bdGanttIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@keyframes bdCheckPop{0%{transform:scale(.7)}60%{transform:scale(1.09)}100%{transform:scale(1)}}
+@keyframes bdScanSweep{0%{opacity:0;top:0%}10%{opacity:1}90%{opacity:1}100%{opacity:0;top:100%}}
+@keyframes bdInvoiceIn{0%{opacity:0;transform:translateY(34px) scale(.92)}55%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes bdPhoneIn{0%{opacity:0;transform:translateY(40px) scale(.94)}55%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes bdAppLaunch{0%{opacity:0;transform:scale(1.06)}60%{opacity:1}100%{opacity:1;transform:scale(1)}}
+@keyframes bdCamSnap{0%{opacity:0}10%{opacity:1}38%{opacity:1}100%{opacity:0}}
+@keyframes bdChipFly{0%{opacity:0;transform:none}18%{opacity:1}82%{opacity:1}100%{opacity:0;transform:translate(96px,176px) scale(.17)}}
+@keyframes bdTapDot{0%{opacity:0;transform:scale(.55)}22%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.92)}}
+@keyframes bdTapRing{0%{opacity:.95;transform:scale(.45)}100%{opacity:0;transform:scale(2.7)}}
+
+/* ---- tab 1: leads ---- */
+[data-bd-anim] .features_scene-card{opacity:0;transform:translateY(-26px) scale(.94)}
+[data-bd-anim] .features_scene-stack.is-in .features_scene-card{animation:bdCardDrop .9s cubic-bezier(.2,.85,.3,1) forwards;animation-delay:var(--d,0ms)}
+[data-bd-anim] .features_scene-stack.is-done .features_scene-card{animation:none;opacity:1;transform:none}
+[data-bd-anim] .features_scene-stack.is-done .features_scene-card.is-press{transform:scale(.985);transition:transform .12s ease-out}
+[data-bd-anim] .features_scene-stack.is-done .features_scene-card.is-picked{box-shadow:0 0 0 1.135px rgba(0,0,0,.05),0 18px 40px -18px rgba(0,0,0,.45)}
+
+/* ---- tab 2: templates -> quote ---- */
+[data-bd-anim] .features_scene-tcard{opacity:0;transform:translateY(-26px) scale(.94)}
+[data-bd-anim] .features_scene-templates.is-in .features_scene-tcard{animation:bdCardDrop .9s cubic-bezier(.2,.85,.3,1) forwards;animation-delay:var(--d,0ms)}
+[data-bd-anim] .features_scene-templates.is-done .features_scene-tcard{animation:none;opacity:1;transform:none}
+[data-bd-anim] .features_scene-templates.is-done .features_scene-tcard.is-press{transform:scale(.985);transition:transform .12s ease-out}
+[data-bd-anim] .features_scene-templates.is-done .features_scene-tcard.is-picked{box-shadow:0 0 0 1.1px rgba(0,0,0,.05),0 18px 40px -18px rgba(0,0,0,.45)}
+[data-bd-anim] .features_scene-templates.is-off{opacity:0;pointer-events:none}
+/* the quote card waits offstage until the template pick opens it */
+[data-bd-anim] .features_scene-quote{opacity:0;pointer-events:none}
+[data-bd-anim] .features_scene-quote.is-on{opacity:1;pointer-events:auto}
+[data-bd-anim] .features_scene-quote.is-enter{animation:bdQuoteIn .6s cubic-bezier(.22,.61,.36,1)}
+.features_scene-qbox.is-editing{border-color:#9a9ea5}
+.features_scene-qbox.is-editing .features_scene-qcaret{display:block;animation:bdBlink .9s steps(1,end) infinite}
+.features_scene-sendbtn.is-press{transform:scale(.96);filter:brightness(.92)}
+
+/* ---- tab 3: received quote -> sign ---- */
+[data-bd-anim] .features_scene-actions,[data-bd-anim] .features_scene-signcard{opacity:0;pointer-events:none}
+[data-bd-anim] .features_scene-actions.is-on,[data-bd-anim] .features_scene-signcard.is-on{opacity:1;pointer-events:auto}
+[data-bd-anim] .features_scene-actions.is-enter,[data-bd-anim] .features_scene-signcard.is-enter{animation:bdCardRise .6s cubic-bezier(.22,.61,.36,1)}
+.features_scene-abtn.is-press{transform:scale(.97);filter:brightness(.93)}
+/* the signature SVG is fetched from the asset library and injected into .spad,
+   so these rules style markup that does not exist until tab 3 first plays.
+   Each pen segment stays at opacity:0 until its own animation starts: a round
+   cap on a fully-offset dash still paints a dot, which pre-drew blobs of ink.
+   The 999 gap stops a segment's tail leaking if --l is a hair short. */
+.bd-sigsvg{position:absolute;left:86px;top:12px;width:167.3px;height:111.1px;display:block}
+.bd-penseg{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:var(--w,8);stroke-dasharray:var(--l) 999;stroke-dashoffset:var(--l);opacity:0}
+.features_scene-signcard.is-writing .bd-penseg{animation:bdPenDraw var(--d) linear var(--t) forwards}
+
+/* ---- tab 4: team -> schedule -> tasks ---- */
+[data-bd-anim] .features_scene-team,[data-bd-anim] .features_scene-gantt,[data-bd-anim] .features_scene-tasks{opacity:0;pointer-events:none}
+[data-bd-anim] .features_scene-team.is-on,[data-bd-anim] .features_scene-gantt.is-on,[data-bd-anim] .features_scene-tasks.is-on{opacity:1;pointer-events:auto}
+[data-bd-anim] .features_scene-team.is-enter,[data-bd-anim] .features_scene-tasks.is-enter{animation:bdCardRise .6s cubic-bezier(.22,.61,.36,1)}
+[data-bd-anim] .features_scene-gantt.is-enter{animation:bdGanttIn .65s cubic-bezier(.22,.61,.36,1)}
+[data-bd-anim] .features_scene-tmrow{opacity:0;transform:translateY(14px)}
+[data-bd-anim] .features_scene-team.is-in .features_scene-tmrow{animation:bdMemberIn .55s cubic-bezier(.2,.85,.3,1) var(--d,0ms) both}
+[data-bd-anim] .features_scene-team.is-in .features_scene-tmrow.is-press{transform:scale(.985);transition:transform .12s ease-out}
+.features_scene-tkrow.is-checked .features_scene-tkring{border-color:transparent;background-color:#2e957c}
+.features_scene-tkrow.is-checked .features_scene-tkcheck{opacity:1}
+.features_scene-tkrow.is-checked .features_scene-tkbox{animation:bdCheckPop .34s cubic-bezier(.2,.9,.3,1.2)}
+.features_scene-tkrow.is-checked .features_scene-tktitle{color:#545d6b;text-decoration:line-through}
+/* task card v2.1 (Figma 2910:11204 open -> 2910:11213 done): both values of each counter
+   live in the DOM and .is-checked swaps them, so the Designer canvas shows the open state */
+.features_scene-tkmeta-item.is-pct path{transition:fill .24s cubic-bezier(.22,.61,.36,1)}
+.features_scene-tkrow.is-checked .features_scene-tkmeta-item.is-pct{color:#2e957c}
+.features_scene-tkrow.is-checked .features_scene-tkmeta-item.is-pct path{fill:#2e957c}
+.features_scene-tkrow.is-checked .features_scene-tkval{display:none}
+.features_scene-tkrow.is-checked .features_scene-tkval.is-done{display:block}
+
+/* ---- tab 5: receipt -> expenses ---- */
+[data-bd-anim] .features_scene-receipt,[data-bd-anim] .features_scene-expenses{opacity:0;pointer-events:none}
+[data-bd-anim] .features_scene-receipt.is-on,[data-bd-anim] .features_scene-expenses.is-on{opacity:1;pointer-events:auto}
+[data-bd-anim] .features_scene-receipt.is-enter,[data-bd-anim] .features_scene-expenses.is-enter{animation:bdCardRise .6s cubic-bezier(.22,.61,.36,1)}
+[data-bd-anim] .features_scene-receipt.is-scanning .features_scene-scanline{animation:bdScanSweep var(--scan,2000ms) cubic-bezier(.45,0,.55,1) both}
+/* the header row is static; only the data rows stagger */
+[data-bd-anim] .features_scene-exrow:not(.is-head){opacity:0;transform:translateY(10px)}
+[data-bd-anim] .features_scene-expenses.is-in .features_scene-exrow:not(.is-head){animation:bdMemberIn .5s cubic-bezier(.2,.85,.3,1) var(--d,0ms) both}
+/* header labels: Figma 2910:11438 = Open Sans SemiBold #545d6b */
+.features_scene-exrow.is-head .features_scene-ex-vendor,
+.features_scene-exrow.is-head .features_scene-ex-date,
+.features_scene-exrow.is-head .features_scene-ex-amount{color:#545d6b;font-weight:600}
+
+/* ---- tab 6: invoice -> payment methods ---- */
+[data-bd-anim] .features_scene-invoice,[data-bd-anim] .features_scene-paycard{opacity:0;pointer-events:none}
+[data-bd-anim] .features_scene-invoice.is-on,[data-bd-anim] .features_scene-paycard.is-on{opacity:1;pointer-events:auto}
+[data-bd-anim] .features_scene-invoice.is-enter{animation:bdInvoiceIn .85s cubic-bezier(.22,.9,.28,1)}
+[data-bd-anim] .features_scene-paycard.is-enter{animation:bdCardRise .6s cubic-bezier(.22,.61,.36,1)}
+[data-bd-anim] .features_scene-payrow,[data-bd-anim] .features_scene-paybtn{opacity:0;transform:translateY(10px)}
+[data-bd-anim] .features_scene-paycard.is-in .features_scene-payrow,
+[data-bd-anim] .features_scene-paycard.is-in .features_scene-paybtn{animation:bdMemberIn .5s cubic-bezier(.2,.85,.3,1) var(--d,0ms) both}
+.features_scene-payrow.is-sel .features_scene-paybox{background-color:#4959e4;border-color:#4959e4}
+.features_scene-payrow.is-sel .features_scene-paycheck{opacity:1}
+.features_scene-paybtn.is-press{transform:scale(.97);filter:brightness(.93)}
+
+/* ---- tab 7: the jobsite phone ---- */
+[data-bd-anim] .features_scene-phone{opacity:0;pointer-events:none}
+[data-bd-anim] .features_scene-phone.is-on{opacity:1;pointer-events:auto}
+/* three framings of one device, as % of the phone's OWN height (502px at desktop:
+   41 -> 8.167%, -291 -> -57.968%, 24 -> 4.781%) so they survive a resize */
+[data-bd-anim] .features_scene-phone.is-zoom{transform:translateY(8.167%) scale(1.5227)}
+[data-bd-anim] .features_scene-phone.is-pan{transform:translateY(-57.968%) scale(1.5227)}
+[data-bd-anim] .features_scene-phone.is-zoomf{transform:translateY(4.781%) scale(1.5227)}
+[data-bd-anim] .features_scene-phone.is-enter .features_scene-phdev{animation:bdPhoneIn .95s cubic-bezier(.22,.9,.28,1)}
+[data-bd-anim] .features_scene-phimg.is-off{opacity:0}
+[data-bd-anim] .features_scene-phimg.is-push{transform:translateY(26px)}
+[data-bd-anim] .features_scene-phimg.is-launch{animation:bdAppLaunch .55s cubic-bezier(.2,.8,.3,1)}
+.features_scene-phblink.is-snap{animation:bdCamSnap .3s ease-out}
+.features_scene-phchip.is-fly{animation:bdChipFly .62s cubic-bezier(.4,0,.3,1)}
+/* the tap ripple is two real children, not ::before/::after */
+.features_scene-phhit.is-tapped .features_scene-tapdot{animation:bdTapDot .6s ease-out}
+.features_scene-phhit.is-tapped .features_scene-tapring{animation:bdTapRing .68s cubic-bezier(.2,.7,.3,1)}
+
+/* ---- shared ---- */
+/* Inline <svg> is inline-level by default, so it lands on a text baseline and
+   sits below the optical centre of its button (visible on Pay invoice). Force
+   block so each icon simply fills the box its wrapper class already sizes. */
+.features_scene-payicon svg,.features_scene-paycheck svg,.features_scene-paybtn-icon svg,
+.features_scene-abtn-icon svg,.features_scene-sclose svg,
+.features_scene-tkcheck svg,.features_scene-tkmeta-icon svg,.features_scene-tkchev svg{display:block;width:100%;height:100%}
+[data-bd-anim] .features_tab-photo{transform-origin:50% 50%;transition:transform 1.1s cubic-bezier(.33,.9,.25,1)}
+/* cursor: real bound Webflow elements now, not script-injected <img src>.
+   Both glyphs share the hotspot 7,3 so the swap never shifts it. */
+.features_scene-cursor.is-show{opacity:1}
+.features_scene-cursor.is-click .features_scene-cursor-glyphs{transform:scale(1.29)}
+.features_scene-cursor.is-hover .features_scene-cursor-arrow{opacity:0}
+.features_scene-cursor.is-hover .features_scene-cursor-hand{opacity:1}
+.features_scene-cursor.is-click .features_scene-cursor-ripple{animation:bdRipple .55s ease-out}
+
+@media (prefers-reduced-motion:reduce){
+[data-bd-anim] .features_scene-card,[data-bd-anim] .features_scene-tcard,[data-bd-anim] .features_scene-tmrow,[data-bd-anim] .features_scene-exrow,[data-bd-anim] .features_scene-payrow,[data-bd-anim] .features_scene-paybtn{opacity:1!important;transform:none!important;animation:none!important}
+[data-bd-anim] .features_tab-photo{transform:none!important}
+[data-bd-anim] .features_scene-quote.is-enter{animation:none!important}
+[data-bd-anim] .features_scene-actions.is-enter,[data-bd-anim] .features_scene-signcard.is-enter{animation:none!important}
+[data-bd-anim] .features_scene-invoice.is-enter{animation:none!important}
+[data-bd-anim] .features_scene-phone.is-zoom,[data-bd-anim] .features_scene-phone.is-pan,[data-bd-anim] .features_scene-phone.is-zoomf{transform:none!important}
+[data-bd-anim] .features_scene-phone.is-enter .features_scene-phdev{animation:none!important}
+/* show the finished signature rather than drawing it */
+.bd-penseg{stroke-dashoffset:0!important;animation:none!important;opacity:1!important}
+.features_scene-cursor{display:none!important}
+}

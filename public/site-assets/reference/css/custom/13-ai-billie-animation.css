@@ -1,0 +1,27 @@
+/* AI Workforce · Billie (card 2) — a real exchange: the user types into the
+   composer, presses send, the message lands in the thread, Billie replies.
+   Every aiwf-* class is applied by JS only, so none may become a Webflow class. */
+
+/* a message only exists once it has been sent. This must stay the SINGLE
+   .aiwf_msg display rule, or a later one silently un-hides them all. */
+.aiwf_msg{display:none}
+.aiwf_msg.aiwf-in{display:flex;animation:aiwfMsgIn .42s cubic-bezier(.22,1,.36,1)}
+@keyframes aiwfMsgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* likewise the suggestions: hidden until Billie asks for them */
+.aiwf_pills{display:none}
+.aiwf_pills.aiwf-in{display:flex;animation:aiwfMsgIn .42s cubic-bezier(.22,1,.36,1)}
+
+/* the composer is typed into for real, so it needs a value state + caret */
+.aiwf_cmp-text.aiwf-typed{color:#111827;line-height:1.5}
+.aiwf_ccaret{display:none;width:1px;height:14px;margin-left:1px;vertical-align:-2px;background-color:#111827}
+.aiwf_cmp.aiwf-typing .aiwf_ccaret{display:inline-block;animation:aiwfCCaret .9s steps(1,end) infinite}
+@keyframes aiwfCCaret{50%{opacity:0}}
+.aiwf_ibtn.is-send{transition:transform .14s ease,filter .14s ease}
+.aiwf_ibtn.is-send.aiwf-press{transform:scale(.86);filter:brightness(.88)}
+
+/* poster frame: until the driver boots, show the finished exchange rather
+   than an empty card */
+.aiwf_stage:not([data-aiwf-anim]) .aiwf_msg{display:flex}
+.aiwf_stage:not([data-aiwf-anim]) .aiwf_pills{display:flex}
+
+@media (prefers-reduced-motion:reduce){.aiwf_stage *{animation:none!important;transition:none!important}}

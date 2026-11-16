@@ -1,0 +1,9 @@
+/* billdrnotifsreveal v1.0.0 — notifications slide in, then chip + unread badge settle */
+.onboarding_notifs-embed{position:absolute;left:0;top:0;width:0;height:0;overflow:hidden}
+/* image slots not yet connected: hide the broken-image glyph (Designer still shows the placeholder) */
+.onboarding_notifs img:not([src]),.onboarding_notifs img[src=""]{opacity:0}
+.onboarding_notifs [data-notif-card]{opacity:0;transform:translateX(26px) scale(.972);transition:opacity .5s cubic-bezier(.16,.84,.44,1),transform .6s cubic-bezier(.16,.84,.44,1);will-change:opacity,transform}
+.onboarding_notifs [data-notif-chip]{opacity:0;transform:translateY(6px);transition:opacity .35s ease-out,transform .35s cubic-bezier(.16,.84,.44,1);will-change:opacity,transform}
+.onboarding_notifs [data-notif-badge]{opacity:0;transform:scale(.2);transition:opacity .28s ease-out,transform .4s cubic-bezier(.34,1.56,.64,1);will-change:opacity,transform}
+.onboarding_notifs.is-in [data-notif-card],.onboarding_notifs.is-in [data-notif-chip],.onboarding_notifs.is-in [data-notif-badge]{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.onboarding_notifs [data-notif-card],.onboarding_notifs [data-notif-chip],.onboarding_notifs [data-notif-badge]{opacity:1!important;transform:none!important;transition:none!important}}
