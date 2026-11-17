@@ -107,6 +107,19 @@
   outline-offset: 2px;
 }
 
+.appointment-flow-nav-button:focus-visible,
+.appointment-flow-playback-button:focus-visible {
+  outline: 3px solid #294b8e;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appointment-flow-route * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @media (max-width: 640px) {
   .appointment-flow-route__loading {
     align-items: flex-start;

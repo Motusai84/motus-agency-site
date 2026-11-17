@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 
 // ─── Tokens ──────────────────────────────────────────────────────────────────
 const T = {
@@ -100,13 +100,8 @@ function Tag({ label, color }: { label: string; color: "green" | "amber" | "mute
   )
 }
 
-// ─── Auto-advance progress bar ────────────────────────────────────────────────
-function AutoAdvance({ duration, onComplete }: { duration: number; onComplete: () => void }) {
-  useEffect(() => {
-    const t = setTimeout(onComplete, duration)
-    return () => clearTimeout(t)
-  }, [duration, onComplete])
-
+// ─── Timed scene progress bar ─────────────────────────────────────────────────
+function AutoAdvance({ duration, elapsed, reducedMotion }: { duration: number; elapsed: number; reducedMotion: boolean }) {
   return (
     <div style={{ maxWidth: "540px", width: "100%", marginTop: "20px" }}>
       <div style={{ height: "2px", background: T.border, borderRadius: "1px", overflow: "hidden" }}>
@@ -114,8 +109,8 @@ function AutoAdvance({ duration, onComplete }: { duration: number; onComplete: (
           height: "100%",
           background: T.accent,
           borderRadius: "1px",
-          width: "0%",
-          animation: `fillBar ${duration}ms linear forwards`,
+          width: `${Math.min(100, (elapsed / duration) * 100)}%`,
+          transition: reducedMotion ? "none" : "width 50ms linear",
         }} />
       </div>
     </div>
@@ -123,7 +118,12 @@ function AutoAdvance({ duration, onComplete }: { duration: number; onComplete: (
 }
 
 // ─── Progress strip ───────────────────────────────────────────────────────────
-function ProgressBar({ current, onBack, mobile }: { current: number; onBack: () => void; mobile: boolean }) {
+function ProgressBar({ current, onBack, mobile, paused, remaining, onToggle, timed }: {
+  current: number; onBack: () => void; mobile: boolean; paused: boolean;
+  remaining: number; onToggle: () => void; timed: boolean
+}) {
+  const seconds = Math.ceil(remaining / 1000)
+  const time = `0:${String(seconds).padStart(2, "0")}`
   return (
     <div style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
@@ -132,22 +132,48 @@ function ProgressBar({ current, onBack, mobile }: { current: number; onBack: () 
       <div style={{
         maxWidth: 1100, margin: "0 auto",
         padding: `0 ${mobile ? "20px" : "40px"}`,
-        display: "flex", alignItems: "center", height: "52px", gap: "16px",
+        display: "flex", flexDirection: "column", height: "68px",
       }}>
-        <button
-          onClick={onBack}
-          style={{
-            fontFamily: SANS, fontSize: "12px", color: T.muted,
-            background: "none", border: "none", cursor: "pointer",
-            letterSpacing: "0.06em", flexShrink: 0, padding: 0,
-            transition: "color 0.15s", whiteSpace: "nowrap" as const,
-          }}
-          onMouseEnter={e => (e.currentTarget.style.color = T.ink)}
-          onMouseLeave={e => (e.currentTarget.style.color = T.muted)}
-        >
-          ← {mobile ? "Back" : "Appointment Flow"}
-        </button>
-        <div style={{ flex: 1, display: "flex", gap: "3px" }}>
+        <div style={{ display: "flex", alignItems: "center", minHeight: "54px", gap: mobile ? "8px" : "16px" }}>
+          <button
+            onClick={onBack}
+            className="appointment-flow-nav-button"
+            style={{
+              fontFamily: SANS, fontSize: "12px", color: T.muted,
+              background: "none", border: "none", cursor: "pointer",
+              letterSpacing: "0.06em", flexShrink: 0, padding: "6px 0",
+              whiteSpace: "nowrap" as const,
+            }}
+          >
+            ← {mobile ? "Back" : "Appointment Flow"}
+          </button>
+          <div style={{ flex: 1 }} />
+          <span style={{ fontFamily: SANS, fontSize: "12px", color: T.muted, flexShrink: 0 }}>
+            {current} / 6
+          </span>
+          <span style={{ fontFamily: SANS, fontSize: "12px", color: paused ? T.accent : T.inkSub, flexShrink: 0, fontVariantNumeric: "tabular-nums" }}>
+            {timed ? `${paused ? "Paused" : "Next in"} ${time}` : current === 5 ? "Your choice" : "Finished"}
+          </span>
+          {timed && (
+            <button
+              id="appointment-flow-playback-toggle"
+              className="appointment-flow-playback-button"
+              type="button"
+              onClick={onToggle}
+              aria-label={paused ? "Resume automatic walkthrough" : "Pause automatic walkthrough"}
+              aria-pressed={paused}
+              style={{
+                fontFamily: SANS, fontSize: "12px", fontWeight: 600,
+                color: T.canvas, background: T.ink, border: `1px solid ${T.ink}`,
+                borderRadius: "2px", padding: "7px 10px", minHeight: "34px",
+                cursor: "pointer", flexShrink: 0,
+              }}
+            >
+              {paused ? "Resume" : "Pause"}
+            </button>
+          )}
+        </div>
+        <div style={{ display: "flex", gap: "3px" }} aria-hidden="true">
           {Array.from({ length: 6 }, (_, i) => (
             <div key={i} style={{
               flex: 1, height: "2px",
@@ -157,9 +183,6 @@ function ProgressBar({ current, onBack, mobile }: { current: number; onBack: () 
             }} />
           ))}
         </div>
-        <span style={{ fontFamily: SANS, fontSize: "12px", color: T.muted, flexShrink: 0 }}>
-          {current} / 6
-        </span>
       </div>
     </div>
   )
@@ -173,7 +196,7 @@ function Shell({ step, narrative, lead, children, mobile }: {
   const py = mobile ? "36px 36px 52px" : "52px 40px 64px"
   return (
     <div style={{
-      minHeight: "calc(100vh - 52px)", marginTop: "52px",
+      minHeight: "calc(100vh - 68px)", marginTop: "68px",
       display: "flex", flexDirection: "column", alignItems: "center",
       justifyContent: "center", padding: py, paddingLeft: px, paddingRight: px,
     }}>
@@ -355,24 +378,14 @@ function Scene0({ onStart }: { onStart: () => void }) {
 const SLOTS   = ["9:00 am","9:30 am","10:00 am","10:30 am","11:00 am","11:30 am","1:00 pm","1:30 pm","2:00 pm","2:30 pm","3:00 pm","3:30 pm"]
 const UNAVAIL = ["9:30 am","11:00 am","1:00 pm","3:00 pm"]
 
-function Scene1({ onNext }: { onNext: () => void }) {
+function Scene1({ elapsed, duration, reducedMotion, onSelection }: {
+  elapsed: number; duration: number; reducedMotion: boolean; onSelection: (deadline: number) => void
+}) {
   const mobile = useIsMobile()
-  const [selected, setSelected] = useState<string | null>(null)
-  const [confirmed, setConfirmed] = useState(false)
-
-  // Auto-select Maya's slot after 1.8s to illustrate the customer choosing
-  useEffect(() => {
-    const t = setTimeout(() => setSelected("2:30 pm"), 1800)
-    return () => clearTimeout(t)
-  }, [])
-
-  // Once selected, confirm after 1.4s then advance
-  useEffect(() => {
-    if (!selected) return
-    const t1 = setTimeout(() => setConfirmed(true), 1400)
-    const t2 = setTimeout(() => onNext(), 3000)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
-  }, [selected, onNext])
+  const [manualSelection, setManualSelection] = useState<{ slot: string; at: number } | null>(null)
+  const selected = manualSelection?.slot ?? (elapsed >= 1800 ? APT.time : null)
+  const selectedAt = manualSelection?.at ?? (elapsed >= 1800 ? 1800 : null)
+  const confirmed = selectedAt !== null && elapsed >= selectedAt + 1400
 
   return (
     <Shell
@@ -430,7 +443,11 @@ function Scene1({ onNext }: { onNext: () => void }) {
           {SLOTS.map(slot => {
             const busy   = UNAVAIL.includes(slot)
             const active = selected === slot
-            return <SlotBtn key={slot} slot={slot} busy={busy} active={active} onClick={() => !busy && !selected && setSelected(slot)} />
+            return <SlotBtn key={slot} slot={slot} busy={busy} active={active} onClick={() => {
+              if (busy || selected) return
+              setManualSelection({ slot, at: elapsed })
+              onSelection(elapsed + 3000)
+            }} />
           })}
         </div>
 
@@ -467,6 +484,7 @@ function Scene1({ onNext }: { onNext: () => void }) {
           </div>
         </div>
       </div>
+      <AutoAdvance duration={duration} elapsed={elapsed} reducedMotion={reducedMotion} />
     </Shell>
   )
 }
@@ -499,7 +517,7 @@ function SlotBtn({ slot, busy, active, onClick }: { slot: string; busy: boolean;
 }
 
 // ─── SCENE 2: Confirmation email ──────────────────────────────────────────────
-function Scene2({ onNext }: { onNext: () => void }) {
+function Scene2({ elapsed, reducedMotion }: { elapsed: number; reducedMotion: boolean }) {
   const mobile = useIsMobile()
   return (
     <Shell
@@ -626,13 +644,13 @@ function Scene2({ onNext }: { onNext: () => void }) {
           </div>
         </div>
       </div>
-      <AutoAdvance duration={5200} onComplete={onNext} />
+      <AutoAdvance duration={5200} elapsed={elapsed} reducedMotion={reducedMotion} />
     </Shell>
   )
 }
 
 // ─── SCENE 3: Team calendar ───────────────────────────────────────────────────
-function Scene3({ onNext }: { onNext: () => void }) {
+function Scene3({ elapsed, reducedMotion }: { elapsed: number; reducedMotion: boolean }) {
   const mobile = useIsMobile()
 
   // Mobile: simplified vertical list; Desktop: full grid
@@ -754,22 +772,16 @@ function Scene3({ onNext }: { onNext: () => void }) {
           ))}
         </div>
       </div>
-      <AutoAdvance duration={4500} onComplete={onNext} />
+      <AutoAdvance duration={4500} elapsed={elapsed} reducedMotion={reducedMotion} />
     </Shell>
   )
 }
 
 // ─── SCENE 4: Phone message ───────────────────────────────────────────────────
-function Scene4({ onNext }: { onNext: () => void }) {
+function Scene4({ elapsed, reducedMotion }: { elapsed: number; reducedMotion: boolean }) {
   const mobile = useIsMobile()
-  const [show,  setShow]  = useState(false)
-  const [reply, setReply] = useState(false)
-
-  useEffect(() => {
-    const t1 = setTimeout(() => setShow(true),  550)
-    const t2 = setTimeout(() => setReply(true), 1900)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
-  }, [])
+  const show = elapsed >= 550
+  const reply = elapsed >= 1900
 
   return (
     <Shell
@@ -859,7 +871,7 @@ function Scene4({ onNext }: { onNext: () => void }) {
           </div>
         </div>
       </div>
-      <AutoAdvance duration={5000} onComplete={onNext} />
+      <AutoAdvance duration={5000} elapsed={elapsed} reducedMotion={reducedMotion} />
     </Shell>
   )
 }
@@ -1145,16 +1157,69 @@ function Scene6({ onRestart }: { onRestart: () => void }) {
 export default function App() {
   const [scene,   setScene]   = useState(0)
   const [visible, setVisible] = useState(true)
+  const [elapsed, setElapsed] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [scene1Deadline, setScene1Deadline] = useState(4800)
+  const [tabVisible, setTabVisible] = useState(() => !document.hidden)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const transitioning = useRef(false)
+  const transitionTimer = useRef<number | null>(null)
+  const revealTimer = useRef<number | null>(null)
   const mobile = useIsMobile()
+  const duration = scene === 1 ? scene1Deadline : scene === 2 ? 5200 : scene === 3 ? 4500 : scene === 4 ? 5000 : 0
+  const timed = duration > 0
 
-  const goTo = (n: number) => {
+  useEffect(() => {
+    const onVisibilityChange = () => setTabVisible(!document.hidden)
+    document.addEventListener("visibilitychange", onVisibilityChange)
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange)
+  }, [])
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const update = () => setReducedMotion(media.matches)
+    update()
+    media.addEventListener("change", update)
+    return () => media.removeEventListener("change", update)
+  }, [])
+
+  useEffect(() => {
+    if (!timed || paused || !visible || !tabVisible) return
+    let previous = performance.now()
+    const tick = () => {
+      const now = performance.now()
+      if (!document.hidden) setElapsed(value => Math.min(duration, value + now - previous))
+      previous = now
+    }
+    const timer = window.setInterval(tick, 50)
+    return () => window.clearInterval(timer)
+  }, [duration, paused, tabVisible, timed, visible])
+
+  useEffect(() => () => {
+    if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current)
+    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current)
+  }, [])
+
+  const goTo = useCallback((n: number) => {
+    if (transitioning.current) return
+    transitioning.current = true
     setVisible(false)
-    setTimeout(() => {
+    transitionTimer.current = window.setTimeout(() => {
       setScene(n)
+      setElapsed(0)
+      setPaused(false)
+      setScene1Deadline(4800)
       window.scrollTo({ top: 0 })
-      setTimeout(() => setVisible(true), 40)
-    }, 240)
-  }
+      revealTimer.current = window.setTimeout(() => {
+        setVisible(true)
+        transitioning.current = false
+      }, reducedMotion ? 0 : 40)
+    }, reducedMotion ? 0 : 240)
+  }, [reducedMotion])
+
+  useEffect(() => {
+    if (timed && elapsed >= duration && !paused && tabVisible && visible) goTo(scene + 1)
+  }, [duration, elapsed, goTo, paused, scene, tabVisible, timed, visible])
 
   return (
     <div style={{
@@ -1164,18 +1229,26 @@ export default function App() {
       fontFamily: SANS,
     }}>
       {scene > 0 && (
-        <ProgressBar current={scene} onBack={() => goTo(0)} mobile={mobile} />
+        <ProgressBar
+          current={scene}
+          onBack={() => goTo(0)}
+          mobile={mobile}
+          paused={paused}
+          remaining={Math.max(0, duration - elapsed)}
+          onToggle={() => setPaused(value => !value)}
+          timed={timed}
+        />
       )}
       <div style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(6px)",
-        transition: "opacity 0.24s ease, transform 0.24s ease",
+        transition: reducedMotion ? "none" : "opacity 0.24s ease, transform 0.24s ease",
       }}>
         {scene === 0 && <Scene0 onStart={() => goTo(1)} />}
-        {scene === 1 && <Scene1 onNext={() => goTo(2)} />}
-        {scene === 2 && <Scene2 onNext={() => goTo(3)} />}
-        {scene === 3 && <Scene3 onNext={() => goTo(4)} />}
-        {scene === 4 && <Scene4 onNext={() => goTo(5)} />}
+        {scene === 1 && <Scene1 elapsed={elapsed} duration={duration} reducedMotion={reducedMotion} onSelection={setScene1Deadline} />}
+        {scene === 2 && <Scene2 elapsed={elapsed} reducedMotion={reducedMotion} />}
+        {scene === 3 && <Scene3 elapsed={elapsed} reducedMotion={reducedMotion} />}
+        {scene === 4 && <Scene4 elapsed={elapsed} reducedMotion={reducedMotion} />}
         {scene === 5 && <Scene5 onNext={() => goTo(6)} />}
         {scene === 6 && <Scene6 onRestart={() => goTo(0)} />}
       </div>
