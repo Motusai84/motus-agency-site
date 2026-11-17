@@ -1,8 +1,27 @@
 # Motus Agency Site
 
+## Appointment Flow playback release — 17 November 2026
+
+Seun approved publishing a countdown and Pause/Resume control for the public
+Appointment Flow demo. [PR #23](https://github.com/Motusai84/motus-agency-site/pull/23)
+merged as `d8f736c`; its source tree matches the tested commit `236939a`.
+Cloudflare Worker version `7f990536-fa6b-419e-81ae-01f3e2158279` serves
+100% of traffic. The previous live version
+`5b6959ef-91d7-44b0-9dd5-7cebe10deab8` is the rollback target; its source
+archive and deployment metadata are retained privately in
+`production-backups/2026-11-17-cloudflare-5b6959ef/`.
+
+The locked dependency install, production Next.js/Webpack build with
+TypeScript, targeted ESLint, OpenNext build and Wrangler dry run passed.
+Local browser checks covered 390×844 and 1440×900 layouts, Pause/Resume,
+and the site shell. Live browser checks confirmed the countdown, Pause/Resume
+and the `/examples` booking link. Live GET checks returned 200 for the
+homepage and demo, and 405 for `/api/leads`. Both existing lead webhook
+secret binding names remain present; no real enquiry was submitted.
+
 ## Approved website replacement — 16 November 2026
 
-Published at 15:29 UTC after explicit owner approval. [PR #21](https://github.com/Motusai84/motus-agency-site/pull/21) merged as `6837efd`; tested source commit `ce09126` has the same tree. Active Worker `5b6959ef-91d7-44b0-9dd5-7cebe10deab8` serves 100% of traffic. Next.js/TypeScript, OpenNext and Wrangler dry-run checks passed. Live GET checks returned 200 for the five pages, catalogue, six demos, robots and sitemap. The live API returned 405 for GET and 400 for an empty JSON POST; no real enquiry was sent. Both existing `N8N_LEAD_WEBHOOK_*` secret binding names remain present, with values unchanged. Browser verification confirmed the new homepage, Services calculator (£200/month for the trades enquiry example), no broken homepage images and no preview badge. Phone-width visual verification passed locally; the physical Android background override remains unresolved as noted below.
+Published at 15:29 UTC after explicit owner approval. [PR #21](https://github.com/Motusai84/motus-agency-site/pull/21) merged as `6837efd`; tested source commit `ce09126` has the same tree. Worker `5b6959ef-91d7-44b0-9dd5-7cebe10deab8` served 100% of traffic for that release. Next.js/TypeScript, OpenNext and Wrangler dry-run checks passed. Live GET checks returned 200 for the five pages, catalogue, six demos, robots and sitemap. The live API returned 405 for GET and 400 for an empty JSON POST; no real enquiry was sent. Both existing `N8N_LEAD_WEBHOOK_*` secret binding names remain present, with values unchanged. Browser verification confirmed the new homepage, Services calculator (£200/month for the trades enquiry example), no broken homepage images and no preview badge. Phone-width visual verification passed locally; the physical Android background override remains unresolved as noted below.
 
 The owner explicitly approved replacing `motusautomation.co.uk` with the reviewed Billdr-based Motus design. The five marketing pages are now `public/index.html`, `services.html`, `examples.html`, `about.html` and `privacy.html`; Cloudflare's existing asset-first routing serves these before the retained Next.js application. `/demos`, all six individual demos and `/api/leads` remain in Next.js unchanged. Public HTML links use the clean `/services`, `/examples`, `/about` and `/privacy` routes.
 
