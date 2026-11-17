@@ -44,7 +44,7 @@ function buttonId(label: string) {
   return undefined;
 }
 
-/** The Figma Make export is intentionally kept unchanged in FigmaAppointmentFlow. */
+/** Keeps route-specific button IDs on the interactive Appointment Flow component. */
 export default function AppointmentFlowClient() {
   useEffect(() => {
     const labelButtons = () => {
